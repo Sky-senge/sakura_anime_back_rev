@@ -1,9 +1,7 @@
 package com.computerapplicationtechnologycnus.sakura_anime.mapper;
 
 import com.computerapplicationtechnologycnus.sakura_anime.model.User;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -16,8 +14,32 @@ public interface UserMapper {
     @Select("SELECT * FROM users")
     List<User> findAllUsersIncludePasswords(); //用于管理员查询，【包含密码！需要注意使用】
 
+    // 查询缺失的最小 ID
+    @Select("SELECT MIN(t1.id + 1) AS missing_id " +
+            "FROM users t1 " +
+            "LEFT JOIN users t2 ON t1.id + 1 = t2.id " +
+            "WHERE t2.id IS NULL")
+    Long findMissingId();
+
+    //普通插入用户
+    @Insert("INSERT INTO users (avatar,email,username,permission,password,display_name,remarks) " +
+            "VALUES (null,#{email},#{username},#{permission},#{password},#{displayName},#{remarks})")
+    @Options(useGeneratedKeys = true,keyProperty = "id")
+    void insertUser(User user);
+
+    // 手动指定 ID 插入用户
+    @Insert("INSERT INTO users (id, avatar, email, username, permission, password, display_name, remarks) " +
+            "VALUES (#{id}, null, #{email}, #{username}, #{permission}, #{password}, #{displayName}, #{remarks})")
+    void insertUserWithId(User user);
+
     @Select("SELECT id,avatar,email,username,permission,display_name,remarks from users WHERE id=#{id}")
     User findUserDetailByID(Long id);
+
+    @Select("SELECT id,avatar,email,username,permission,display_name,remarks FROM users WHERE username = #{username}")
+    User findByUsername(@Param("username") String username);
+
+    @Select("SELECT * FROM users WHERE username = #{username}")
+    User findByUsernameIncludePassword(@Param("username") String username); //用于管理员查询，【包含密码！需要注意使用】
 
     @Select("SELECT * from users WHERE id=#{id}")
     User findUserDetailByIDIncludePassword(Long id); //用于管理员查询，【包含密码！需要注意使用】
@@ -39,6 +61,10 @@ public interface UserMapper {
 
     @Update("UPDATE users SET remarks=#{remarks} WHERE id=#{id}")
     void updateRemarksById(Long id,String remarks);
+
+    // 删除指定用户
+    @Delete("DELETE FROM users WHERE id = #{userId}")
+    int deleteUserById(@Param("userId") Long userId);
 
 
 }

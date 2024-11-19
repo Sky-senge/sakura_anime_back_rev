@@ -1,10 +1,13 @@
 package com.computerapplicationtechnologycnus.sakura_anime.utils;
 
+import org.springframework.stereotype.Component;
+
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
+@Component
 public class SecurityUtils {
     public static String sha256Hash(String input) {
         try {

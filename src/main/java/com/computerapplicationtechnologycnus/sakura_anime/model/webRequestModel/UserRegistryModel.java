@@ -1,15 +1,10 @@
-package com.computerapplicationtechnologycnus.sakura_anime.model;
+package com.computerapplicationtechnologycnus.sakura_anime.model.webRequestModel;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
-public class User {
-    @Schema(description = "用户唯一ID")
-    private Long id;
-
-    @Schema(description = "头像路径")
-    private String avatar;
+public class UserRegistryModel {
 
     @Schema(description = "唯一用户邮箱")
     private String email;

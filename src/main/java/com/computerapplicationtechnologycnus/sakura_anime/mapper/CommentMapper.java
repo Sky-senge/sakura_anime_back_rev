@@ -28,4 +28,8 @@ public interface CommentMapper {
 
     @Delete("DELETE FROM comment WHERE id = #{id}")
     void deleteComment(Long id);
+
+    // 删除指定用户的所有评论
+    @Delete("DELETE FROM comments WHERE user_id = #{userId}")
+    int deleteCommentsByUserId(@Param("userId") Long userId);
 }
