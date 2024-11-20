@@ -32,4 +32,8 @@ public interface CommentMapper {
     // 删除指定用户的所有评论
     @Delete("DELETE FROM comments WHERE user_id = #{userId}")
     int deleteCommentsByUserId(@Param("userId") Long userId);
+
+    // 删除指定动漫的所有评论
+    @Delete("DELETE FROM comments WHERE anime_id = #{animeId}")
+    int deleteCommentsByAnimeId(@Param("animeId") Long animeId);
 }

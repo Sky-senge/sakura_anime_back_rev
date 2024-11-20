@@ -2,10 +2,13 @@ package com.computerapplicationtechnologycnus.sakura_anime.services;
 
 import com.alibaba.fastjson.JSON;
 import com.computerapplicationtechnologycnus.sakura_anime.mapper.AnimeMapper;
+import com.computerapplicationtechnologycnus.sakura_anime.mapper.CommentMapper;
 import com.computerapplicationtechnologycnus.sakura_anime.model.Anime;
+import com.computerapplicationtechnologycnus.sakura_anime.model.Comment;
 import com.computerapplicationtechnologycnus.sakura_anime.model.webRequestModel.AnimeRequestModel;
 import com.computerapplicationtechnologycnus.sakura_anime.model.webRequestModel.AnimeResponseModel;
 import com.computerapplicationtechnologycnus.sakura_anime.utils.JwtUtil;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -22,9 +25,11 @@ public class AnimeService {
     //构造函数
     private final AnimeMapper animeMapper;
     private final JwtUtil jwtUtil;
-    public AnimeService(AnimeMapper animeMapper,JwtUtil jwtUtil){
+    private final CommentMapper commentMapper;
+    public AnimeService(AnimeMapper animeMapper,JwtUtil jwtUtil,CommentMapper commentMapper){
         this.animeMapper=animeMapper;
         this.jwtUtil=jwtUtil;
+        this.commentMapper=commentMapper;
     }
 
     /**
@@ -34,6 +39,7 @@ public class AnimeService {
      * 我也想知道为什么MyBaties不支持List和驼峰命名映射
      * 我真的是服了。
      */
+    @Schema(description = "获取动漫信息列表")
     public List<AnimeResponseModel> getAllAnime() {
         // 从数据库中获取 Anime 对象列表
         List<Anime> animeList = animeMapper.findAllAnimes();
@@ -60,12 +66,27 @@ public class AnimeService {
         return animeResponseList;
     }
 
+    @Schema(description = "通过ID获取动漫信息")
+    public AnimeResponseModel getAnimeById(Long id){
+        Anime returnedAnime=animeMapper.findAnimeById(id);
+        AnimeResponseModel animeResponse=new AnimeResponseModel();
+        //转换对象
+        animeResponse.setId(returnedAnime.getId());
+        animeResponse.setDescription(returnedAnime.getDescription());
+        animeResponse.setName(returnedAnime.getName());
+        animeResponse.setTags(returnedAnime.getTagsList());
+        animeResponse.setRating(returnedAnime.getRating());
+        animeResponse.setReleaseDate(returnedAnime.getReleaseDate());
+        animeResponse.setFilePath(returnedAnime.getFilePath());
+        return animeResponse;
+    }
+
     /**
      * 更新动漫信息
      *
      * @return 是否成功
      */
-
+    @Schema(description = "更新动漫信息")
     @Transactional
     public void updateAnime(AnimeRequestModel anime) throws Exception{
         try{
@@ -92,6 +113,7 @@ public class AnimeService {
      *
      * @return 是否成功
      */
+    @Schema(description = "添加新的动漫")
     @Transactional
     public void insertAnime(String name,List<String> tags,String description,Float rating,String filePath) throws Exception{
         try{
@@ -128,5 +150,22 @@ public class AnimeService {
         // 转换为字符串检查是否为一位小数
         String str = String.format("%.1f", number);
         return Float.parseFloat(str) == number;
+    }
+
+    /**
+     * 删除1某个动漫列表
+     *
+     *
+     */
+    @Schema(description = "删除某条动漫列表")
+    @Transactional
+    public void deleteAnime(Long id) throws Exception {
+        try{
+            animeMapper.deleteAnimeById(id);
+            // 注意！删除动漫会导致该动漫下的评论一并全部删除！
+            commentMapper.deleteCommentsByAnimeId(id);
+        }catch (Exception e){
+            throw new Exception("该条目["+id+"]删除失败！原因："+e.getMessage());
+        }
     }
 }

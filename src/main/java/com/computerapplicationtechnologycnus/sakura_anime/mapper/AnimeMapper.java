@@ -21,10 +21,15 @@ public interface AnimeMapper {
             "WHERE t2.id IS NULL")
     Long findMissingId();
 
-    // 手动指定 ID 插入动漫
+    // 手动指定 ID 新增动漫，不插入日期信息，默认由SQL生成
+    @Insert("INSERT INTO anime (id, name, tags, description, rating, file_path) " +
+            "VALUES (#{id}, #{name}, #{tags}, #{description}, #{rating}, #{filePath})")
+    void insertAnimeWithId(Anime anime);
+
+    // 手动指定 ID 插入动漫，包括日期（如有需要用于手动修正日期）
     @Insert("INSERT INTO anime (id, name, tags, description, rating, release_date, file_path) " +
             "VALUES (#{id}, #{name}, #{tags}, #{description}, #{rating}, #{releaseDate}, #{filePath})")
-    void insertAnimeWithId(Anime anime);
+    void insertAnimeWithIdIncludeDate(Anime anime);
 
     @Select("SELECT * FROM anime WHERE id = #{id}")
     @Results({  //沙雕MyBaties，连个映射都做不好，还要我手操，杂鱼！

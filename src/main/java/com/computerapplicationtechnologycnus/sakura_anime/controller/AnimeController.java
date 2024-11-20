@@ -39,9 +39,20 @@ public class AnimeController {
         }
     }
 
+    @Schema(description = "根据ID获取动漫详情")
+    @GetMapping("/getDetail/{id}")
+    public ResultMessage<AnimeResponseModel> getDetail(@PathVariable("id") Long id){
+        try{
+            AnimeResponseModel animeDetail = animeService.getAnimeById(id);
+            return ResultMessage.message(animeDetail,true,"请求成功！");
+        }catch (Exception e){
+            return ResultMessage.message(false,"获取失败！请联络管理员",e.getMessage());
+        }
+    }
+
     @Schema(description = "新增动漫资源 (对数据库)")
     @PostMapping("/createAnime")
-    @AuthRequired(minPermissionLevel = 0) //Only 管理员 can do.
+    @AuthRequired(minPermissionLevel = 0) //Only 管理员 can do.  权限详情见model/User的permission定义
     public ResultMessage createAnime(@RequestBody AnimeCreateModel request){
         try{
             animeService.insertAnime(request.getName(), request.getTags(),request.getDescription(),request.getRating(),request.getFilePath());
@@ -52,9 +63,22 @@ public class AnimeController {
         }
     }
 
+    @Schema(description = "删除指定动漫列表")
+    @GetMapping("/deleteAnime/{id}")
+    @AuthRequired(minPermissionLevel = 0)
+    public ResultMessage deleteAnime(@PathVariable("id") Long id){
+        try{
+            AnimeResponseModel animeDetail = animeService.getAnimeById(id);
+            animeService.deleteAnime(id);
+            return ResultMessage.message(animeDetail,true,"操作成功，已删除的动漫讯息如上\n【相关评论也随之删除！】");
+        }catch (Exception e){
+            return ResultMessage.message(false,"删除失败！请联络管理员",e.getMessage());
+        }
+    }
+
     @Schema(description = "更新动漫资源 (对数据库)")
     @PostMapping("/updateAnime")
-    @AuthRequired(minPermissionLevel = 0) //Only 管理员 can do.
+    @AuthRequired(minPermissionLevel = 0)
     public ResultMessage updateAnime(@RequestBody AnimeRequestModel request){
         try{
             animeService.updateAnime(request);
