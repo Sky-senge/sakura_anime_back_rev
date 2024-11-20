@@ -54,8 +54,9 @@ public class AuthInterceptor implements HandlerInterceptor {
 
         try {
             // 提取 token（去掉 Bearer 前缀）
-            String jwtToken = token.startsWith("Bearer ") ? token.substring(7) : token;
-
+//            String jwtToken = token.startsWith("Bearer ") ? token.substring(7) : token;
+            //无需提取
+              String jwtToken = token;
             if (jwtUtil.isTokenExpired(jwtToken)) {
                 logger.error("Token has expired.");
                 throw new AuthenticationException("Token has expired");
