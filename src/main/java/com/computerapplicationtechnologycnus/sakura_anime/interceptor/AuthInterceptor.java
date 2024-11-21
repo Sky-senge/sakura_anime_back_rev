@@ -68,7 +68,7 @@ public class AuthInterceptor implements HandlerInterceptor {
             Integer userPermissionLevel = claims.get("permission", Integer.class);
 
             // 权限验证
-            if (userPermissionLevel == null || userPermissionLevel < minPermissionLevel) {
+            if (userPermissionLevel == null || userPermissionLevel > minPermissionLevel) {
                 logger.error("User does not have sufficient permissions. Required: {}, Found: {}.",
                         minPermissionLevel, userPermissionLevel);
                 throw new AuthenticationException("Insufficient permissions");

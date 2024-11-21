@@ -8,25 +8,76 @@ import java.util.List;
 @Mapper
 public interface CommentMapper {
 
-    @Insert("INSERT INTO comment (anime_id, user_id, content, create_at) " +
-            "VALUES (#{animeId}, #{userId}, #{content}, #{createAt})")
+    //查询评论全表
+    @Select("SELECT * from comments")
+    List<Comment> findAllComment();
+
+    @Insert("INSERT INTO comments (anime_id, user_id, content) " +
+            "VALUES (#{animeId}, #{userId}, #{content})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
+    @Results({
+            @Result(property = "id",column = "id"),
+            @Result(property = "animeId",column = "anime_id"),
+            @Result(property = "userId",column = "user_id"),
+            @Result(property = "content",column = "content"),
+            @Result(property = "createAt",column = "created_at"),
+    })
     void insertComment(Comment comment);
 
-    @Select("SELECT * FROM comment WHERE id = #{id}")
-    Comment selectCommentById(Long id);
+    // 查询缺失的最小 ID
+    @Select("SELECT MIN(t1.id + 1) AS missing_id " +
+            "FROM comments t1 " +
+            "LEFT JOIN comments t2 ON t1.id + 1 = t2.id " +
+            "WHERE t2.id IS NULL")
+    Long findMissingId();
 
-    @Select("SELECT * FROM comment WHERE anime_id = #{animeId}")
-    List<Comment> selectCommentsByAnimeId(Long animeId);
+    // 手动指定 ID 新增评论，不插入日期信息，默认由SQL生成
+    @Insert("INSERT INTO comments (id, anime_id, user_id, content) " +
+            "VALUES (#{id},#{animeId}, #{userId}, #{content})")
+    @Options(useGeneratedKeys = true, keyProperty = "id")
+    @Results({
+            @Result(property = "id",column = "id"),
+            @Result(property = "animeId",column = "anime_id"),
+            @Result(property = "userId",column = "user_id"),
+            @Result(property = "content",column = "content"),
+    })
+    void insertCommentWithId(Comment comment);
 
-    @Select("SELECT * FROM comment WHERE user_id = #{userId}")
-    List<Comment> selectCommentsByUserId(Long userId);
+    @Select("SELECT * FROM comments WHERE id = #{id}")
+    @Results({
+            @Result(property = "id",column = "id"),
+            @Result(property = "animeId",column = "anime_id"),
+            @Result(property = "userId",column = "user_id"),
+            @Result(property = "content",column = "content"),
+            @Result(property = "createAt",column = "created_at"),
+    })
+    Comment findCommentById(Long id);
 
-    @Update("UPDATE comment SET anime_id = #{animeId}, user_id = #{userId}, content = #{content}, " +
+    @Select("SELECT * FROM comments WHERE anime_id = #{animeId}")
+    @Results({
+            @Result(property = "id",column = "id"),
+            @Result(property = "animeId",column = "anime_id"),
+            @Result(property = "userId",column = "user_id"),
+            @Result(property = "content",column = "content"),
+            @Result(property = "createAt",column = "created_at"),
+    })
+    List<Comment> findCommentsByAnimeId(Long animeId);
+
+    @Select("SELECT * FROM comments WHERE user_id = #{userId}")
+    @Results({
+            @Result(property = "id",column = "id"),
+            @Result(property = "animeId",column = "anime_id"),
+            @Result(property = "userId",column = "user_id"),
+            @Result(property = "content",column = "content"),
+            @Result(property = "createAt",column = "created_at"),
+    })
+    List<Comment> findCommentsByUserId(Long userId);
+
+    @Update("UPDATE comments SET anime_id = #{animeId}, user_id = #{userId}, content = #{content}, " +
             "create_at = #{createAt} WHERE id = #{id}")
     void updateComment(Comment comment);
 
-    @Delete("DELETE FROM comment WHERE id = #{id}")
+    @Delete("DELETE FROM comments WHERE id = #{id}")
     void deleteComment(Long id);
 
     // 删除指定用户的所有评论
