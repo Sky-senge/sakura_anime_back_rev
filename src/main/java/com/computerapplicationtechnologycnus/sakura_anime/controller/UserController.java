@@ -57,8 +57,9 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/delete")
-    public ResultMessage deleteUser(@PathVariable Long userId) {
+    @GetMapping("/deleteUser/{id}")
+    @AuthRequired(minPermissionLevel = 0) //仅限管理员可删除用户
+    public ResultMessage deleteUser(@PathVariable("id") Long userId) {
         boolean success = userService.deleteUserWithComments(userId);
         if (success) {
             return ResultMessage.message(true,"删除成功，UID："+userId);

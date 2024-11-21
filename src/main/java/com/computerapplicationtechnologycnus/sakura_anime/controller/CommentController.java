@@ -53,7 +53,6 @@ public class CommentController {
     @AuthRequired(minPermissionLevel = 1) //需求权限，用户
     public ResultMessage<String> addComment(@RequestBody CommentRequestModel request){
         try {
-            request.setCreateAt(null);
             commentService.insertComment(request);
             return ResultMessage.message(true,"操作成功！");
         }catch (Exception e){
