@@ -7,6 +7,7 @@ import com.computerapplicationtechnologycnus.sakura_anime.model.webRequestModel.
 import com.computerapplicationtechnologycnus.sakura_anime.model.webRequestModel.AnimeRequestModel;
 import com.computerapplicationtechnologycnus.sakura_anime.model.webRequestModel.AnimeResponseModel;
 import com.computerapplicationtechnologycnus.sakura_anime.services.AnimeService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +28,7 @@ public class AnimeController {
         this.resourceHandlerMapping = resourceHandlerMapping;
     }
 
-    @Schema(description = "获取全部动漫列表讯息")
+    @Operation(description = "获取全部动漫列表讯息")
     @GetMapping("/getAllAnime")
     public ResultMessage<List<AnimeResponseModel>> getAllAnime(){
         try{
@@ -39,7 +40,7 @@ public class AnimeController {
         }
     }
 
-    @Schema(description = "根据ID获取动漫详情")
+    @Operation(description = "根据ID获取动漫详情")
     @GetMapping("/getDetail/{id}")
     public ResultMessage<AnimeResponseModel> getDetail(@PathVariable("id") Long id){
         try{
@@ -50,7 +51,7 @@ public class AnimeController {
         }
     }
 
-    @Schema(description = "新增动漫资源 (对数据库)")
+    @Operation(description = "新增动漫资源 (对数据库)")
     @PostMapping("/createAnime")
     @AuthRequired(minPermissionLevel = 0) //Only 管理员 can do.  权限详情见model/User的permission定义
     public ResultMessage createAnime(@RequestBody AnimeCreateModel request){
@@ -63,7 +64,7 @@ public class AnimeController {
         }
     }
 
-    @Schema(description = "删除指定动漫列表")
+    @Operation(description = "删除指定动漫列表")
     @GetMapping("/deleteAnime/{id}")
     @AuthRequired(minPermissionLevel = 0)
     public ResultMessage deleteAnime(@PathVariable("id") Long id){
@@ -76,7 +77,7 @@ public class AnimeController {
         }
     }
 
-    @Schema(description = "更新动漫资源 (对数据库)")
+    @Operation(description = "更新动漫资源 (对数据库)")
     @PostMapping("/updateAnime")
     @AuthRequired(minPermissionLevel = 0)
     public ResultMessage updateAnime(@RequestBody AnimeRequestModel request){

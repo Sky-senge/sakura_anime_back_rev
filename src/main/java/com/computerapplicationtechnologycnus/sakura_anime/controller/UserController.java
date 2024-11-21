@@ -7,6 +7,7 @@ import com.computerapplicationtechnologycnus.sakura_anime.model.webRequestModel.
 import com.computerapplicationtechnologycnus.sakura_anime.model.webRequestModel.UserLoginResponse;
 import com.computerapplicationtechnologycnus.sakura_anime.model.webRequestModel.UserRegistryModel;
 import com.computerapplicationtechnologycnus.sakura_anime.services.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +23,7 @@ public class UserController {
         this.userService=userService;
     }
 
-    @Schema(description = "用户登录")
+    @Operation(description = "用户登录")
     @PostMapping("/login")
     public ResultMessage<UserLoginResponse> login(@RequestBody UserLoginRequest request){
         try{
@@ -33,7 +34,7 @@ public class UserController {
         }
     }
 
-    @Schema(description = "用户注册")
+    @Operation(description = "用户注册")
     @PostMapping("/register")
     public ResultMessage register(@RequestBody UserRegistryModel request) {
         try{
@@ -45,7 +46,7 @@ public class UserController {
         }
     }
 
-    @Schema(description = "获取用户所有信息的接口")
+    @Operation(description = "获取用户所有信息的接口")
     @AuthRequired(minPermissionLevel = 1)  // 使用 AuthRequired 注解，进行认证，普通用户即可访问
     @GetMapping("/getAllUsers")
     public ResultMessage<List<User>> getAllUsers(){

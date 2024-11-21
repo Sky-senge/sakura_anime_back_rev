@@ -5,6 +5,7 @@ import com.computerapplicationtechnologycnus.sakura_anime.common.ResultMessage;
 import com.computerapplicationtechnologycnus.sakura_anime.model.Comment;
 import com.computerapplicationtechnologycnus.sakura_anime.model.webRequestModel.CommentRequestModel;
 import com.computerapplicationtechnologycnus.sakura_anime.services.CommentService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +26,7 @@ public class CommentController {
         this.commentService=commentService;
     }
 
-    @Schema(description = "根据动漫ID获取评论列表")
+    @Operation(description = "根据动漫ID获取评论列表")
     @GetMapping("/getComment/{id}")
     public ResultMessage<List<Comment>> getCommentsByAnimeID(@PathVariable("id") Long id){
         try{
@@ -37,7 +38,7 @@ public class CommentController {
         }
     }
 
-    @Schema(description = "根据用户ID获取评论列表")
+    @Operation(description = "根据用户ID获取评论列表")
     @GetMapping("/getCommentByUID/{id}")
     public ResultMessage<List<Comment>> getCommentsByUserID(@PathVariable("id") Long id){
         try{
@@ -48,7 +49,7 @@ public class CommentController {
         }
     }
 
-    @Schema(description = "新增评论，需要用户登录")
+    @Operation(description = "新增评论，需要用户登录")
     @PostMapping("/addComment")
     @AuthRequired(minPermissionLevel = 1) //需求权限，用户
     public ResultMessage<String> addComment(@RequestBody CommentRequestModel request){
@@ -60,7 +61,7 @@ public class CommentController {
         }
     }
 
-    @Schema(description = "更改评论内容，需要管理员操作")
+    @Operation(description = "更改评论内容，需要管理员操作")
     @PostMapping("/updateComment")
     @AuthRequired(minPermissionLevel = 0) //需要权限，管理员
     public ResultMessage<String> updateComment(@RequestBody Comment request){
@@ -72,7 +73,7 @@ public class CommentController {
         }
     }
 
-    @Schema(description = "删除评论，根据评论ID操作")
+    @Operation(description = "删除评论，根据评论ID操作")
     @GetMapping("/deleteComment/{id}")
     @AuthRequired(minPermissionLevel = 0)
     public ResultMessage<String> deleteCommentByID(@PathVariable("id") Long id){
