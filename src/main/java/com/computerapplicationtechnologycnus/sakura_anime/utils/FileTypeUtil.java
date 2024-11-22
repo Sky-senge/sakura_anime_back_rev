@@ -3,6 +3,8 @@ package com.computerapplicationtechnologycnus.sakura_anime.utils;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
+
 @Component
 public class FileTypeUtil {
     public String getFileExtension(String filename) {
@@ -22,6 +24,17 @@ public class FileTypeUtil {
             default:
                 return null; // 未知类型
         }
+    }
+
+    /**
+     * 验证文件是否为支持的视频类型
+     * @param filename 文件名
+     * @return 是否为视频文件
+     */
+    public boolean isVideoFile(String filename) {
+        String[] allowedExtensions = { "mp4", "mkv", "avi", "mov" };
+        String fileExtension = filename.substring(filename.lastIndexOf('.') + 1).toLowerCase();
+        return Arrays.asList(allowedExtensions).contains(fileExtension);
     }
 
 }

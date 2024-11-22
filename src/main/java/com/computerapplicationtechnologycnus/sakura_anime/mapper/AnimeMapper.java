@@ -59,6 +59,9 @@ public interface AnimeMapper {
             "rating = #{rating}, release_date = #{releaseDate}, file_path = #{filePath} WHERE id = #{id}")
     void updateAnime(Anime anime); //直接提交一个完整的Anime类即可，因为类中包括ID
 
+    @Update("UPDATE anime SET file_path = #{filePath} WHERE id = #{id}")
+    void updateAnimeFilePathById(String filePath,Long id);
+
     @Delete("DELETE FROM anime WHERE id = #{id}")
     void deleteAnimeById(Long id);
 }

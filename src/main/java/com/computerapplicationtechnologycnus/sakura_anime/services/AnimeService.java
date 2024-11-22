@@ -81,6 +81,17 @@ public class AnimeService {
         return animeResponse;
     }
 
+    /**通过动漫ID更新路径
+     *
+     * 文件控制器中使用
+     */
+    @Schema(description = "通过动漫ID更新文件存在路径")
+    @Transactional
+    public void updatePathById(Long id,String filePath){
+        animeMapper.updateAnimeFilePathById(filePath,id);
+        logger.info("ID为 \""+id+"\" 的动漫路径已更新为："+filePath);
+    }
+
     /**
      * 更新动漫信息
      *
@@ -127,7 +138,7 @@ public class AnimeService {
             anime.setName(name);
             anime.setTagsList(tags);
             anime.setDescription(description);
-            anime.setFilePath(filePath);
+            anime.setFilePath("WaitingForUpload."); //为避免后续冲突问题，文件路径由文件上传提供。
             anime.setRating(rating);
 
             //检查Rating应当在 1-10内的一位小数，例如3.8 ，5.6 ，10.0
