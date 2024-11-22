@@ -1,5 +1,6 @@
 package com.computerapplicationtechnologycnus.sakura_anime.services;
 
+import com.computerapplicationtechnologycnus.sakura_anime.controller.FileController;
 import com.computerapplicationtechnologycnus.sakura_anime.mapper.CommentMapper;
 import com.computerapplicationtechnologycnus.sakura_anime.mapper.UserMapper;
 import com.computerapplicationtechnologycnus.sakura_anime.model.User;
@@ -7,6 +8,8 @@ import com.computerapplicationtechnologycnus.sakura_anime.model.webRequestModel.
 import com.computerapplicationtechnologycnus.sakura_anime.model.webRequestModel.UserLoginResponse;
 import com.computerapplicationtechnologycnus.sakura_anime.utils.JwtUtil;
 import com.computerapplicationtechnologycnus.sakura_anime.utils.SecurityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +17,8 @@ import java.util.List;
 
 @Service
 public class UserService {
+
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     //构造函式
     private final UserMapper userMapper;
@@ -87,6 +92,17 @@ public class UserService {
         } catch (Exception e) {
             throw new Exception("用户注册失败：" + e.getMessage(), e);
         }
+    }
+
+    /**
+     * 保存头像文件名到数据库
+     * @param userId 用户ID
+     * @param filename 文件名
+     */
+    @Transactional //修改表需要使用事务
+    public void saveAvatarToDatabase(Long userId, String filename) {
+        userMapper.updateAvatarById(userId,filename);
+        logger.info("用户ID: " + userId + " 的头像已更新为: " + filename);
     }
 
     /**

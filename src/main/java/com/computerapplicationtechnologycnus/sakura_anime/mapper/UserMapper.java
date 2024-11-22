@@ -62,6 +62,9 @@ public interface UserMapper {
     @Update("UPDATE users SET remarks=#{remarks} WHERE id=#{id}")
     void updateRemarksById(Long id,String remarks);
 
+    @Update("UPDATE users SET avatar=#{avatarFileName} WHERE id=#{id}")
+    void updateAvatarById(Long id,String avatarFileName);
+
     // 删除指定用户
     @Delete("DELETE FROM users WHERE id = #{userId}")
     int deleteUserById(@Param("userId") Long userId);
