@@ -170,7 +170,7 @@ public class FileController {
             // 文件唯一名称对应ID路径保存到数据库，去掉mp4之类的扩展名
             String videoName=uniqueFilename.substring(0,uniqueFilename.lastIndexOf('.'));
             animeService.updatePathById(animeId, videoName);
-            return ResultMessage.message(true, "转码完成。文件名："+uniqueFilename);
+            return ResultMessage.message(true, "上传完成，转码中。文件名："+uniqueFilename);
         } catch (Exception e) {
             logger.error("视频上传失败", e);
             return ResultMessage.message(false, "视频上传失败！请联系管理员。", e.getMessage());
