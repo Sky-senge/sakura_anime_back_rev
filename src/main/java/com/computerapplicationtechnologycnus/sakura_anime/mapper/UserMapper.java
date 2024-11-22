@@ -9,6 +9,16 @@ import java.util.List;
 public interface UserMapper {
 
     @Select("SELECT id,avatar,email,username,permission,display_name,remarks FROM users")
+    @Results({
+            @Result(property = "id",column = "id"),
+            @Result(property = "avatar",column = "avatar"),
+            @Result(property = "email",column = "email"),
+            @Result(property = "username",column = "username"),
+            @Result(property = "permission",column = "permission"),
+            @Result(property = "password",column = "password"),
+            @Result(property = "displayName",column = "display_name"),
+            @Result(property = "remarks",column = "remarks")
+    })
     List<User> findAllUsers(); //用于返回式查询，默认隐藏密码
 
     @Select("SELECT * FROM users")
@@ -25,23 +35,83 @@ public interface UserMapper {
     @Insert("INSERT INTO users (avatar,email,username,permission,password,display_name,remarks) " +
             "VALUES (null,#{email},#{username},#{permission},#{password},#{displayName},#{remarks})")
     @Options(useGeneratedKeys = true,keyProperty = "id")
+    @Results({
+            @Result(property = "id",column = "id"),
+            @Result(property = "avatar",column = "avatar"),
+            @Result(property = "email",column = "email"),
+            @Result(property = "username",column = "username"),
+            @Result(property = "permission",column = "permission"),
+            @Result(property = "password",column = "password"),
+            @Result(property = "displayName",column = "display_name"),
+            @Result(property = "remarks",column = "remarks")
+    })
     void insertUser(User user);
 
     // 手动指定 ID 插入用户
     @Insert("INSERT INTO users (id, avatar, email, username, permission, password, display_name, remarks) " +
             "VALUES (#{id}, null, #{email}, #{username}, #{permission}, #{password}, #{displayName}, #{remarks})")
+    @Results({
+            @Result(property = "id",column = "id"),
+            @Result(property = "avatar",column = "avatar"),
+            @Result(property = "email",column = "email"),
+            @Result(property = "username",column = "username"),
+            @Result(property = "permission",column = "permission"),
+            @Result(property = "password",column = "password"),
+            @Result(property = "displayName",column = "display_name"),
+            @Result(property = "remarks",column = "remarks")
+    })
     void insertUserWithId(User user);
 
     @Select("SELECT id,avatar,email,username,permission,display_name,remarks from users WHERE id=#{id}")
+    @Results({
+            @Result(property = "id",column = "id"),
+            @Result(property = "avatar",column = "avatar"),
+            @Result(property = "email",column = "email"),
+            @Result(property = "username",column = "username"),
+            @Result(property = "permission",column = "permission"),
+            @Result(property = "password",column = "password"),
+            @Result(property = "displayName",column = "display_name"),
+            @Result(property = "remarks",column = "remarks")
+    })
     User findUserDetailByID(Long id);
 
     @Select("SELECT id,avatar,email,username,permission,display_name,remarks FROM users WHERE username = #{username}")
+    @Results({
+            @Result(property = "id",column = "id"),
+            @Result(property = "avatar",column = "avatar"),
+            @Result(property = "email",column = "email"),
+            @Result(property = "username",column = "username"),
+            @Result(property = "permission",column = "permission"),
+            @Result(property = "password",column = "password"),
+            @Result(property = "displayName",column = "display_name"),
+            @Result(property = "remarks",column = "remarks")
+    })
     User findByUsername(@Param("username") String username);
 
     @Select("SELECT * FROM users WHERE username = #{username}")
+    @Results({
+            @Result(property = "id",column = "id"),
+            @Result(property = "avatar",column = "avatar"),
+            @Result(property = "email",column = "email"),
+            @Result(property = "username",column = "username"),
+            @Result(property = "permission",column = "permission"),
+            @Result(property = "password",column = "password"),
+            @Result(property = "displayName",column = "display_name"),
+            @Result(property = "remarks",column = "remarks")
+    })
     User findByUsernameIncludePassword(@Param("username") String username); //用于管理员查询，【包含密码！需要注意使用】
 
     @Select("SELECT * from users WHERE id=#{id}")
+    @Results({
+            @Result(property = "id",column = "id"),
+            @Result(property = "avatar",column = "avatar"),
+            @Result(property = "email",column = "email"),
+            @Result(property = "username",column = "username"),
+            @Result(property = "permission",column = "permission"),
+            @Result(property = "password",column = "password"),
+            @Result(property = "displayName",column = "display_name"),
+            @Result(property = "remarks",column = "remarks")
+    })
     User findUserDetailByIDIncludePassword(Long id); //用于管理员查询，【包含密码！需要注意使用】
 
     @Update("UPDATE users SET password=#{newpasswd} WHERE id=#{id}")
