@@ -114,6 +114,9 @@ public interface UserMapper {
     })
     User findUserDetailByIDIncludePassword(Long id); //用于管理员查询，【包含密码！需要注意使用】
 
+    @Select("SELECT id from users WHERE username=#{username}")
+    Long findUserIdByUsername(String username); //根据用户名反查UID
+
     @Update("UPDATE users SET password=#{newpasswd} WHERE id=#{id}")
     void updatePasswordById(Long id,String newpasswd);
 

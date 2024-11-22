@@ -37,6 +37,9 @@ public class UserService {
         return userMapper.findAllUsers();
     }
 
+    //根据UID查询用户
+    public User getUserByUID(Long uid){return userMapper.findUserDetailByID(uid);}
+
     /**
      * 验证用户身份
      *
@@ -58,6 +61,14 @@ public class UserService {
         String token = jwtUtil.generateToken(user.getId(), user.getUsername(), user.getPermission());
         // 返回包含 Token 和 userId 的响应
         return new UserLoginResponse(token, user.getId());
+    }
+
+    /**
+     * 根据用户名查询UID
+     * @param username 唯一用户名
+     */
+    public Long findUIDByUsername(String username){
+        return userMapper.findUserIdByUsername(username);
     }
 
     /**
@@ -91,6 +102,41 @@ public class UserService {
             }
         } catch (Exception e) {
             throw new Exception("用户注册失败：" + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * 更改密码
+     * @param userId 用户ID
+     * @param passwd 用户密码
+     */
+    @Transactional
+    public void updatePassword(Long userId,String passwd) throws Exception {
+        try{
+            String hashedPassword = SecurityUtils.sha256Hash(passwd);
+            userMapper.updatePasswordById(userId,hashedPassword);
+        }catch (Exception e){
+            throw new Exception("更改密码失败："+e.getMessage());
+        }
+    }
+
+    /**
+     * 更新用户信息
+     * @param user 用户对象
+     */
+    @Transactional
+    public void updateUser(User user) throws Exception {
+        try{
+            Long UID=user.getId();
+            String hashedPassword = SecurityUtils.sha256Hash(user.getPassword());
+            userMapper.updateUsernameById(UID,user.getUsername());
+            userMapper.updateEmailById(UID,user.getEmail());
+            userMapper.updatePasswordById(UID,hashedPassword);
+            userMapper.updatePermissionById(UID,user.getPermission());
+            userMapper.updateRemarksById(UID,user.getRemarks());
+            userMapper.updateDisplayNameById(UID, user.getDisplayName());
+        }catch (Exception e){
+            throw new Exception("更改密码失败："+e.getMessage());
         }
     }
 

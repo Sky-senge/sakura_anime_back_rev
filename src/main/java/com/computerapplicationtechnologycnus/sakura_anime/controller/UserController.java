@@ -5,13 +5,16 @@ import com.computerapplicationtechnologycnus.sakura_anime.common.ResultMessage;
 import com.computerapplicationtechnologycnus.sakura_anime.model.User;
 import com.computerapplicationtechnologycnus.sakura_anime.model.webRequestModel.UserLoginRequest;
 import com.computerapplicationtechnologycnus.sakura_anime.model.webRequestModel.UserLoginResponse;
+import com.computerapplicationtechnologycnus.sakura_anime.model.webRequestModel.UserModPasswordRequestModel;
 import com.computerapplicationtechnologycnus.sakura_anime.model.webRequestModel.UserRegistryModel;
 import com.computerapplicationtechnologycnus.sakura_anime.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/user")
@@ -34,6 +37,36 @@ public class UserController {
         }
     }
 
+    @Operation(description = "更改密码(用户侧)")
+    @PostMapping("/modPassword")
+    @AuthRequired(minPermissionLevel = 1)
+    public ResultMessage<String> userModPassword(@RequestBody UserModPasswordRequestModel request, HttpServletRequest requestHeader){
+        try{
+            // 从请求中获取 username
+            String usernameFromToken = (String) requestHeader.getAttribute("username");
+            Long uidFromDatabase = userService.findUIDByUsername(usernameFromToken);
+            if(!uidFromDatabase.equals(request.getId())){
+                return ResultMessage.message(false,"修改密码失败，请本人登录！");
+            }
+            userService.updatePassword(request.getId(),request.getPassword());
+            return ResultMessage.message(true,"修改密码成功，请重新登陆！");
+        }catch (Exception e){
+            return ResultMessage.message(false,"修改密码失败，请联系管理员！", e.getMessage());
+        }
+    }
+
+    @Operation(description = "更新用户的信息")
+    @PostMapping("/updateUser")
+    @AuthRequired(minPermissionLevel = 0) //管理员可用，更改用户的全部信息
+    public ResultMessage<User> userUpdate(@RequestBody User request){
+        try{
+            userService.updateUser(request);
+            User modAfterUser = userService.getUserByUID(request.getId());
+            return ResultMessage.message(modAfterUser,true,"用户更新成功！");
+        }catch (Exception e){
+            return ResultMessage.message(false,"用户修改失败！可能存在冲突用户名和邮箱",e.getMessage());
+        }
+    }
     @Operation(description = "用户注册")
     @PostMapping("/register")
     public ResultMessage register(@RequestBody UserRegistryModel request) {

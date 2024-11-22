@@ -9,6 +9,7 @@ import com.computerapplicationtechnologycnus.sakura_anime.services.VideoService;
 import com.computerapplicationtechnologycnus.sakura_anime.utils.FileTypeUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,10 +50,78 @@ public class FileController {
         this.videoService=videoService;
     }
 
-    @Operation(description = "头像上传用接口")
+    /**
+     *
+     * @param file 上传的头像文件，通过form-data传输
+     * @param userId 自身的UID
+     * @param requestHeader 从Token获取的身份验证讯息
+     * @return
+     */
+    @Operation(description = "用户头像上传用接口")
     @PostMapping("/uploadAvatar")
     @AuthRequired(minPermissionLevel = 1)
     public ResultMessage<String> uploadAvatar(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("userId") Long userId,
+            HttpServletRequest requestHeader) {
+        try {
+            // 验证用户ID是否有效
+            if (userId == null || userId <= 0) {
+                return ResultMessage.message(false, "用户ID无效！");
+            }
+            String usernameFromToken = (String) requestHeader.getAttribute("username"); // 从请求中获取 username
+            Long uidFromDatabase = userService.findUIDByUsername(usernameFromToken); //从数据库获取UID并对比是否本人操作
+            if(!uidFromDatabase.equals(userId)){
+                return ResultMessage.message(false,"修改头像失败，请本人登录！");
+            }
+            // 验证文件是否为空
+            if (file.isEmpty()) {
+                return ResultMessage.message(false, "文件不能为空！");
+            }
+            // 验证文件类型是否为图片
+            String contentType = file.getContentType();
+            if (contentType == null || !contentType.startsWith("image/")) {
+                return ResultMessage.message(false, "仅支持上传图片文件！");
+            }
+            // 获取文件上传路径
+            String uploadDir = fileStorageProperties.getUploadDir() + "avatar/";
+            logger.info("本次上传路径: " + uploadDir);
+
+            // 检查目录是否存在，不存在则创建
+            File dir = new File(uploadDir);
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+
+            // 生成唯一文件名（使用用户ID和时间戳）
+            String originalFilename = file.getOriginalFilename();
+            String fileExtension = originalFilename != null && originalFilename.contains(".")
+                    ? originalFilename.substring(originalFilename.lastIndexOf('.'))
+                    : "";
+            String uniqueFilename = "avatar_" + userId + "_" + System.currentTimeMillis() + fileExtension;
+
+            // 保存文件
+            File uploadFile = new File(uploadDir + uniqueFilename);
+            file.transferTo(uploadFile);
+            // 将文件名保存到数据库
+            userService.saveAvatarToDatabase(userId, uniqueFilename);
+            return ResultMessage.message(uniqueFilename,true, "上传成功，文件名：" + uniqueFilename);
+        } catch (Exception e) {
+            logger.error("头像上传失败", e);
+            return ResultMessage.message(false, "头像上传失败！请联系管理员。", e.getMessage());
+        }
+    }
+
+    /**
+     *
+     * @param file 上传的头像文件，通过form-data传输
+     * @param userId  欲修改目标的UID
+     * @return
+     */
+    @Operation(description = "管理员头像修改用接口")
+    @PostMapping("/modAvatar")
+    @AuthRequired(minPermissionLevel = 0)
+    public ResultMessage<String> modAvatar(
             @RequestParam("file") MultipartFile file,
             @RequestParam("userId") Long userId) {
         try {
@@ -97,8 +166,6 @@ public class FileController {
             return ResultMessage.message(false, "头像上传失败！请联系管理员。", e.getMessage());
         }
     }
-
-
 
     @Operation(description = "头像下载接口")
     @GetMapping("/getAvatar/{filename}")

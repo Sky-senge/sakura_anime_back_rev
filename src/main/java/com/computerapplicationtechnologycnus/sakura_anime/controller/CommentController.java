@@ -5,8 +5,10 @@ import com.computerapplicationtechnologycnus.sakura_anime.common.ResultMessage;
 import com.computerapplicationtechnologycnus.sakura_anime.model.Comment;
 import com.computerapplicationtechnologycnus.sakura_anime.model.webRequestModel.CommentRequestModel;
 import com.computerapplicationtechnologycnus.sakura_anime.services.CommentService;
+import com.computerapplicationtechnologycnus.sakura_anime.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -21,9 +23,11 @@ public class CommentController {
     private static final Logger logger = LoggerFactory.getLogger(CommentController.class);
 
     private final CommentService commentService;
+    private final UserService userService;
 
-    public CommentController(CommentService commentService){
+    public CommentController(CommentService commentService,UserService userService){
         this.commentService=commentService;
+        this.userService=userService;
     }
 
     @Operation(description = "根据动漫ID获取评论列表")
@@ -52,8 +56,13 @@ public class CommentController {
     @Operation(description = "新增评论，需要用户登录")
     @PostMapping("/addComment")
     @AuthRequired(minPermissionLevel = 1) //需求权限，用户
-    public ResultMessage<String> addComment(@RequestBody CommentRequestModel request){
+    public ResultMessage<String> addComment(@RequestBody CommentRequestModel request, HttpServletRequest requestHeader){
         try {
+            String usernameFromToken = (String) requestHeader.getAttribute("username"); // 从请求中获取 username
+            Long uidFromDatabase = userService.findUIDByUsername(usernameFromToken); //从数据库获取UID并对比是否本人操作
+            if(!uidFromDatabase.equals(request.getUserId())){
+                return ResultMessage.message(false,"添加评论失败，请本人登录！");
+            }
             commentService.insertComment(request);
             return ResultMessage.message(true,"操作成功！");
         }catch (Exception e){

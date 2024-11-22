@@ -64,9 +64,12 @@ public class AuthInterceptor implements HandlerInterceptor {
 
             // 验证Token有效性，并获取相关信息
             Claims claims = jwtUtil.getClaimsFromToken(jwtToken);
-//            logger.info(String.valueOf(claims)); //调试，查看Token讯息
-            Integer userPermissionLevel = claims.get("permission", Integer.class);
 
+
+
+            logger.info(String.valueOf(claims)); //调试，查看Token讯息
+            Integer userPermissionLevel = claims.get("permission", Integer.class);
+            String username = claims.get("username", String.class); // 提取 username
             // 权限验证
             if (userPermissionLevel == null || userPermissionLevel > minPermissionLevel) {
                 logger.error("User does not have sufficient permissions. Required: {}, Found: {}.",
@@ -74,6 +77,7 @@ public class AuthInterceptor implements HandlerInterceptor {
                 throw new AuthenticationException("Insufficient permissions");
             }
 
+            request.setAttribute("username", username); //把请求的username缓存
             logger.info("Token is valid and permissions are sufficient.");
             return true;
 
