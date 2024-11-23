@@ -200,11 +200,19 @@ public class FileController {
         }
     }
 
+    /**
+     *
+     * @param file  文件部分，二进制数据
+     * @param animeId 动漫对应ID
+     * @param episodes 第几集，剧场版直接写1
+     * @return
+     */
     @Operation(description = "动漫资源文件上传用接口，仅限管理员使用")
     @PostMapping("/uploadAnime")
     @AuthRequired(minPermissionLevel = 0)
     public ResultMessage<String> uploadAnime(@RequestParam("file") MultipartFile file,
-                                             @RequestParam("animeId") Long animeId) {
+                                             @RequestParam("animeId") Long animeId,
+                                             @RequestParam("episodes")Long episodes) {
         try {
             // 验证文件是否为空
             if (file.isEmpty()) {
@@ -236,7 +244,7 @@ public class FileController {
             videoService.convertVideoToM3u8(videoFilePath); // 转码视频
             // 文件唯一名称对应ID路径保存到数据库，去掉mp4之类的扩展名
             String videoName=uniqueFilename.substring(0,uniqueFilename.lastIndexOf('.'));
-            animeService.updatePathById(animeId, videoName);
+            animeService.updatePathById(animeId, episodes, videoName);
             return ResultMessage.message(true, "上传完成，转码中。文件名："+uniqueFilename);
         } catch (Exception e) {
             logger.error("视频上传失败", e);

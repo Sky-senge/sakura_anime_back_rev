@@ -1,5 +1,6 @@
 package com.computerapplicationtechnologycnus.sakura_anime.model.webRequestModel;
 
+import com.computerapplicationtechnologycnus.sakura_anime.model.AnimePathObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -26,6 +27,6 @@ public class AnimeResponseModel {
     @Schema(description = "发布日期")
     private Date releaseDate;
 
-    @Schema(description = "视频文件路径")
-    private String filePath;
+    @Schema(description = "视频文件集数和文件地址的列表")
+    private List<AnimePathObject> filePath;
 }

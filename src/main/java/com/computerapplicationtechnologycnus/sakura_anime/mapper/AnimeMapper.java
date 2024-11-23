@@ -55,6 +55,10 @@ public interface AnimeMapper {
     })
     List<Anime> findAllAnimes();
 
+    @Select("SELECT file_path FROM anime WHERE id=#{id}")
+    @Results({@Result(property = "filePath", column = "file_path")})
+    String findFilePathListById(Long id);
+
     @Update("UPDATE anime SET name = #{name}, tags = #{tags}, description = #{description}, " +
             "rating = #{rating}, release_date = #{releaseDate}, file_path = #{filePath} WHERE id = #{id}")
     void updateAnime(Anime anime); //直接提交一个完整的Anime类即可，因为类中包括ID
