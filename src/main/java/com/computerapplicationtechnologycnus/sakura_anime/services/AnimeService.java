@@ -68,6 +68,44 @@ public class AnimeService {
         return animeResponseList;
     }
 
+    /**
+     * 获取所有动漫信息
+     *
+     * 使用分页查询功能，减少数据库压力
+     */
+    @Schema(description = "获取动漫信息列表")
+    public List<AnimeResponseModel> getAnimeByPage(Long size,Long page) {
+        if(page<=1){
+            page= 0L;
+        }else {
+            page=page*size;
+        }
+        // 从数据库中获取 Anime 对象列表
+        List<Anime> animeList = animeMapper.findAnimeUseOffset(size,page);
+        // 创建一个 List 来存储转换后的 AnimeResponseModel
+        List<AnimeResponseModel> animeResponseList = new ArrayList<>();
+        // 遍历 animeList 并将其转换为 AnimeResponseModel
+        for (Anime anime : animeList) {
+            AnimeResponseModel responseModel = new AnimeResponseModel();
+            // 设置 AnimeResponseModel 的属性
+            responseModel.setId(anime.getId());
+            responseModel.setName(anime.getName());
+            responseModel.setDescription(anime.getDescription());
+            responseModel.setRating(anime.getRating());
+            responseModel.setReleaseDate(anime.getReleaseDate());
+            //把存进去的JSON反序列化回来
+            responseModel.setFilePath(JSON.parseArray(anime.getFilePath(),AnimePathObject.class));
+            // 处理 tags 字段：从 JSON 字符串转为 List<String>
+            if (anime.getTags() != null) {
+                List<String> tagsList = JSON.parseArray(anime.getTags(), String.class);
+                responseModel.setTags(tagsList);
+            }
+            // 将转换后的对象添加到响应列表中
+            animeResponseList.add(responseModel);
+        }
+        return animeResponseList;
+    }
+
     @Schema(description = "通过ID获取动漫信息")
     public AnimeResponseModel getAnimeById(Long id){
         Anime returnedAnime=animeMapper.findAnimeById(id);

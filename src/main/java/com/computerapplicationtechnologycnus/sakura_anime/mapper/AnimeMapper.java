@@ -55,6 +55,18 @@ public interface AnimeMapper {
     })
     List<Anime> findAllAnimes();
 
+    @Select("select * from anime order by id asc limit #{size} OFFSET #{offset};")
+    @Results({  //沙雕MyBaties，连个映射都做不好，还要我手操，杂鱼！
+            @Result(property = "id", column = "id"),
+            @Result(property = "name", column = "name"),
+            @Result(property = "tags", column = "tags"),
+            @Result(property = "description", column = "description"),
+            @Result(property = "rating", column = "rating"),
+            @Result(property = "releaseDate", column = "release_date"),
+            @Result(property = "filePath", column = "file_path")
+    })
+    List<Anime> findAnimeUseOffset(@Param("size") Long size, @Param("offset") Long offset);
+
     @Select("SELECT file_path FROM anime WHERE id=#{id}")
     @Results({@Result(property = "filePath", column = "file_path")})
     String findFilePathListById(Long id);

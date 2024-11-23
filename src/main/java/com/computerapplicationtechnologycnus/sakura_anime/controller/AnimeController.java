@@ -40,6 +40,27 @@ public class AnimeController {
         }
     }
 
+    /**
+     * 分页查询动漫列表信息
+     * @param page 多少页，首页默认1
+     * @param size 每页多少个数据，默认10个
+     * @return 动漫列表
+     */
+    @Operation(description = "获取全部动漫列表讯息，但使用分页查询")
+    @GetMapping("/getAnimeList")
+    public ResultMessage<List<AnimeResponseModel>> getAllAnimeByPage(
+            @RequestParam(defaultValue = "0") long page,
+            @RequestParam(defaultValue = "10") long size
+    ){
+        try{
+            List<AnimeResponseModel> animeList = animeService.getAnimeByPage(size,page);
+
+            return ResultMessage.message(animeList,true,"访问成功！");
+        }catch (Exception e){
+            return ResultMessage.message(false,"无法访问数据，原因如下："+e.getMessage());
+        }
+    }
+
     @Operation(description = "根据ID获取动漫详情")
     @GetMapping("/getDetail/{id}")
     public ResultMessage<AnimeResponseModel> getDetail(@PathVariable("id") Long id){
