@@ -21,6 +21,19 @@ public interface UserMapper {
     })
     List<User> findAllUsers(); //用于返回式查询，默认隐藏密码
 
+    @Select("SELECT id,avatar,email,username,permission,display_name,remarks FROM users order by id asc limit #{size} OFFSET #{offset}")
+    @Results({
+            @Result(property = "id",column = "id"),
+            @Result(property = "avatar",column = "avatar"),
+            @Result(property = "email",column = "email"),
+            @Result(property = "username",column = "username"),
+            @Result(property = "permission",column = "permission"),
+            @Result(property = "password",column = "password"),
+            @Result(property = "displayName",column = "display_name"),
+            @Result(property = "remarks",column = "remarks")
+    })
+    List<User> findUsersUseOffset(@Param("size") Long size, @Param("offset") Long offset); //分页查询，用于返回式查询，默认隐藏密码
+
     @Select("SELECT * FROM users")
     List<User> findAllUsersIncludePasswords(); //用于管理员查询，【包含密码！需要注意使用】
 

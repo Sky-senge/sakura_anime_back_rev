@@ -80,11 +80,32 @@ public class UserController {
     }
 
     @Operation(description = "获取用户所有信息的接口")
-    @AuthRequired(minPermissionLevel = 1)  // 使用 AuthRequired 注解，进行认证，普通用户即可访问
+    @AuthRequired(minPermissionLevel = 0)  // 使用 AuthRequired 注解，进行认证，只有管理员可用
     @GetMapping("/getAllUsers")
     public ResultMessage<List<User>> getAllUsers(){
         try{
             List<User> userList = userService.getAllUsers();
+            return ResultMessage.message(userList,true,"访问成功");
+        }catch (Exception e){
+            return ResultMessage.message(false,"无法访问数据库，原因如下", e.getMessage());
+        }
+    }
+
+    /**
+     *
+     * @param page 分页页数
+     * @param size 分页列表大小
+     * @return
+     */
+    @Operation(description = "分页获取用户所有信息的接口")
+    @AuthRequired(minPermissionLevel = 1)  // 使用 AuthRequired 注解，进行认证，普通用户即可访问
+    @GetMapping("/getUserList")
+    public ResultMessage<List<User>> getUsersByPage(
+            @RequestParam(defaultValue = "0") long page,
+            @RequestParam(defaultValue = "10") long size
+    ){
+        try{
+            List<User> userList = userService.getUsersByPage(size,page);
             return ResultMessage.message(userList,true,"访问成功");
         }catch (Exception e){
             return ResultMessage.message(false,"无法访问数据库，原因如下", e.getMessage());
