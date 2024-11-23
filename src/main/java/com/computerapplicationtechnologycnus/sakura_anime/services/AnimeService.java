@@ -75,10 +75,11 @@ public class AnimeService {
      */
     @Schema(description = "获取动漫信息列表")
     public List<AnimeResponseModel> getAnimeByPage(Long size,Long page) {
-        if(page<=1){
-            page= 0L;
+        if(page<=1 || size<1){ //假如出现异常参数，恢复默认
+            page = 0L;
+            size = 10L;
         }else {
-            page=page*size;
+            page = page*size;
         }
         // 从数据库中获取 Anime 对象列表
         List<Anime> animeList = animeMapper.findAnimeUseOffset(size,page);
