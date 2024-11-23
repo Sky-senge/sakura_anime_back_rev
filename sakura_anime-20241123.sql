@@ -29,7 +29,7 @@ CREATE TABLE `anime` (
   `description` text DEFAULT NULL,
   `rating` float(3,1) DEFAULT 0.0 CHECK (`rating` between 1 and 10),
   `release_date` timestamp NULL DEFAULT current_timestamp(),
-  `file_path` varchar(255) NOT NULL,
+  `file_path` longtext NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -43,8 +43,8 @@ LOCK TABLES `anime` WRITE;
 INSERT INTO `anime` VALUES
 (1,'秒速5厘米','[\"日系\", \"治愈\"]','新海誠執導的2007年日本動畫電影',9.5,'2024-11-18 06:44:04','[]'),
 (2,'寒蝉鸣泣之时','[\"日系\",\"治愈\"]','人坏掉，蝉在叫',1.0,'2024-11-20 17:06:31','[]'),
-(3,'你得名字','[\"日系\",\"新海诚\",\"治愈\"]','新海誠執導的2007年日本動畫電影',1.5,NULL,'[]'),
-(4,'迷宫饭','[\"日系\",\"治愈\"]','反正是吃货',9.5,'2024-11-22 07:01:33','[{\"episodes\":1,\"fileName\":\"anime_1732358043001\"}]');
+(3,'你得名字','[\"日系\",\"新海诚\",\"治愈\"]','新海誠執導的2007年日本動畫電影',1.5,'2024-11-20 17:06:31','[{\"episodes\":1,\"fileName\":\"anime_1732368030343\"}]'),
+(4,'迷宫饭','[\"日系\",\"治愈\"]','反正是吃货',9.5,'2024-11-22 07:01:33','[{\"episodes\":1,\"fileName\":\"anime_1732368724539\"},{\"episodes\":2,\"fileName\":\"anime_1732368030343\"}]');
 /*!40000 ALTER TABLE `anime` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -76,10 +76,10 @@ CREATE TABLE `comments` (
 LOCK TABLES `comments` WRITE;
 /*!40000 ALTER TABLE `comments` DISABLE KEYS */;
 INSERT INTO `comments` VALUES
-(1,1,1,'感觉不如原神','2024-11-21 16:24:23'),
+(1,1,1,'我去','2024-11-21 16:24:23'),
 (2,1,2,'很好看哦www','2024-11-21 16:44:39'),
-(3,1,2,'请不要ky发言谢谢','2024-11-22 13:46:49'),
-(4,1,2,'不好看睡了3小时','2024-11-22 13:45:37');
+(3,1,2,'很好看哦www','2024-11-22 13:46:49'),
+(4,1,2,'很好看哦www','2024-11-22 13:45:37');
 /*!40000 ALTER TABLE `comments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -102,7 +102,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -131,4 +131,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-11-23 18:43:53
+-- Dump completed on 2024-11-23 21:58:18
