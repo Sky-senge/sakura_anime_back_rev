@@ -50,7 +50,10 @@ public class VideoService {
                 String m3u8FilePath = outputDirPath + "/playlist.m3u8";
                 String encodingType = "libx264";
                 String ffmpegLocate = ffmpegConfig.getLocate();
-                if(ffmpegConfig.getVideo().isEnableNvenc()){
+                if(ffmpegLocate.isEmpty()){ //防止空命令错误，如果为空，默认使用"ffmpeg"命令
+                    ffmpegLocate="ffmpeg";
+                }
+                if(ffmpegConfig.getVideo().isEnableNvenc()){ //如果启用NVENC加速
                     encodingType = "h264_nvenc";
                 }
                 String command = String.format(
