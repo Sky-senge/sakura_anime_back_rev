@@ -49,12 +49,13 @@ public class VideoService {
                 // 构建 FFmpeg 命令
                 String m3u8FilePath = outputDirPath + "/playlist.m3u8";
                 String encodingType = "libx264";
+                String ffmpegLocate = ffmpegConfig.getLocate();
                 if(ffmpegConfig.getVideo().isEnableNvenc()){
                     encodingType = "h264_nvenc";
                 }
                 String command = String.format(
-                        "ffmpeg -i %s -c:v "+encodingType+" -b:v "+ffmpegConfig.getVideo().getAvgrate()+"k -maxrate "+ffmpegConfig.getVideo().getMaxrate()+"k -bufsize 10000k " +
-                                "-profile:v high -level 5.1 -map v:0 -c:a aac -ar 48k -b:a 256k " +
+                        ffmpegLocate+" -i %s -c:v "+encodingType+" -b:v "+ffmpegConfig.getVideo().getAvgrate()+"k -maxrate "+ffmpegConfig.getVideo().getMaxrate()+"k -bufsize 10000k " +
+                                "-profile:v high -level 5.1 -map v:0 -map a:0 -c:a aac -ar 48k -b:a 256k " +
                                 "-pix_fmt yuv420p -sws_flags lanczos -f hls -hls_time "+ffmpegConfig.getHls().getTime()+" -hls_list_size 0 %s",
                         videoFilePath, m3u8FilePath
                 );

@@ -21,6 +21,8 @@ ffmpeg.video.maxrate=5000
 ffmpeg.video.avgrate=3000
 ## 是否开启N卡加速编码（默认开启，转码遇到问题请关闭）
 ffmpeg.video.enableNvenc=true
+## FFMPEG程序路径，若已经配好环境变量，则不需要改动
+ffmpeg.locate="ffmpeg"
 
 # JWT配置
 ## JWT密钥（要弄得超级长，512位密钥）

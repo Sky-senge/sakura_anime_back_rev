@@ -148,7 +148,7 @@ public class AnimeService {
             animeFinal.setName(anime.getName());
             animeFinal.setTagsList(anime.getTags());
             animeFinal.setDescription(anime.getDescription());
-            animeFinal.setFilePath(anime.getFilePath());
+            animeFinal.setFilePath(JSON.toJSONString(anime.getFilePath()));
             animeFinal.setRating(anime.getRating());
             animeMapper.updateAnime(animeFinal);
         }catch (Exception e){

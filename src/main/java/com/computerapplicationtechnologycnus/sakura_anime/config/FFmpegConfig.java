@@ -14,6 +14,9 @@ public class FFmpegConfig {
     private Hls hls = new Hls();
     private Video video = new Video();
 
+    @Schema(description = "FFMPEG程序的所在路径，默认为ffmpeg")
+    private String locate;
+
     @Data
     public static class Hls {
         @Schema(description = "FFMPEG 单个切片时长")
