@@ -18,7 +18,7 @@ MariaDB数据库
 
 ## API文档
 
-### User部分控制器：
+### 用户部分控制器：
 
 [POST] /api/user/login
 
@@ -415,3 +415,136 @@ MariaDB数据库
   "error": "string"
 }
 ```
+
+
+
+## 文件控制器：
+
+[POST] /files/getAvatar/{filename}
+
+**说明：** 获取头像文件
+
+**请求：** filename为头像文件路径，头像可通过用户相关API查表或者getDetail来获取
+
+
+
+[POST] /files/uploadAnime
+
+**说明：** 更新一个动漫视频文件，需要【管理员】权限
+
+**请求：**
+
+格式： Form-data（表单上传）
+
+| 请求字段     | 请求内容         |
+| -------- | ------------ |
+| animeId  | 对应动漫id，数字    |
+| episodes | 集数，剧场版就1集，数字 |
+| file     | 文件内容，二进制视频文件 |
+
+**响应：**
+
+```json
+{
+  "status": true, //是否成功？
+  "data": "String", //成功的消息
+  "message": "string", //成功的消息
+  "error": "string"
+}
+```
+
+
+
+[POST] /files/uploadAvatar
+
+**说明：** 更新一个用户头像文件，需要登录，仅限传自己的头像。
+
+**请求：**
+
+格式： Form-data（表单上传）
+
+| 请求字段   | 请求内容          |
+| ------ | ------------- |
+| userId | 目标用户ID，填写自己的。 |
+| file   | 文件内容，二进制图像文件  |
+
+**响应：**
+
+```json
+{
+  "status": true, //是否成功？
+  "data": "String", //成功的消息
+  "message": "string", //成功的消息
+  "error": "string"
+}
+```
+
+
+
+[POST] /files/modAvatar
+
+**说明：** 管理员修改头像，仅限【管理员】权限使用。
+
+**请求：**
+
+格式： Form-data（表单上传）
+
+| 请求字段   | 请求内容           |
+| ------ | -------------- |
+| userId | 目标用户ID，填谁的都可以。 |
+| file   | 文件内容，二进制图像文件   |
+
+**响应：**
+
+```json
+{
+  "status": true, //是否成功？
+  "data": "String", //成功的消息
+  "message": "string", //成功的消息
+  "error": "string"
+}
+```
+
+
+
+[GET] /files/getVideo/{requirements}/playlist.m3u8
+
+**说明：** 获取动漫的播放列表，m3u8切片流
+
+**请求：** {requirements} 为动漫路径字段，可在注释1的字段中找到```fileName```部分
+
+注释1：
+
+```json
+"filePath": [
+      {
+        "episodes": 0,
+        "fileName": "string"
+      }
+```
+
+
+
+**响应：** 正常来说，是m3u8的文件内容，错误则返回错误响应体。
+
+
+
+[GET] /files/getVideo/{requirements}/{tsFileName}
+
+**说明：** 获取动漫的播放列表，m3u8切片流
+
+**请求：** {requirements} 为动漫路径字段，可在注释1的字段中找到`fileName`部分
+
+{tsFileName}为切片的ts文件名称，一般播放器会自动从playlist.m3u8中获取并请求。
+
+注释1：
+
+```json
+"filePath": [
+      {
+        "episodes": 0,
+        "fileName": "string"
+      }
+```
+
+**响应：** 二进制文件
