@@ -18,7 +18,7 @@ MariaDB数据库
 
 ## API文档
 
-### User部分控制器
+### User部分控制器：
 
 [POST] /api/user/login
 
@@ -214,6 +214,203 @@ MariaDB数据库
       "remarks": "string"
     }
   ],
+  "message": "string",
+  "error": "string"
+}
+```
+
+
+
+## 动漫部分控制器：
+
+[POST] /api/anime/createAnime
+
+**说明：** 新建一个动漫资源表，需要【管理员】权限
+
+**请求：**
+
+```json
+{
+  "name": "string", //动漫名称
+  "tags": [ //动漫的标签，是包含多个词的数组，下面是个例子
+    "日系",
+    "治愈"
+  ],
+  "description": "string", //动漫介绍
+  "rating": 0, //评分，在1~10之间的一位小数点，例如 9.5
+  "filePath": "string" //不用管，上传文件之后会自动加的，填啥字符串都一样
+}
+```
+
+**响应：**
+
+```json
+{
+  "status": true, //是否成功？
+  "data": {},
+  "message": "string", //成功的消息
+  "error": "string"
+}
+```
+
+[POST] /api/anime/updateAnime
+
+**说明：** 更新一个动漫资源，需要【管理员】权限
+
+**请求：**
+
+```json
+{
+  "id": 0, //需要更新ID为什么的动漫？
+  "name": "string", //动漫名称
+  "tags": [
+    "string"
+  ],
+  "description": "string", //动漫说明
+  "rating": 0, //评分
+  "releaseDate": "2024-11-24T08:38:34.261Z", //发行时间，SQL自动生成，无需填写
+  "filePath": [ //文件存放相关
+    {
+      "episodes": 1, //第几集，剧场版写1
+      "fileName": "string" //实际视频流的文件夹
+    }
+  ]
+}
+```
+
+**响应：**
+
+```json
+{
+  "status": true, //是否成功？
+  "data": {},
+  "message": "string", //成功的消息
+  "error": "string"
+}
+```
+
+
+
+[GET] /api/anime/getDetail/{id}
+
+**说明：** 根据动漫ID获取具体信息
+
+**请求：**{id} 是动漫ID
+
+**响应：**
+
+```json
+{
+  "status": true, //是否获取成功？
+  "data": { //动漫信息的对象
+    "id": 0,
+    "name": "string",
+    "tags": [
+      "string"
+    ],
+    "description": "string",
+    "rating": 0,
+    "releaseDate": "2024-11-24T08:41:22.180Z", 
+    "filePath": [
+      {
+        "episodes": 0,
+        "fileName": "string"
+      }
+    ]
+  },
+  "message": "string", //获取成功后的信息
+  "error": "string" //错误发生后的消息（可能没有）
+}
+```
+
+
+
+[GET] /api/anime/getAnimeList
+
+**说明：** 分页查询动漫列表，仅限登录使用。
+
+**请求参数：** /api/anime/getAnimeList? `page=第几页` & `size=每页几个数据`
+
+**响应(以下面为例的对象列表)：**
+
+```json
+{
+  "status": true,
+  "data": [
+    {
+      "id": 0,
+      "name": "string",
+      "tags": [
+        "string"
+      ],
+      "description": "string",
+      "rating": 0,
+      "releaseDate": "2024-11-24T08:45:13.905Z",
+      "filePath": [
+        {
+          "episodes": 0,
+          "fileName": "string"
+        }
+      ]
+    }
+  ],
+  "message": "string",
+  "error": "string"
+}
+```
+
+
+
+[GET] /api/anime/getAllAnime
+
+**说明：** 一次性查询所有动漫列表，不建议使用，仅限【管理员】使用。
+
+**请求参数：** 无
+
+**响应(以下面为例的对象列表)：**
+
+```json
+{
+  "status": true,
+  "data": [
+    {
+      "id": 0,
+      "name": "string",
+      "tags": [
+        "string"
+      ],
+      "description": "string",
+      "rating": 0,
+      "releaseDate": "2024-11-24T08:45:13.905Z",
+      "filePath": [
+        {
+          "episodes": 0,
+          "fileName": "string"
+        }
+      ]
+    }
+  ],
+  "message": "string",
+  "error": "string"
+}
+```
+
+
+
+[GET] /api/anime/deleteAnime/{ID}
+
+**说明：** 删除某个动漫，仅限【管理员】使用。
+
+**注意：** 删除动漫会导致其名下所有评论联动删除，谨慎使用！！
+
+**请求：** {ID} 为动漫实际ID
+
+**响应（以下面为例的对象列表）：**
+
+```json
+{
+  "status": true, //是否成功
+  "data": {},
   "message": "string",
   "error": "string"
 }
