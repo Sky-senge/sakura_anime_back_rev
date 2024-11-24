@@ -112,13 +112,13 @@ MariaDB数据库
 ```json
 {
   "id": 0,
-  "avatar": "string",
-  "email": "string",
-  "username": "string",
+  "avatar": "string", //头像文件名称标识
+  "email": "string", //电邮
+  "username": "string", //唯一用户名
   "permission": 0, //权限级别[0:管理员，1:普通用户,2:已被封锁]
-  "password": "string",
-  "displayName": "string",
-  "remarks": "string"
+  "password": "string", //密码，这个字段永远为空，保护隐私
+  "displayName": "string", //显示名称，昵称
+  "remarks": "string" //个性签名
 }
 ```
 
@@ -220,6 +220,30 @@ MariaDB数据库
 ```
 
 
+
+[GET] /api/anime/getDetail
+
+**说明：** 获取当前已登录用户的用户详情，只要带Token即可。
+
+**响应：**
+
+```json
+{
+  "status": true, //请求是否成功
+  "data": { //当前用户的详情
+    "id": 0,
+    "avatar": "string",
+    "email": "string",
+    "username": "string",
+    "permission": 0,
+    "password": "string",
+    "displayName": "string",
+    "remarks": "string"
+  },
+  "message": "string", //请求成功的消息
+  "error": "string" //错误消息（如有）
+}
+```
 
 ## 动漫部分控制器：
 
