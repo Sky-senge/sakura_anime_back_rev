@@ -2,6 +2,7 @@ package com.computerapplicationtechnologycnus.sakura_anime.interceptor;
 
 import com.computerapplicationtechnologycnus.sakura_anime.annotation.AuthRequired;
 import com.computerapplicationtechnologycnus.sakura_anime.exception.AuthenticationException;
+import com.computerapplicationtechnologycnus.sakura_anime.mapper.UserMapper;
 import com.computerapplicationtechnologycnus.sakura_anime.utils.JwtUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -22,6 +23,8 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     @Autowired
     private JwtUtil jwtUtil;
+    @Autowired
+    private UserMapper userMapper;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
@@ -61,17 +64,21 @@ public class AuthInterceptor implements HandlerInterceptor {
             }
             // 验证Token有效性，并获取相关信息
             Claims claims = jwtUtil.getClaimsFromToken(jwtToken);
-
             logger.info(String.valueOf(claims)); //调试，查看Token讯息
             Integer userPermissionLevel = claims.get("permission", Integer.class);
             String username = claims.get("username", String.class); // 提取 username
+            String passkeyFromToken = claims.get("passkey",String.class); //提取存储的密码
+            String passkeyFromDatabase = userMapper.findUserPasskeyByUsername(username); //从数据库获取密码
             // 权限验证
+            if(!passkeyFromToken.equals(passkeyFromDatabase)){
+                throw new AuthenticationException("Premission Denied. Passkey not Match!");
+            }
+            //验证权限等级
             if (userPermissionLevel == null || userPermissionLevel > minPermissionLevel) {
                 logger.error("User does not have sufficient permissions. Required: {}, Found: {}.",
                         minPermissionLevel, userPermissionLevel);
                 throw new AuthenticationException("Insufficient permissions");
             }
-
             request.setAttribute("username", username); //把请求的username缓存
             logger.info("Token is valid and permissions are sufficient.");
             return true;

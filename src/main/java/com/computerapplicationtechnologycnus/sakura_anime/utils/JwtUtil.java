@@ -19,11 +19,12 @@ public class JwtUtil {
     private Long expiration;  // 过期时间，单位毫秒
 
     // 生成 JWT Token
-    public String generateToken(Long userId, String username, int permission) {
+    public String generateToken(Long userId, String username, int permission,String encrypted_password) {
         return Jwts.builder()
                 .setSubject(String.valueOf(userId))
                 .claim("username", username)
                 .claim("permission", permission)
+                .claim("passkey",encrypted_password)
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))  // 设置过期时间
                 .signWith(SignatureAlgorithm.HS512, secret)  // 使用 HS512 签名
                 .compact();

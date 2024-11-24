@@ -69,7 +69,7 @@ public class UserService {
             return null; // 密码错误
         }
         // 使用 JwtUtil 生成JWT Token
-        String token = jwtUtil.generateToken(user.getId(), user.getUsername(), user.getPermission());
+        String token = jwtUtil.generateToken(user.getId(), user.getUsername(), user.getPermission(),user.getPassword());
         // 返回包含 Token 和 userId 的响应
         return new UserLoginResponse(token, user.getId());
     }

@@ -88,6 +88,9 @@ public interface UserMapper {
     })
     User findUserDetailByID(Long id);
 
+    @Select("SELECT password from users WHERE username=#{username}")
+    String findUserPasskeyByUsername(String username);
+
     @Select("SELECT id,avatar,email,username,permission,display_name,remarks FROM users WHERE username = #{username}")
     @Results({
             @Result(property = "id",column = "id"),
