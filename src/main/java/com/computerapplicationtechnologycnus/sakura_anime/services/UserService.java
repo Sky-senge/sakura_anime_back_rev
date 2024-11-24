@@ -140,6 +140,10 @@ public class UserService {
         try{
             Long UID=user.getId();
             String hashedPassword = SecurityUtils.sha256Hash(user.getPassword());
+            if(user.getPassword().isEmpty()){
+                //以免发生空密码把用户变成免密登录的事件
+                hashedPassword = userMapper.findUserPasskeyByUsername(user.getUsername());
+            }
             userMapper.updateUsernameById(UID,user.getUsername());
             userMapper.updateEmailById(UID,user.getEmail());
             userMapper.updatePasswordById(UID,hashedPassword);
