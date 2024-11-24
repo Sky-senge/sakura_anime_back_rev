@@ -14,7 +14,9 @@ MariaDB数据库
 
 #### 注意：
 
-**application.properties现在不会受Git更新，避免由于开发组成员更新导致的启动问题。取而代之的是同目录下的** ```application.properties模板.temp``` **文件，它会提供一个很好的模板，下载之后请根据它来配置你的properties文件。**
+~~**application.properties现在不会受Git更新，避免由于开发组成员更新导致的启动问题。取而代之的是同目录下的** ```application.properties模板.temp``` **文件，它会提供一个很好的模板，下载之后请根据它来配置你的properties文件。~~**
+
+我也不知道为啥排除不了（）总之先这样吧，自个备份一份properties文件到其他目录，更新就覆盖回去。
 
 ## API文档
 
@@ -219,8 +221,6 @@ MariaDB数据库
 }
 ```
 
-
-
 [GET] /api/anime/getDetail
 
 **说明：** 获取当前已登录用户的用户详情，只要带Token即可。
@@ -313,8 +313,6 @@ MariaDB数据库
 }
 ```
 
-
-
 [GET] /api/anime/getDetail/{id}
 
 **说明：** 根据动漫ID获取具体信息
@@ -346,8 +344,6 @@ MariaDB数据库
   "error": "string" //错误发生后的消息（可能没有）
 }
 ```
-
-
 
 [GET] /api/anime/getAnimeList
 
@@ -383,8 +379,6 @@ MariaDB数据库
 }
 ```
 
-
-
 [GET] /api/anime/getAllAnime
 
 **说明：** 一次性查询所有动漫列表，不建议使用，仅限【管理员】使用。
@@ -419,8 +413,6 @@ MariaDB数据库
 }
 ```
 
-
-
 [GET] /api/anime/deleteAnime/{ID}
 
 **说明：** 删除某个动漫，仅限【管理员】使用。
@@ -440,8 +432,6 @@ MariaDB数据库
 }
 ```
 
-
-
 ## 文件控制器：
 
 [POST] /files/getAvatar/{filename}
@@ -449,8 +439,6 @@ MariaDB数据库
 **说明：** 获取头像文件
 
 **请求：** filename为头像文件路径，头像可通过用户相关API查表或者getDetail来获取
-
-
 
 [POST] /files/uploadAnime
 
@@ -477,8 +465,6 @@ MariaDB数据库
 }
 ```
 
-
-
 [POST] /files/uploadAvatar
 
 **说明：** 更新一个用户头像文件，需要登录，仅限传自己的头像。
@@ -502,8 +488,6 @@ MariaDB数据库
   "error": "string"
 }
 ```
-
-
 
 [POST] /files/modAvatar
 
@@ -529,8 +513,6 @@ MariaDB数据库
 }
 ```
 
-
-
 [GET] /files/getVideo/{requirements}/playlist.m3u8
 
 **说明：** 获取动漫的播放列表，m3u8切片流
@@ -547,11 +529,7 @@ MariaDB数据库
       }
 ```
 
-
-
 **响应：** 正常来说，是m3u8的文件内容，错误则返回错误响应体。
-
-
 
 [GET] /files/getVideo/{requirements}/{tsFileName}
 
