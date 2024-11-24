@@ -67,6 +67,21 @@ public class UserController {
             return ResultMessage.message(false,"用户修改失败！可能存在冲突用户名和邮箱",e.getMessage());
         }
     }
+
+    @Operation(description = "根据UID查询用户详情")
+    @GetMapping("/getDetail")
+    @AuthRequired(minPermissionLevel = 1)
+    public ResultMessage<User> getDetail(HttpServletRequest requestHeader){
+        try{
+            // 从请求中获取 username
+            String usernameFromToken = (String) requestHeader.getAttribute("username");
+            Long uidFromDatabase = userService.findUIDByUsername(usernameFromToken);
+            User userDetail = userService.getUserByUID(uidFromDatabase);
+            return ResultMessage.message(userDetail,true,"获取成功");
+        }catch (Exception e){
+            return ResultMessage.message(false,"用户查询失败，请登录！",e.getMessage());
+        }
+    }
     @Operation(description = "用户注册")
     @PostMapping("/register")
     public ResultMessage register(@RequestBody UserRegistryModel request) {
