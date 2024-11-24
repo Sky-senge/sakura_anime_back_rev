@@ -30,6 +30,7 @@ public class AnimeController {
 
     @Operation(description = "获取全部动漫列表讯息")
     @GetMapping("/getAllAnime")
+    @AuthRequired(minPermissionLevel = 0) //仅限管理员使用
     public ResultMessage<List<AnimeResponseModel>> getAllAnime(){
         try{
             List<AnimeResponseModel> animeList = animeService.getAllAnime();
