@@ -41,17 +41,15 @@ public class AuthInterceptor implements HandlerInterceptor {
             logger.info("No @AuthRequired annotation found, skipping authorization.");
             return true;
         }
-
         int minPermissionLevel = authRequired.minPermissionLevel();
+        //调试用，获取方法最低所需权限
         logger.info("Required minPermissionLevel: " + minPermissionLevel);
-
         // 获取请求中的 token
         String token = request.getHeader("Authorization");
         if (token == null || token.isEmpty()) {
             logger.error("Missing token in request.");
             throw new AuthenticationException("Missing token");
         }
-
         try {
             // 提取 token（去掉 Bearer 前缀）
 //            String jwtToken = token.startsWith("Bearer ") ? token.substring(7) : token;
@@ -61,11 +59,8 @@ public class AuthInterceptor implements HandlerInterceptor {
                 logger.error("Token has expired.");
                 throw new AuthenticationException("Token has expired");
             }
-
             // 验证Token有效性，并获取相关信息
             Claims claims = jwtUtil.getClaimsFromToken(jwtToken);
-
-
 
             logger.info(String.valueOf(claims)); //调试，查看Token讯息
             Integer userPermissionLevel = claims.get("permission", Integer.class);
