@@ -22,6 +22,17 @@ public class CommentService {
         return commentMapper.findCommentsByAnimeId(id);
     }
 
+    @Schema(description = "根据动漫ID，分页查询评论列表")
+    public List<Comment> getCommentByAnimeIDByPage(Long id,Long page,Long size){
+        if(page<=1 || size<1){ //假如出现异常参数，恢复默认
+            page = 0L;
+            size = 30L;
+        }else {
+            page = page*size;
+        }
+        return commentMapper.findCommentsByAnimeIdUseOffset(id,size,page);
+    }
+
     @Schema(description = "获取全部评论，不管是什么动漫的，仅限管理员使用")
     public List<Comment> getAllComment(){
         return commentMapper.findAllComment();

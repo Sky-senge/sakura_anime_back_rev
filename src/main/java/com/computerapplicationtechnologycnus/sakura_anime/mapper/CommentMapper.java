@@ -10,7 +10,25 @@ public interface CommentMapper {
 
     //查询评论全表
     @Select("SELECT * from comments")
+    @Results({
+            @Result(property = "id",column = "id"),
+            @Result(property = "animeId",column = "anime_id"),
+            @Result(property = "userId",column = "user_id"),
+            @Result(property = "content",column = "content"),
+            @Result(property = "createAt",column = "created_at"),
+    })
     List<Comment> findAllComment();
+
+    //查询评论全表
+    @Select("SELECT * from comments order by id asc limit #{size} OFFSET #{offset}")
+    @Results({
+            @Result(property = "id",column = "id"),
+            @Result(property = "animeId",column = "anime_id"),
+            @Result(property = "userId",column = "user_id"),
+            @Result(property = "content",column = "content"),
+            @Result(property = "createAt",column = "created_at"),
+    })
+    List<Comment> findCommentUseOffset(@Param("size") Long size, @Param("offset") Long offset);
 
     @Insert("INSERT INTO comments (anime_id, user_id, content) " +
             "VALUES (#{animeId}, #{userId}, #{content})")
@@ -52,6 +70,16 @@ public interface CommentMapper {
             @Result(property = "createAt",column = "created_at"),
     })
     Comment findCommentById(Long id);
+
+    @Select("SELECT * FROM comments WHERE anime_id = #{animeId} order by id asc limit #{size} OFFSET #{offset}")
+    @Results({
+            @Result(property = "id",column = "id"),
+            @Result(property = "animeId",column = "anime_id"),
+            @Result(property = "userId",column = "user_id"),
+            @Result(property = "content",column = "content"),
+            @Result(property = "createAt",column = "created_at"),
+    })
+    List<Comment> findCommentsByAnimeIdUseOffset(@Param("animeId") Long animeId,@Param("size") Long size, @Param("offset") Long offset);
 
     @Select("SELECT * FROM comments WHERE anime_id = #{animeId}")
     @Results({

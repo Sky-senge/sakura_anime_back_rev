@@ -30,11 +30,27 @@ public class CommentController {
         this.userService=userService;
     }
 
-    @Operation(description = "根据动漫ID获取评论列表")
+    @Operation(description = "根据动漫ID获取评论列表，直接获取全部数据")
     @GetMapping("/getComment/{id}")
+    @AuthRequired(minPermissionLevel = 0)
     public ResultMessage<List<Comment>> getCommentsByAnimeID(@PathVariable("id") Long id){
         try{
             List<Comment> commentList = commentService.getAllCommentByAnimeID(id);
+            logger.info(commentList.toString());
+            return ResultMessage.message(commentList,true,"获取成功！");
+        }catch (Exception e){
+            return ResultMessage.message(false,"获取评论失败，请联络管理员！",e.getMessage());
+        }
+    }
+
+    @Operation(description = "根据动漫ID获取评论列表，分页查询，用户和未登录可用")
+    @GetMapping("/getCommentList/{id}")
+    public ResultMessage<List<Comment>> getCommentsByAnimeID(
+            @PathVariable("id") Long id,
+            @RequestParam(defaultValue = "0") long page,
+            @RequestParam(defaultValue = "30") long size){
+        try{
+            List<Comment> commentList = commentService.getCommentByAnimeIDByPage(id,page,size);
             logger.info(commentList.toString());
             return ResultMessage.message(commentList,true,"获取成功！");
         }catch (Exception e){
