@@ -43,7 +43,7 @@ public class AnimeController {
 
     /**
      * 分页查询动漫列表信息
-     * @param page 多少页，首页默认1
+     * @param page 多少页，首页默认第一页
      * @param size 每页多少个数据，默认10个
      * @return 动漫列表
      */
@@ -67,6 +67,13 @@ public class AnimeController {
         }
     }
 
+    /**
+     *
+     * @param keyWord 查询关键词
+     * @param page 多少页，默认第一页
+     * @param size 每页多少个数据，默认30个
+     * @return
+     */
     @Operation(description = "按名称搜索")
     @GetMapping("/searchByName")
     public ResultMessage<List<AnimeResponseModel>> searchAnimeByName(
