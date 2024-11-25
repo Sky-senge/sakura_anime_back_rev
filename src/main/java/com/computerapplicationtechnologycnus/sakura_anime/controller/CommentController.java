@@ -50,6 +50,11 @@ public class CommentController {
             @RequestParam(defaultValue = "0") long page,
             @RequestParam(defaultValue = "30") long size){
         try{
+            //处理可能存在刁民给你搬来巨大或错误参数拖累性能
+            if(size>100 || page<0){
+                return ResultMessage.message(false,"您的查询参数过于巨大或不正确，请重试");
+            }
+            //查询执行
             List<Comment> commentList = commentService.getCommentByAnimeIDByPage(id,page,size);
             logger.info(commentList.toString());
             return ResultMessage.message(commentList,true,"获取成功！");
