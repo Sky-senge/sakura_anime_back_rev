@@ -8,9 +8,7 @@ Java 17，
 
 Maven
 
-已经配置好的ffmpeg，可以到这里[下载](https://www.ffmpeg.org/download.html)
-
-（建议使用N卡加速编码，不支持也可以用CPU编码，就是会很慢）
+已经配置好的ffmpeg，可以到[这里下载](https://www.ffmpeg.org/download.html)
 
 MariaDB 10.11 并导入数据库，数据库默认名为```sakura_anime```
 
@@ -29,6 +27,14 @@ git update-index --assume-unchanged src/main/resources/application.properties
 ```bash
 git update-index --no-assume-unchanged
 ```
+
+**Tips:**
+
+1. 如果你打开你的IDE，发现代码或者配置存在乱码，请把工作区的文件编码都改成UTF-8，有的环境默认是ISO-8859-1或其他不正确的编码导致显示/保存错误。请在工作前务必修改为正确的UTF-8，避免后续麻烦。
+
+2. 请记得配置上述排除application.properties文件的Git追踪。
+
+3. 由于项目涉及视频编解码，建议在拥有NVIDIA GPU或者强大算力CPU的计算机运行。
 
 ## API文档
 
