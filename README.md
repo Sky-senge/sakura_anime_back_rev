@@ -14,9 +14,19 @@ MariaDB数据库
 
 #### 注意：
 
-~~**application.properties现在不会受Git更新，避免由于开发组成员更新导致的启动问题。取而代之的是同目录下的** ```application.properties模板.temp``` **文件，它会提供一个很好的模板，下载之后请根据它来配置你的properties文件。~~**
+**application.properties现在不建议受Git更新，避免由于开发组成员更新导致的启动问题。取而代之的是同目录下的** ```application.properties模板.temp``` **文件，它会提供一个很好的模板，下载之后请根据它来配置你的properties文件。**
 
-我也不知道为啥排除不了（）总之先这样吧，自个备份一份properties文件到其他目录，更新就覆盖回去。
+为了维保你是会排除掉这个properties文件，请你先在克隆/下载项目的目录下，执行一行Git命令，确保排除它。
+
+```bash
+git update-index --assume-unchanged src/main/resources/application.properties
+```
+
+如果有需要确实要更新它，那么请替换为以下参数
+
+```bash
+git update-index --no-assume-unchanged
+```
 
 ## API文档
 
@@ -489,8 +499,6 @@ MariaDB数据库
 }
 ```
 
-
-
 [POST] /files/uploadCover
 
 **说明：** 更新一个动漫头像文件，需要【管理员】登录，以及【已经上传】的动漫资源。
@@ -514,8 +522,6 @@ MariaDB数据库
   "error": "string"
 }
 ```
-
-
 
 [POST] /files/modAvatar
 
@@ -541,8 +547,6 @@ MariaDB数据库
 }
 ```
 
-
-
 [GET] /files/getVideo/{requirements}/playlist.m3u8
 
 **说明：** 获取动漫的播放列表，m3u8切片流
@@ -560,8 +564,6 @@ MariaDB数据库
 ```
 
 **响应：** 正常来说，是m3u8的文件内容，错误则返回错误响应体。
-
-
 
 [GET] /files/getVideo/{requirements}/{tsFileName}
 
@@ -582,8 +584,6 @@ MariaDB数据库
 ```
 
 **响应：** ``` 二进制文件```
-
-
 
 [GET] /files/getCover/{requirements}
 
