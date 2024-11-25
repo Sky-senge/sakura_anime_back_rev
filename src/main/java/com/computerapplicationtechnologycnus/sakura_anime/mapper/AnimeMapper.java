@@ -55,6 +55,20 @@ public interface AnimeMapper {
     })
     List<Anime> findAllAnimes();
 
+    @Select("SELECT * FROM anime WHERE name LIKE CONCAT('%', #{name}, '%') LIMIT #{limit} OFFSET #{offset}")
+    @Results({
+            @Result(property = "id", column = "id"),
+            @Result(property = "name", column = "name"),
+            @Result(property = "tags", column = "tags"),
+            @Result(property = "description", column = "description"),
+            @Result(property = "rating", column = "rating"),
+            @Result(property = "releaseDate", column = "release_date"),
+            @Result(property = "filePath", column = "file_path")
+    })
+    List<Anime> searchAnimeByNameUseOffset(@Param("name") String name,
+                                                  @Param("limit") Long limit,
+                                                  @Param("offset") Long offset);
+
     @Select("select * from anime order by id asc limit #{size} OFFSET #{offset}")
     @Results({  //沙雕MyBaties，连个映射都做不好，还要我手操，杂鱼！
             @Result(property = "id", column = "id"),

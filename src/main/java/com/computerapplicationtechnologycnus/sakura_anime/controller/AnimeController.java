@@ -67,6 +67,26 @@ public class AnimeController {
         }
     }
 
+    @Operation(description = "按名称搜索")
+    @GetMapping("/searchByName")
+    public ResultMessage<List<AnimeResponseModel>> searchAnimeByName(
+            @RequestParam(defaultValue = "") String keyWord,
+            @RequestParam(defaultValue = "0") long page,
+            @RequestParam(defaultValue = "30") long size
+    ){
+        try{
+            //处理可能存在刁民给你搬来巨大或错误参数拖累性能
+            if(size>100 || page<0){
+                return ResultMessage.message(false,"您的查询参数过于巨大或不正确，请重试");
+            }
+            //查询执行
+            List<AnimeResponseModel> animeList = animeService.animeSearch(keyWord,size,page);
+            return ResultMessage.message(animeList,true,"访问成功！");
+        }catch (Exception e){
+            return ResultMessage.message(false,"无法访问数据，原因如下："+e.getMessage());
+        }
+    }
+
     @Operation(description = "根据ID获取动漫详情")
     @GetMapping("/getDetail/{id}")
     public ResultMessage<AnimeResponseModel> getDetail(@PathVariable("id") Long id){
