@@ -239,7 +239,7 @@ git update-index --no-assume-unchanged
 }
 ```
 
-[GET] /api/anime/getDetail
+[GET] /api/user/getDetail
 
 **说明：** 获取当前已登录用户的用户详情，只要带Token即可。
 
