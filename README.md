@@ -391,13 +391,11 @@ git update-index --no-assume-unchanged
 }
 ```
 
-
-
 [GET] /api/anime/searchByName
 
 **说明：** 根据关键词搜索动漫，支持模糊匹配。
 
-**请求参数：** /api/anime/searchByName? ```keyWord=关键词``` `page=第几页` & `size=每页几个数据`
+**请求参数：** /api/anime/searchByName? ```keyWord=关键词``` & `page=第几页` & `size=每页几个数据`
 
 **提示：** keyWord为必须，不填分页则默认第一页，返回30个数据
 
@@ -428,8 +426,6 @@ git update-index --no-assume-unchanged
   "error": "string"
 }
 ```
-
-
 
 [GET] /api/anime/getAllAnime
 
