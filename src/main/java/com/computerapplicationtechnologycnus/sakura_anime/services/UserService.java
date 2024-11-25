@@ -43,7 +43,7 @@ public class UserService {
             page = 0L;
             size = 10L;
         }else {
-            page = page*size;
+            page = (page-1)*size;
         }
         return userMapper.findUsersUseOffset(size,page);
     }

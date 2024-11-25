@@ -82,7 +82,7 @@ public class AnimeService {
             page = 0L;
             size = 10L;
         }else {
-            page = page*size;
+            page = (page-1)*size;
         }
         // 从数据库中获取 Anime 对象列表
         List<Anime> animeList = animeMapper.findAnimeUseOffset(size,page);

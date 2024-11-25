@@ -28,7 +28,7 @@ public class CommentService {
             page = 0L;
             size = 30L;
         }else {
-            page = page*size;
+            page = (page-1)*size;
         }
         return commentMapper.findCommentsByAnimeIdUseOffset(id,size,page);
     }
