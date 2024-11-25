@@ -201,7 +201,7 @@ public class FileController {
     }
 
     /**
-     *
+     * 动漫资源文件上传用接口
      * @param file  文件部分，二进制数据
      * @param animeId 动漫对应ID
      * @param episodes 第几集，剧场版直接写1
@@ -249,6 +249,111 @@ public class FileController {
         } catch (Exception e) {
             logger.error("视频上传失败", e);
             return ResultMessage.message(false, "视频上传失败！请联系管理员。", e.getMessage());
+        }
+    }
+
+    /**
+     * 动漫封面上传用接口，仅限管理员使用，默认在第一集的路径内，cover.jpg/png等等
+     * 【注意！】需要先上传了视频资源，才能使用封面
+     *
+     * @param file 上传的头像文件，通过form-data传输
+     * @param animeId 对应动漫的ID
+     * @return
+     */
+    @Operation(description = "动漫封面上传用接口")
+    @PostMapping("/uploadCover")
+    @AuthRequired(minPermissionLevel = 0)
+    public ResultMessage<String> uploadCover(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("animeId") Long animeId) {
+        try {
+            // 验证文件是否为空
+            if (file.isEmpty()) {
+                return ResultMessage.message(false, "文件不能为空！");
+            }
+            // 验证文件类型是否为图片
+            String contentType = file.getContentType();
+            if (contentType == null || !contentType.startsWith("image/")) {
+                return ResultMessage.message(false, "仅支持上传图片文件！");
+            }
+            // 获取文件上传路径
+            String uniqueAnimeDir = animeService.getAnimePathByIdAndEpodies(animeId,1L);
+            if(uniqueAnimeDir.isBlank()){
+                return ResultMessage.message(false, "封面上传失败，未创建对应资源！");
+            }
+            String uploadDir = fileStorageProperties.getUploadDir() + "anime/"+uniqueAnimeDir+"/";
+            logger.info("本次上传路径: " + uploadDir);
+
+            // 检查目录是否存在，不存在则创建
+            File dir = new File(uploadDir);
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+            // 生成名称
+            String originalFilename = file.getOriginalFilename();
+            String fileExtension = originalFilename != null && originalFilename.contains(".")
+                    ? originalFilename.substring(originalFilename.lastIndexOf('.'))
+                    : "";
+            String coverFilename = "cover" + fileExtension;
+            // 保存文件
+            File uploadFile = new File(uploadDir + coverFilename);
+            file.transferTo(uploadFile);
+            return ResultMessage.message(uniqueAnimeDir + coverFilename,true, "封面上传成功！");
+        } catch (Exception e) {
+            logger.error("封面上传失败", e);
+            return ResultMessage.message(false, "封面上传失败！请联系管理员。", e.getMessage());
+        }
+    }
+
+    /**
+     * 提供封面文件
+     *
+     * @param requirements 目录路径参数
+     * @return 封面文件响应
+     */
+    @Operation(description = "提供封面文件的接口")
+    @GetMapping("/getCover/{requirements}")
+    public ResponseEntity<byte[]> getCover(
+            @PathVariable String requirements) {
+        try {
+            // 获取目录路径
+            String directoryPath = fileStorageProperties.getUploadDir() + "anime/" + requirements;
+            File directory = new File(directoryPath);
+            if (!directory.exists() || !directory.isDirectory()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(("目录不存在: " + requirements).getBytes());
+            }
+            // 搜索文件
+            File coverFile = null;
+            for (String extension : new String[]{"jpg", "jpeg","png"}) {
+                File file = new File(directory, "cover." + extension);
+                if (file.exists() && file.isFile()) {
+                    coverFile = file;
+                    break;
+                }
+            }
+            if (coverFile == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("封面文件不存在".getBytes());
+            }
+            // 修改 Content-Type
+            String contentType = Files.probeContentType(coverFile.toPath());
+            if (contentType == null) { //如果无法确定，就丢这个
+                contentType = "application/octet-stream";
+            }
+            // 读取文件内容
+            InputStream inputStream = new FileInputStream(coverFile);
+            byte[] content = inputStream.readAllBytes();
+            inputStream.close();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.parseMediaType(contentType));
+            headers.add("Content-Disposition", "inline; filename=\"" + coverFile.getName() + "\"");
+
+            return new ResponseEntity<>(content, headers, HttpStatus.OK);
+        } catch (IOException e) {
+            logger.error("读取封面文件失败: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(("读取文件失败: " + e.getMessage()).getBytes());
         }
     }
 

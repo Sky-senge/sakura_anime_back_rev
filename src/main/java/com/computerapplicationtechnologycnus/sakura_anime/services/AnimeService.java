@@ -123,6 +123,32 @@ public class AnimeService {
     }
 
     /**
+     *
+     * @param id 动漫ID
+     * @param epodies 动漫集数
+     * @return 对应FileName
+     */
+    @Schema(description = "通过ID和集数来获取文件唯一路径")
+    public String getAnimePathByIdAndEpodies(Long id,Long epodies){
+        List<AnimePathObject> animeList = JSON.parseArray(animeMapper.findFilePathListById(id),AnimePathObject.class);
+        return getFileNameByEpisode(animeList,epodies);
+    }
+
+    /**
+     *
+     * @param animeList List<AnimePathObject>
+     * @param n 第几集
+     * @return FileName属性
+     */
+    public static String getFileNameByEpisode(List<AnimePathObject> animeList, long n) {
+        return animeList.stream()
+                .filter(anime -> anime.getEpisodes() == n) // 筛选 episodes 为 n 的对象
+                .map(AnimePathObject::getFileName)         // 提取 fileName 属性
+                .findFirst()                               // 找到第一个匹配的结果
+                .orElse(null);                       // 如果没有匹配的，返回 null
+    }
+
+    /**
      * 通过动漫ID更新文件存在路径
      *
      * @param id        动漫ID
