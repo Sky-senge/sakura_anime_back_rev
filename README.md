@@ -489,6 +489,34 @@ MariaDB数据库
 }
 ```
 
+
+
+[POST] /files/uploadCover
+
+**说明：** 更新一个动漫头像文件，需要【管理员】登录，以及【已经上传】的动漫资源。
+
+**请求：**
+
+格式： Form-data（表单上传）
+
+| 请求字段    | 请求内容          |
+| ------- | ------------- |
+| animeId | 对应已上传资源的动漫ID。 |
+| file    | 文件内容，二进制图像文件  |
+
+**响应：**
+
+```json
+{
+  "status": true, //是否成功？
+  "data": "String", //成功的消息
+  "message": "string", //成功的消息
+  "error": "string"
+}
+```
+
+
+
 [POST] /files/modAvatar
 
 **说明：** 管理员修改头像，仅限【管理员】权限使用。
@@ -513,6 +541,8 @@ MariaDB数据库
 }
 ```
 
+
+
 [GET] /files/getVideo/{requirements}/playlist.m3u8
 
 **说明：** 获取动漫的播放列表，m3u8切片流
@@ -530,6 +560,8 @@ MariaDB数据库
 ```
 
 **响应：** 正常来说，是m3u8的文件内容，错误则返回错误响应体。
+
+
 
 [GET] /files/getVideo/{requirements}/{tsFileName}
 
@@ -549,4 +581,26 @@ MariaDB数据库
       }
 ```
 
-**响应：** 二进制文件
+**响应：** ``` 二进制文件```
+
+
+
+[GET] /files/getCover/{requirements}
+
+**说明：** 获取动漫的封面，Content-Type应为 ```image/``` 开头
+
+**请求：** {requirements} 为动漫路径字段，可在注释1的字段中找到`fileName`部分
+
+请仅使用第一集的fineName进行查询，其他集数默认不放置封面。
+
+注释1：
+
+```json
+"filePath": [
+      {
+        "episodes": 0,
+        "fileName": "string"
+      }
+```
+
+**响应：** `二进制文件`
