@@ -8,9 +8,11 @@ Java 17，
 
 Maven
 
-已经配置好的ffmpeg（需要N卡加速编码）
+已经配置好的ffmpeg，可以到这里[下载](https://www.ffmpeg.org/download.html)
 
-MariaDB数据库
+（建议使用N卡加速编码，不支持也可以用CPU编码，就是会很慢）
+
+MariaDB 10.11 并导入数据库，数据库默认名为```sakura_anime```
 
 #### 注意：
 
