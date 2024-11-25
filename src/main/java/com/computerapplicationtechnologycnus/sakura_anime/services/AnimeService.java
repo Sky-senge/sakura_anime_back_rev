@@ -70,8 +70,11 @@ public class AnimeService {
 
     /**
      * 获取所有动漫信息
-     *
      * 使用分页查询功能，减少数据库压力
+     *
+     * @param size 分页长度
+     * @param page 页面数
+     * @return List<AnimeResponseModel>
      */
     @Schema(description = "获取动漫信息列表")
     public List<AnimeResponseModel> getAnimeByPage(Long size,Long page) {
@@ -196,7 +199,7 @@ public class AnimeService {
 
     /**
      * 更新动漫信息
-     *
+     * @param anime Anime类
      * @return 是否成功
      */
     @Schema(description = "更新动漫信息")
@@ -224,7 +227,12 @@ public class AnimeService {
     /**
      * 添加新的动漫
      *
-     * @return 是否成功
+     * @param name 动漫名称
+     * @param tags 动漫tag列表
+     * @param description 动漫描述
+     * @param rating 动漫评分，应当在1.0~10.0之间的小数（Float）
+     * @param filePath 已经弃用的参数。
+     * @throws Exception
      */
     @Schema(description = "添加新的动漫")
     @Transactional

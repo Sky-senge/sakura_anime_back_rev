@@ -147,14 +147,12 @@ public class FileController {
             if (!dir.exists()) {
                 dir.mkdirs();
             }
-
             // 生成唯一文件名（使用用户ID和时间戳）
             String originalFilename = file.getOriginalFilename();
             String fileExtension = originalFilename != null && originalFilename.contains(".")
                     ? originalFilename.substring(originalFilename.lastIndexOf('.'))
                     : "";
             String uniqueFilename = "avatar_" + userId + "_" + System.currentTimeMillis() + fileExtension;
-
             // 保存文件
             File uploadFile = new File(uploadDir + uniqueFilename);
             file.transferTo(uploadFile);
