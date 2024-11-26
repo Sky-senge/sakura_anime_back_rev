@@ -13,7 +13,7 @@ import java.util.Date;
 public class JwtUtil {
 
     @Value("${jwt.secret}")
-    private String secret;  // 秘密密钥
+    private String secret;  // 私钥
 
     @Value("${jwt.expiration}")
     private Long expiration;  // 过期时间，单位毫秒
@@ -26,7 +26,7 @@ public class JwtUtil {
                 .claim("permission", permission)
                 .claim("passkey",encrypted_password)
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))  // 设置过期时间
-                .signWith(SignatureAlgorithm.HS512, secret)  // 使用 HS512 签名
+                .signWith(SignatureAlgorithm.HS512, secret)  // 使用 HMAC-SHA-512 签名
                 .compact();
     }
 
