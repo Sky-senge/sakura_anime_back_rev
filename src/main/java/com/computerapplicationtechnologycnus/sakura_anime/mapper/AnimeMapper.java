@@ -103,6 +103,61 @@ public interface AnimeMapper {
     })
     List<Anime> findAllAnimeWithIndexPageUseOffset(@Param("limit") Long limit, @Param("offset") Long offset);
 
+    @Select("<script>"
+            + "SELECT"
+            + "    a.id,"
+            + "    a.name,"
+            + "    a.tags,"
+            + "    a.description,"
+            + "    a.rating,"
+            + "    a.release_date,"
+            + "    COALESCE("
+            + "        NULLIF("
+            + "            JSON_ARRAYAGG("
+            + "                CASE "
+            + "                    WHEN jt.fileName IS NOT NULL "
+            + "                    THEN JSON_OBJECT('episodes', jt.episodes, 'fileName', jt.fileName)"
+            + "                END"
+            + "            ),"
+            + "            JSON_ARRAY(NULL)"
+            + "        ),"
+            + "        JSON_ARRAY()"
+            + "    ) AS file_path "
+            + "FROM "
+            + "anime a "
+            + "LEFT JOIN"
+            + "    JSON_TABLE("
+            + "        a.file_path, "
+            + "        '$[*]'"
+            + "        COLUMNS ("
+            + "            episodes BIGINT PATH '$.episodes',"
+            + "            fileName VARCHAR(255) PATH '$.fileName'"
+            + "        )"
+            + "    ) AS jt ON jt.episodes = 1 "
+            + "WHERE" //MyBaties动态查询
+            + "    <foreach collection='tags' item='tag' open='(' separator=' AND ' close=')'>"
+            + "        JSON_CONTAINS(a.tags, JSON_ARRAY(#{tag})) "
+            + "    </foreach>"
+            + "GROUP BY"
+            + "    a.id,"
+            + "    a.name,"
+            + "    a.tags,"
+            + "    a.description,"
+            + "    a.rating,"
+            + "    a.release_date "
+            + "ORDER BY a.id "
+            + "LIMIT #{limit} OFFSET #{offset}"
+            + "</script>")
+    @Results({
+            @Result(property = "id", column = "id"),
+            @Result(property = "name", column = "name"),
+            @Result(property = "tags", column = "tags"),
+            @Result(property = "description", column = "description"),
+            @Result(property = "rating", column = "rating"),
+            @Result(property = "releaseDate", column = "release_date"),
+            @Result(property = "filePath", column = "file_path")
+    })
+    List<Anime> findAnimeWithIndexPageByTags(@Param("tags") List<String> tags,@Param("limit") Long limit, @Param("offset") Long offset);
 
 
     @Select("SELECT * FROM anime")

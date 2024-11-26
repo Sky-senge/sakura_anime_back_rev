@@ -68,6 +68,35 @@ public class AnimeController {
     }
 
     /**
+     * 分类页，根据Tag筛选并使用分页查询动漫列表信息
+     *
+     * @param page 多少页，首页默认第一页
+     * @param size 每页多少个数据，默认10个
+     * @param tags List<String> 关于动漫的标签
+     * @return 动漫列表
+     */
+    @Operation(description = "根据Tags获取动漫资源信息")
+    @GetMapping("/getAnimeListByTags")
+    public ResultMessage<List<AnimeResponseModel>> getAllAnimeByPageWithTags(
+            @RequestParam(defaultValue = "0") long page,
+            @RequestParam(defaultValue = "10") long size,
+            @RequestParam(defaultValue = "") List<String> tag
+    ){
+        try{
+            //处理可能存在刁民给你搬来巨大或错误参数拖累性能
+            if(size>100 || page<0){
+                return ResultMessage.message(false,"您的查询参数过于巨大或不正确，请重试");
+            }
+            //查询执行
+            List<AnimeResponseModel> animeList = animeService.getAnimeByTagUseOffset(tag,size,page);
+
+            return ResultMessage.message(animeList,true,"访问成功！");
+        }catch (Exception e){
+            return ResultMessage.message(false,"无法访问数据，原因如下："+e.getMessage());
+        }
+    }
+
+    /**
      *
      * @param keyWord 查询关键词
      * @param page 多少页，默认第一页
