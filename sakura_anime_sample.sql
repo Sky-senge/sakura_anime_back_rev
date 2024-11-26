@@ -29,7 +29,7 @@ CREATE TABLE `anime` (
   `description` text DEFAULT NULL,
   `rating` float(3,1) DEFAULT 0.0 CHECK (`rating` between 1 and 10),
   `release_date` timestamp NULL DEFAULT current_timestamp(),
-  `file_path` longtext NOT NULL,
+  `file_path` longtext NOT NULL CHECK (json_valid(`file_path`)),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -43,8 +43,8 @@ LOCK TABLES `anime` WRITE;
 INSERT INTO `anime` VALUES
 (1,'秒速5厘米','[\"日系\", \"治愈\"]','新海誠執導的2007年日本動畫電影',9.5,'2024-11-18 06:44:04','[]'),
 (2,'寒蝉鸣泣之时','[\"日系\",\"治愈\"]','人坏掉，蝉在叫',1.0,'2024-11-20 17:06:31','[]'),
-(3,'你得名字','[\"日系\",\"新海诚\",\"治愈\"]','新海誠執導的2007年日本動畫電影',1.5,'2024-11-20 17:06:31','[{\"episodes\":1,\"fileName\":\"anime_1732368030343\"}]'),
-(4,'迷宫饭','[\"日系\",\"治愈\"]','反正是吃货',9.5,'2024-11-22 07:01:33','[{\"episodes\":1,\"fileName\":\"anime_1732368724539\"},{\"episodes\":2,\"fileName\":\"anime_1732368030343\"}]');
+(3,'Angel Beats!','[\"日系\",\"治愈\"]','新海誠執導的2007年日本動畫電影',1.5,'2024-11-20 17:06:31','[{\"episodes\":1,\"fileName\":\"anime_1732528204793\"},{\"episodes\":2,\"fileName\":\"anime_1732593047242\"}]'),
+(4,'迷宫饭','[\"日系\",\"治愈\"]','反正是吃货',9.5,'2024-11-22 07:01:33','[{\"episodes\":1,\"fileName\":\"anime_1732528204793\"}]');
 /*!40000 ALTER TABLE `anime` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -131,4 +131,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-11-23 21:58:18
+-- Dump completed on 2024-11-26 11:51:37
