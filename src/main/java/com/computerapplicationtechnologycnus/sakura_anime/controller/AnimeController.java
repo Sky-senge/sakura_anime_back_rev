@@ -116,7 +116,7 @@ public class AnimeController {
                 return ResultMessage.message(false,"您的查询参数过于巨大或不正确，请重试");
             }
             //查询执行
-            List<AnimeResponseModel> animeList = animeService.animeSearch(keyWord,size,page);
+            List<AnimeResponseModel> animeList = animeService.searchAnime(keyWord,size,page);
             return ResultMessage.message(animeList,true,"访问成功！");
         }catch (Exception e){
             return ResultMessage.message(false,"无法访问数据，原因如下："+e.getMessage());

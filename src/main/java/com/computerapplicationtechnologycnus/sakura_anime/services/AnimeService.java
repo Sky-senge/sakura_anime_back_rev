@@ -152,6 +152,54 @@ public class AnimeService {
         return animeResponseList;
     }
 
+    /**
+     * 搜索动漫信息
+     * 支持分页和模糊搜索功能
+     *
+     * @param name 搜索关键字
+     * @param size 分页长度
+     * @param page 页面数
+     * @return List<AnimeResponseModel>
+     */
+    @Schema(description = "搜索动漫信息")
+    public List<AnimeResponseModel> searchAnime(String name, Long size, Long page) {
+        // 参数校验和分页逻辑处理
+        if (page <= 1 || size < 1) { // 出现异常参数时，恢复默认
+            page = 0L;
+            size = 10L;
+        } else {
+            page = (page - 1) * size;
+        }
+        // 清理用户输入并构造模糊匹配的搜索关键字
+        String cleanedName = name == null ? "" : name.trim();
+        String[] words = cleanedName.split("\\s+");
+        StringBuilder fuzzyName = new StringBuilder();
+        for (String word : words) {
+            fuzzyName.append("%").append(word).append("%");
+        }
+        // 从数据库中获取 Anime 对象列表
+        List<Anime> animeList = animeMapper.searchAnimeByNameUseOffset(fuzzyName.toString(), size, page);
+        // 转换 Anime 对象为 AnimeResponseModel
+        List<AnimeResponseModel> animeResponseList = new ArrayList<>();
+        for (Anime anime : animeList) {
+            AnimeResponseModel responseModel = new AnimeResponseModel();
+            responseModel.setId(anime.getId());
+            responseModel.setName(anime.getName());
+            responseModel.setDescription(anime.getDescription());
+            responseModel.setRating(anime.getRating());
+            responseModel.setReleaseDate(anime.getReleaseDate());
+            //把存进去的JSON反序列化回来
+            responseModel.setFilePath(JSON.parseArray(anime.getFilePath(), AnimePathObject.class));
+            // 处理 tags 字段：从 JSON 字符串转为 List<String>
+            if (anime.getTags() != null) {
+                List<String> tagsList = JSON.parseArray(anime.getTags(), String.class);
+                responseModel.setTags(tagsList);
+            }
+            animeResponseList.add(responseModel);
+        }
+        return animeResponseList;
+    }
+
     @Schema(description = "通过ID获取动漫信息")
     public AnimeResponseModel getAnimeById(Long id){
         Anime returnedAnime=animeMapper.findAnimeById(id);
@@ -200,6 +248,7 @@ public class AnimeService {
      * @param page 查询页
      * @return List<Anime>
      */
+    @Deprecated //已经弃用的方法
     public List<AnimeResponseModel> animeSearch(String searchKeyWord,Long size,Long page){
         if(page<=1 || size<1){ //假如出现异常参数，恢复默认
             page = 0L;
