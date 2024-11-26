@@ -79,7 +79,7 @@ public class AnimeController {
     @GetMapping("/getAnimeListByTags")
     public ResultMessage<List<AnimeResponseModel>> getAllAnimeByPageWithTags(
             @RequestParam(defaultValue = "0") long page,
-            @RequestParam(defaultValue = "10") long size,
+            @RequestParam(defaultValue = "30") long size,
             @RequestParam(defaultValue = "") List<String> tag
     ){
         try{
