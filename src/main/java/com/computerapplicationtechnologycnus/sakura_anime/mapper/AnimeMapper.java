@@ -172,7 +172,50 @@ public interface AnimeMapper {
     })
     List<Anime> findAllAnimes();
 
-    @Select("SELECT * FROM anime WHERE name LIKE CONCAT('%', #{name}, '%') LIMIT #{limit} OFFSET #{offset}")
+//    @Select("SELECT * FROM anime WHERE name LIKE CONCAT('%', #{name}, '%') LIMIT #{limit} OFFSET #{offset}")
+@Select("""
+    SELECT
+        a.id,
+        a.name,
+        a.tags,
+        a.description,
+        a.rating,
+        a.release_date,
+        COALESCE(
+            NULLIF(
+                JSON_ARRAYAGG(
+                    CASE 
+                        WHEN jt.fileName IS NOT NULL 
+                        THEN JSON_OBJECT('episodes', jt.episodes, 'fileName', jt.fileName)
+                    END
+                ),
+                JSON_ARRAY(NULL)
+            ), 
+            JSON_ARRAY()
+        ) AS file_path
+    FROM 
+        anime a
+    LEFT JOIN 
+        JSON_TABLE(
+            a.file_path, 
+            '$[*]'
+            COLUMNS (
+                episodes BIGINT PATH '$.episodes',
+                fileName VARCHAR(255) PATH '$.fileName'
+            )
+        ) AS jt ON jt.episodes = 1 
+    WHERE name LIKE CONCAT('%',#{name},'%') 
+    GROUP BY 
+        a.id, 
+        a.name, 
+        a.tags, 
+        a.description, 
+        a.rating, 
+        a.release_date
+    ORDER BY 
+        a.id 
+    LIMIT #{limit} OFFSET #{offset};
+    """)
     @Results({
             @Result(property = "id", column = "id"),
             @Result(property = "name", column = "name"),
@@ -182,9 +225,7 @@ public interface AnimeMapper {
             @Result(property = "releaseDate", column = "release_date"),
             @Result(property = "filePath", column = "file_path")
     })
-    List<Anime> searchAnimeByNameUseOffset(@Param("name") String name,
-                                                  @Param("limit") Long limit,
-                                                  @Param("offset") Long offset);
+    List<Anime> searchAnimeByNameUseOffset(@Param("name") String name, @Param("limit") Long limit, @Param("offset") Long offset);
 
     @Select("select * from anime order by id asc limit #{size} OFFSET #{offset}")
     @Results({  //沙雕MyBaties，连个映射都做不好，还要我手操，杂鱼！
