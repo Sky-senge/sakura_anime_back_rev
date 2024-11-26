@@ -494,6 +494,10 @@ git update-index --no-assume-unchanged
 
 **请求：** filename为头像文件路径，头像可通过用户相关API查表或者getDetail来获取
 
+**响应：** ```二进制文件```
+
+
+
 [POST] /files/uploadAnime
 
 **说明：** 更新一个动漫视频文件，需要【管理员】权限
@@ -542,6 +546,35 @@ git update-index --no-assume-unchanged
   "error": "string"
 }
 ```
+
+
+
+[POST] /files/uploadSubtitle
+
+**说明：** 上传对应动漫的字幕文件，需要【管理员】权限
+
+**请求：**
+
+格式： Form-data（表单上传）
+
+| 请求字段     | 请求内容         |
+| -------- | ------------ |
+| animeId  | 对应动漫id，数字    |
+| episodes | 集数，剧场版就1集，数字 |
+| file     | 文件内容，字幕文件    |
+
+**响应：**
+
+```json
+{
+  "status": true, //是否成功？
+  "data": "String", //成功的消息
+  "message": "string", //成功的消息
+  "error": "string"
+}
+```
+
+
 
 [POST] /files/uploadCover
 
