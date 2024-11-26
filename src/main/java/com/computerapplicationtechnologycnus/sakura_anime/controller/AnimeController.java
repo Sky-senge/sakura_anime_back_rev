@@ -72,7 +72,7 @@ public class AnimeController {
      *
      * @param page 多少页，首页默认第一页
      * @param size 每页多少个数据，默认10个
-     * @param tags List<String> 关于动漫的标签
+     * @param tag List<String> 关于动漫的标签
      * @return 动漫列表
      */
     @Operation(description = "根据Tags获取动漫资源信息")
