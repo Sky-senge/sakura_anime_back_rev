@@ -405,6 +405,54 @@ git update-index --no-assume-unchanged
 
 **提示：** keyWord为必须，不填分页则默认第一页，返回30个数据
 
+完整请求示例：
+
+```url
+http://localhost:8080/api/anime/getAnimeListByTags?page=0&size=10&tag=日系&tag=治愈
+```
+
+也可以省略page和size参数，但只有最多30个匹配结果：
+
+```url
+http://localhost:8080/api/anime/getAnimeListByTags?&tag=日系&tag=治愈
+```
+
+**响应(以下面为例的对象列表)：**
+
+```json
+{
+  "status": true,
+  "data": [
+    {
+      "id": 0,
+      "name": "string",
+      "tags": [
+        "string"
+      ],
+      "description": "string",
+      "rating": 0,
+      "releaseDate": "2024-11-24T08:45:13.905Z",
+      "filePath": [
+        {
+          "episodes": 0,
+          "fileName": "string"
+        }
+      ]
+    }
+  ],
+  "message": "string",
+  "error": "string"
+}
+```
+
+[GET] /api/anime/getAnimeListByTags
+
+**说明：** 根据Tags匹配动漫，支持多个Tag匹配。
+
+**请求参数：** /api/anime/getAnimeListByTags? `tag=标签1` & ```tag=标签2``` ...   & `page=第几页` & `size=每页几个数据`
+
+**提示：** tag为必须，可以是一个或者多个；page/size不填分页则默认第一页，返回30个数据
+
 **响应(以下面为例的对象列表)：**
 
 ```json
@@ -496,8 +544,6 @@ git update-index --no-assume-unchanged
 
 **响应：** ```二进制文件```
 
-
-
 [POST] /files/uploadAnime
 
 **说明：** 更新一个动漫视频文件，需要【管理员】权限
@@ -547,8 +593,6 @@ git update-index --no-assume-unchanged
 }
 ```
 
-
-
 [POST] /files/uploadSubtitle
 
 **说明：** 上传对应动漫的字幕文件，需要【管理员】权限
@@ -573,8 +617,6 @@ git update-index --no-assume-unchanged
   "error": "string"
 }
 ```
-
-
 
 [POST] /files/uploadCover
 
