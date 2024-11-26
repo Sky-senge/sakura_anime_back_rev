@@ -252,6 +252,8 @@ public class FileController {
 
     /**
      * 动漫字幕文件上传用接口
+     * 【注意！】需要先上传了视频资源，才能上传字幕
+     *
      * @param file  文件部分，二进制数据
      * @param animeId 动漫对应ID
      * @param episodes 第几集，剧场版直接写1
@@ -299,7 +301,7 @@ public class FileController {
 
     /**
      * 动漫封面上传用接口，仅限管理员使用，默认在第一集的路径内，cover.jpg/png等等
-     * 【注意！】需要先上传了视频资源，才能使用封面
+     * 【注意！】需要先上传了视频资源，才能上传封面
      *
      * @param file 上传的头像文件，通过form-data传输
      * @param animeId 对应动漫的ID
