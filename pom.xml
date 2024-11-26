@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.ComputerApplicationTechnologyCNUS</groupId>
     <artifactId>Sakura_Anime</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.1.0-ALPHA</version>
     <name>Sakura_Anime_Backend</name>
     <description>Sakura_Anime_Backend</description>
     <url/>
