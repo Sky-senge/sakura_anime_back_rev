@@ -70,7 +70,11 @@ public class FileController {
                 return ResultMessage.message(false, "用户ID无效！");
             }
             String usernameFromToken = (String) requestHeader.getAttribute("username"); // 从请求中获取 username
+            logger.info("用户名："+usernameFromToken);
             Long uidFromDatabase = userService.findUIDByUsername(usernameFromToken); //从数据库获取UID并对比是否本人操作
+            if(uidFromDatabase==null){
+                return ResultMessage.message(false,"无法查询到指定用户，请更新Token！");
+            }
             if(!uidFromDatabase.equals(userId)){
                 return ResultMessage.message(false,"修改头像失败，请本人登录！");
             }
@@ -98,8 +102,8 @@ public class FileController {
             String fileExtension = originalFilename != null && originalFilename.contains(".")
                     ? originalFilename.substring(originalFilename.lastIndexOf('.'))
                     : "";
-            String uniqueFilename = "avatar_" + userId + "_" + System.currentTimeMillis() + fileExtension;
-
+//            String uniqueFilename = "avatar_" + userId + "_" + System.currentTimeMillis() + fileExtension;
+            String uniqueFilename = "avatar_" + userId + fileExtension;
             // 保存文件
             File uploadFile = new File(uploadDir + uniqueFilename);
             file.transferTo(uploadFile);
@@ -152,7 +156,8 @@ public class FileController {
             String fileExtension = originalFilename != null && originalFilename.contains(".")
                     ? originalFilename.substring(originalFilename.lastIndexOf('.'))
                     : "";
-            String uniqueFilename = "avatar_" + userId + "_" + System.currentTimeMillis() + fileExtension;
+//            String uniqueFilename = "avatar_" + userId + "_" + System.currentTimeMillis() + fileExtension;
+            String uniqueFilename = "avatar_" + userId + fileExtension;
             // 保存文件
             File uploadFile = new File(uploadDir + uniqueFilename);
             file.transferTo(uploadFile);
