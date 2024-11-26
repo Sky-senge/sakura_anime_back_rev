@@ -42,7 +42,7 @@ public class AnimeController {
     }
 
     /**
-     * 分页查询动漫列表信息
+     * 首页，使用分页查询动漫列表信息
      * @param page 多少页，首页默认第一页
      * @param size 每页多少个数据，默认10个
      * @return 动漫列表

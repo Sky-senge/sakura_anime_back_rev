@@ -85,7 +85,7 @@ public class AnimeService {
             page = (page-1)*size;
         }
         // 从数据库中获取 Anime 对象列表
-        List<Anime> animeList = animeMapper.findAnimeUseOffset(size,page);
+        List<Anime> animeList = animeMapper.findAllAnimeWithIndexPageUseOffset(size,page);
         // 创建一个 List 来存储转换后的 AnimeResponseModel
         List<AnimeResponseModel> animeResponseList = new ArrayList<>();
         // 遍历 animeList 并将其转换为 AnimeResponseModel
