@@ -37,4 +37,15 @@ public class FileTypeUtil {
         return Arrays.asList(allowedExtensions).contains(fileExtension);
     }
 
+    /**
+     * 验证文件是否为支持的字幕类型
+     * @param filename 文件名
+     * @return 是否为字幕文件
+     */
+    public boolean isSubtitleFile(String filename) {
+        String[] allowedExtensions = { "srt", "ass", "vtt", "txt" };
+        String fileExtension = filename.substring(filename.lastIndexOf('.') + 1).toLowerCase();
+        return Arrays.asList(allowedExtensions).contains(fileExtension);
+    }
+
 }

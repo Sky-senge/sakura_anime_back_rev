@@ -251,6 +251,53 @@ public class FileController {
     }
 
     /**
+     * 动漫字幕文件上传用接口
+     * @param file  文件部分，二进制数据
+     * @param animeId 动漫对应ID
+     * @param episodes 第几集，剧场版直接写1
+     * @return
+     */
+    @Operation(description = "动漫资源文件上传用接口，仅限管理员使用")
+    @PostMapping("/uploadSubtitle")
+    @AuthRequired(minPermissionLevel = 0)
+    public ResultMessage<String> uploadSubtitle(@RequestParam("file") MultipartFile file,
+                                             @RequestParam("animeId") Long animeId,
+                                             @RequestParam("episodes")Long episodes) {
+        try {
+            // 验证文件是否为空
+            if (file.isEmpty()) {
+                return ResultMessage.message(false, "文件不能为空！");
+            }
+            // 验证文件类型是否为字幕
+            String originalFilename = file.getOriginalFilename();
+            if (originalFilename == null || !fileTypeUtil.isSubtitleFile(originalFilename)) {
+                return ResultMessage.message(false, "仅支持上传字幕文件（txt, ass, vtt, srt）！");
+            }
+            // 获取文件上传路径
+            String uploadDirPath = fileStorageProperties.getUploadDir() + "anime/";
+            logger.info("本次上传路径: " + uploadDirPath);
+            // 检查目录是否存在，不存在则创建
+            File dir = new File(uploadDirPath);
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+            // 查询
+            // 获取文件上传路径
+            String uniqueAnimeMark = animeService.getAnimePathByIdAndEpodies(animeId,episodes);
+            String uniqueAnimeDir = uploadDirPath+uniqueAnimeMark+"/";
+            String fileExtension = originalFilename.substring(originalFilename.lastIndexOf('.'));
+            String uniqueFilename = "playlist" + fileExtension;
+            // 保存文件
+            File uploadFile = new File(uniqueAnimeDir + uniqueFilename);
+            file.transferTo(uploadFile);
+            return ResultMessage.message(true, "字幕上传完成。动漫标识ID："+uniqueAnimeMark);
+        } catch (Exception e) {
+            logger.error("字幕上传失败", e);
+            return ResultMessage.message(false, "字幕上传失败！请联系管理员。", e.getMessage());
+        }
+    }
+
+    /**
      * 动漫封面上传用接口，仅限管理员使用，默认在第一集的路径内，cover.jpg/png等等
      * 【注意！】需要先上传了视频资源，才能使用封面
      *
@@ -385,11 +432,11 @@ public class FileController {
     }
 
     /**
-     * 提供 ts 文件
+     * 提供 ts等资源文件
      *
      * @param requirements 视频路径参数
-     * @param tsFileName   ts 文件名
-     * @return ts 文件响应
+     * @param tsFileName   ts 文件名（其实只要是资源都可以，包括ass等字幕）
+     * @return 文件响应
      */
     @Operation(description = "提供TS文件的接口")
     @GetMapping("/getVideo/{requirements}/{tsFileName}")
