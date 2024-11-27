@@ -31,7 +31,7 @@ CREATE TABLE `anime` (
   `release_date` timestamp NULL DEFAULT current_timestamp(),
   `file_path` longtext NOT NULL CHECK (json_valid(`file_path`)),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42,8 +42,8 @@ LOCK TABLES `anime` WRITE;
 /*!40000 ALTER TABLE `anime` DISABLE KEYS */;
 INSERT INTO `anime` VALUES
 (1,'秒速5厘米','[\"日系\", \"治愈\"]','新海誠執導的2007年日本動畫電影',9.5,'2024-11-18 06:44:04','[]'),
-(2,'寒蝉鸣泣之时','[\"日系\",\"治愈\"]','人坏掉，蝉在叫',1.0,'2024-11-20 17:06:31','[]'),
-(3,'Angel Beats!','[\"日系\",\"治愈\"]','新海誠執導的2007年日本動畫電影',1.5,'2024-11-20 17:06:31','[{\"episodes\":1,\"fileName\":\"anime_1732528204793\"},{\"episodes\":2,\"fileName\":\"anime_1732593047242\"}]'),
+(2,'寒蝉鸣泣之时','[\"日系\",\"治愈\",\"寒蝉\"]','人坏掉，蝉在叫',1.0,'2024-11-20 17:06:31','[]'),
+(3,'Angel Beats!','[\"日系\",\"治愈\",\"射击\"]','是一部由游戏制作公司Key与Aniplex联合制作的日本动画',8.5,'2024-11-20 17:06:31','[{\"episodes\":1,\"fileName\":\"anime_1732528204793\"},{\"episodes\":2,\"fileName\":\"anime_1732596771347\"}]'),
 (4,'迷宫饭','[\"日系\",\"治愈\"]','反正是吃货',9.5,'2024-11-22 07:01:33','[{\"episodes\":1,\"fileName\":\"anime_1732528204793\"}]');
 /*!40000 ALTER TABLE `anime` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -112,9 +112,9 @@ CREATE TABLE `users` (
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` VALUES
-(1,NULL,'user@example.com','用户名(可搜索)',0,'加密后的密码','显示名称','个性签名'),
-(2,'avatar_2_1732250228664.jpg','ff@example.com','testuser2',1,'OE/eNjbm4B4BlNKXbY8mQQrz6EblczecsaCeLwdS2Mw=','Test User','This is a test user.'),
-(3,NULL,'ee@example.com','testuser3',0,'75K3eLr+dx6JJFuJ7LwIpEpOFmwGZZkRiB84PURz6U8=','Test User','This is a test user.');
+(1,NULL,'example@example.com','admin',0,'jGl25bVBBBW96Qi9Te4V37Fnqchz/Eu4qB9vKrRIqRg=','admin','This is a Admin User.'),
+(2,'avatar_2_1732250228664.jpg','ff@example.com','testuser1',1,'OE/eNjbm4B4BlNKXbY8mQQrz6EblczecsaCeLwdS2Mw=','Test User','This is a test user.'),
+(3,'avatar_3.jpg','ee@example.com','testuser3',1,'75K3eLr+dx6JJFuJ7LwIpEpOFmwGZZkRiB84PURz6U8=','Test User','This is a test user.');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -131,4 +131,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-11-26 11:51:37
+-- Dump completed on 2024-11-27 13:34:27
