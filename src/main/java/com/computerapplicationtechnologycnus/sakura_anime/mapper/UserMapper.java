@@ -134,25 +134,25 @@ public interface UserMapper {
     Long findUserIdByUsername(String username); //根据用户名反查UID
 
     @Update("UPDATE users SET password=#{newpasswd} WHERE id=#{id}")
-    void updatePasswordById(Long id,String newpasswd);
+    void updatePasswordById(@Param("id") Long id,@Param("newpasswd") String newpasswd);
 
     @Update("UPDATE users SET permission=#{permission} WHERE id=#{id}")
-    void updatePermissionById(Long id,Integer permission);
+    void updatePermissionById(@Param("id") Long id,@Param("permission") Integer permission);
 
     @Update("UPDATE users SET email=#{email} WHERE id=#{id}")
-    void updateEmailById(Long id,String email);
+    void updateEmailById(@Param("id") Long id,@Param("email") String email);
 
     @Update("UPDATE users SET username=#{username} WHERE id=#{id}")
-    void updateUsernameById(Long id,String username);
+    void updateUsernameById(@Param("id") Long id,@Param("username") String username);
 
     @Update("UPDATE users SET display_name=#{displayName} WHERE id=#{id}")
-    void updateDisplayNameById(Long id,String displayName);
+    void updateDisplayNameById(@Param("id") Long id,@Param("displayName") String displayName);
 
     @Update("UPDATE users SET remarks=#{remarks} WHERE id=#{id}")
-    void updateRemarksById(Long id,String remarks);
+    void updateRemarksById(@Param("id") Long id,@Param("remarks") String remarks);
 
     @Update("UPDATE users SET avatar=#{avatarFileName} WHERE id=#{id}")
-    void updateAvatarById(Long id,String avatarFileName);
+    void updateAvatarById(@Param("id") Long id,@Param("avatarFileName") String avatarFileName);
 
     // 删除指定用户
     @Delete("DELETE FROM users WHERE id = #{userId}")
