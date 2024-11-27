@@ -1,0 +1,842 @@
+{
+	"info": {
+		"_postman_id": "c40c401c-d3b9-4626-bc55-8ce5f2de5d03",
+		"name": "Sakura_Anime 测试接口",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "用户相关API",
+			"item": [
+				{
+					"name": "注册",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"exp1@example.com\",\r\n  \"username\": \"user1\",\r\n  \"permission\": 0,\r\n  \"password\": \"123\",\r\n  \"displayName\": \"user1\",\r\n  \"remarks\": \"This is a Test User.\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/user/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"user",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "管理员登录",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"admin\",\r\n  \"password\": \"admin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/user/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "获取用户列表",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJhZG1pbiIsInBlcm1pc3Npb24iOjAsInBhc3NrZXkiOiJqR2wyNWJWQkJCVzk2UWk5VGU0VjM3Rm5xY2h6L0V1NHFCOXZLclJJcVJnPSIsImV4cCI6MTczMzI4NzcxMn0.7Cf2n2QtqtkiktdVGke4iD8vilZjhIGuaP_k2L1iek89uPqfhB9biiT1_oWcg1cwuxcbtsGU9POV4M4rTkuTBg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/user/getAllUsers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"user",
+								"getAllUsers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "获取当前登录用户的详情",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJhZG1pbiIsInBlcm1pc3Npb24iOjAsInBhc3NrZXkiOiJqR2wyNWJWQkJCVzk2UWk5VGU0VjM3Rm5xY2h6L0V1NHFCOXZLclJJcVJnPSIsImV4cCI6MTczMzI4NzcxMn0.7Cf2n2QtqtkiktdVGke4iD8vilZjhIGuaP_k2L1iek89uPqfhB9biiT1_oWcg1cwuxcbtsGU9POV4M4rTkuTBg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/user/getDetail",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"user",
+								"getDetail"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "修改密码（用户侧，会校验请求和自身是否匹配）",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJhZG1pbiIsInBlcm1pc3Npb24iOjAsInBhc3NrZXkiOiJqR2wyNWJWQkJCVzk2UWk5VGU0VjM3Rm5xY2h6L0V1NHFCOXZLclJJcVJnPSIsImV4cCI6MTczMzI4NzcxMn0.7Cf2n2QtqtkiktdVGke4iD8vilZjhIGuaP_k2L1iek89uPqfhB9biiT1_oWcg1cwuxcbtsGU9POV4M4rTkuTBg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 1,\r\n  \"password\": \"admin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/user/modPassword",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"user",
+								"modPassword"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "更新用户信息",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJhZG1pbiIsInBlcm1pc3Npb24iOjAsInBhc3NrZXkiOiJqR2wyNWJWQkJCVzk2UWk5VGU0VjM3Rm5xY2h6L0V1NHFCOXZLclJJcVJnPSIsImV4cCI6MTczMzI4NzcxMn0.7Cf2n2QtqtkiktdVGke4iD8vilZjhIGuaP_k2L1iek89uPqfhB9biiT1_oWcg1cwuxcbtsGU9POV4M4rTkuTBg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 2,\r\n  \"avatar\": \"avatar_2_1732250228664.jpg\",\r\n  \"email\": \"ff@example.com\",\r\n  \"username\": \"testuser1\",\r\n  \"permission\": 1,\r\n  \"password\": \"\",\r\n  \"displayName\": \"Test User\",\r\n  \"remarks\": \"This is a test user.\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/user/updateUser",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"user",
+								"updateUser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "删除某个用户（注意，会联动删除相关评论）",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJhZG1pbiIsInBlcm1pc3Npb24iOjAsInBhc3NrZXkiOiJqR2wyNWJWQkJCVzk2UWk5VGU0VjM3Rm5xY2h6L0V1NHFCOXZLclJJcVJnPSIsImV4cCI6MTczMzI4NzcxMn0.7Cf2n2QtqtkiktdVGke4iD8vilZjhIGuaP_k2L1iek89uPqfhB9biiT1_oWcg1cwuxcbtsGU9POV4M4rTkuTBg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/user/deleteUser/5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"user",
+								"deleteUser",
+								"5"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "动漫相关API",
+			"item": [
+				{
+					"name": "取得全部动漫列表（需管理权限）",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJhZG1pbiIsInBlcm1pc3Npb24iOjAsInBhc3NrZXkiOiJqR2wyNWJWQkJCVzk2UWk5VGU0VjM3Rm5xY2h6L0V1NHFCOXZLclJJcVJnPSIsImV4cCI6MTczMzI4NzcxMn0.7Cf2n2QtqtkiktdVGke4iD8vilZjhIGuaP_k2L1iek89uPqfhB9biiT1_oWcg1cwuxcbtsGU9POV4M4rTkuTBg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/anime/getAllAnime",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"anime",
+								"getAllAnime"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "首页获取动漫列表",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/anime/getAnimeList?page=1&size=30",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"anime",
+								"getAnimeList"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "size",
+									"value": "30"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "根据单个或多个tag匹配动漫",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/anime/getAnimeListByTags?tag=治愈&tag=日系&page=1&size=30",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"anime",
+								"getAnimeListByTags"
+							],
+							"query": [
+								{
+									"key": "tag",
+									"value": "治愈"
+								},
+								{
+									"key": "tag",
+									"value": "日系"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "size",
+									"value": "30"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "根据动漫ID获取详情",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/anime/getDetail/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"anime",
+								"getDetail",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "根据关键字搜索动漫（支持空格分多个单词搜索）",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/anime/searchByName?keyWord=Angel&page=1&size=30",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"anime",
+								"searchByName"
+							],
+							"query": [
+								{
+									"key": "keyWord",
+									"value": "Angel"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "size",
+									"value": "30"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "更新动漫信息",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJhZG1pbiIsInBlcm1pc3Npb24iOjAsInBhc3NrZXkiOiJqR2wyNWJWQkJCVzk2UWk5VGU0VjM3Rm5xY2h6L0V1NHFCOXZLclJJcVJnPSIsImV4cCI6MTczMzI4NzcxMn0.7Cf2n2QtqtkiktdVGke4iD8vilZjhIGuaP_k2L1iek89uPqfhB9biiT1_oWcg1cwuxcbtsGU9POV4M4rTkuTBg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 3,\r\n  \"name\": \"Angel Beats!\",\r\n  \"tags\": [\"日系\",\"治愈\",\"射击\"],\r\n  \"description\": \"是一部由游戏制作公司Key与Aniplex联合制作的日本动画\",\r\n  \"rating\": 8.5,\r\n  \"releaseDate\": \"2024-11-21\",\r\n  \"filePath\": [{\"episodes\":1,\"fileName\":\"anime_1732528204793\"},{\"episodes\":2,\"fileName\":\"anime_1732596771347\"}]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/anime/updateAnime",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"anime",
+								"updateAnime"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "删除某个动漫（注意，会联动删除评论）",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJhZG1pbiIsInBlcm1pc3Npb24iOjAsInBhc3NrZXkiOiJqR2wyNWJWQkJCVzk2UWk5VGU0VjM3Rm5xY2h6L0V1NHFCOXZLclJJcVJnPSIsImV4cCI6MTczMzI4NzcxMn0.7Cf2n2QtqtkiktdVGke4iD8vilZjhIGuaP_k2L1iek89uPqfhB9biiT1_oWcg1cwuxcbtsGU9POV4M4rTkuTBg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/anime/deleteAnime/5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"anime",
+								"deleteAnime",
+								"5"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "文件操作相关接口",
+			"item": [
+				{
+					"name": "获取用户头像",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/files/getAvatar/avatar_3.jpg",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"files",
+								"getAvatar",
+								"avatar_3.jpg"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "获取动漫封面",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/files/getCover/anime_1732528204793",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"files",
+								"getCover",
+								"anime_1732528204793"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "获取视频播放索引文件",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/files/getVideo/{{VideoFileName}}/playlist.m3u8",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"files",
+								"getVideo",
+								"{{VideoFileName}}",
+								"playlist.m3u8"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "获取视频资源文件",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/files/getVideo/anime_1732528204793/playlist0.ts",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"files",
+								"getVideo",
+								"anime_1732528204793",
+								"playlist0.ts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "修改用户头像接口",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJhZG1pbiIsInBlcm1pc3Npb24iOjAsInBhc3NrZXkiOiJqR2wyNWJWQkJCVzk2UWk5VGU0VjM3Rm5xY2h6L0V1NHFCOXZLclJJcVJnPSIsImV4cCI6MTczMzI4NzcxMn0.7Cf2n2QtqtkiktdVGke4iD8vilZjhIGuaP_k2L1iek89uPqfhB9biiT1_oWcg1cwuxcbtsGU9POV4M4rTkuTBg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "userId",
+									"value": "1",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/files/modAvatar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"files",
+								"modAvatar"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "上传用户头像",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJhZG1pbiIsInBlcm1pc3Npb24iOjAsInBhc3NrZXkiOiJqR2wyNWJWQkJCVzk2UWk5VGU0VjM3Rm5xY2h6L0V1NHFCOXZLclJJcVJnPSIsImV4cCI6MTczMzI4NzcxMn0.7Cf2n2QtqtkiktdVGke4iD8vilZjhIGuaP_k2L1iek89uPqfhB9biiT1_oWcg1cwuxcbtsGU9POV4M4rTkuTBg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "userId",
+									"value": "1",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/files/uploadAvatar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"files",
+								"uploadAvatar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "上传动漫资源",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJhZG1pbiIsInBlcm1pc3Npb24iOjAsInBhc3NrZXkiOiJqR2wyNWJWQkJCVzk2UWk5VGU0VjM3Rm5xY2h6L0V1NHFCOXZLclJJcVJnPSIsImV4cCI6MTczMzI4NzcxMn0.7Cf2n2QtqtkiktdVGke4iD8vilZjhIGuaP_k2L1iek89uPqfhB9biiT1_oWcg1cwuxcbtsGU9POV4M4rTkuTBg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "animeId",
+									"value": "4",
+									"type": "default"
+								},
+								{
+									"key": "episodes",
+									"value": "1",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/files/uploadAnime",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"files",
+								"uploadAnime"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "上传动漫封面",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJhZG1pbiIsInBlcm1pc3Npb24iOjAsInBhc3NrZXkiOiJqR2wyNWJWQkJCVzk2UWk5VGU0VjM3Rm5xY2h6L0V1NHFCOXZLclJJcVJnPSIsImV4cCI6MTczMzI4NzcxMn0.7Cf2n2QtqtkiktdVGke4iD8vilZjhIGuaP_k2L1iek89uPqfhB9biiT1_oWcg1cwuxcbtsGU9POV4M4rTkuTBg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "animeId",
+									"value": "3",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/files/uploadCover",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"files",
+								"uploadCover"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "上传动漫字幕",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJhZG1pbiIsInBlcm1pc3Npb24iOjAsInBhc3NrZXkiOiJqR2wyNWJWQkJCVzk2UWk5VGU0VjM3Rm5xY2h6L0V1NHFCOXZLclJJcVJnPSIsImV4cCI6MTczMzI4NzcxMn0.7Cf2n2QtqtkiktdVGke4iD8vilZjhIGuaP_k2L1iek89uPqfhB9biiT1_oWcg1cwuxcbtsGU9POV4M4rTkuTBg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "animeId",
+									"value": "4",
+									"type": "default"
+								},
+								{
+									"key": "episodes",
+									"value": "1",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/files/uploadSubtitle",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"files",
+								"uploadSubtitle"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "VideoFileName",
+			"value": "{{requirements}}"
+		}
+	]
+}
