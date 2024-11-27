@@ -244,7 +244,7 @@ public interface AnimeMapper {
     String findFilePathListById(Long id);
 
     @Update("UPDATE anime SET name = #{name}, tags = #{tags}, description = #{description}, " +
-            "rating = #{rating}, release_date = #{releaseDate}, file_path = #{filePath} WHERE id = #{id}")
+            "rating = #{rating}, file_path = #{filePath} WHERE id = #{id}") //不再更新releaseDate，因为java的Date和SQL的Date类型不同，待商议
     void updateAnime(Anime anime); //直接提交一个完整的Anime类即可，因为类中包括ID
 
     @Update("UPDATE anime SET file_path = #{filePath} WHERE id = #{id}")
