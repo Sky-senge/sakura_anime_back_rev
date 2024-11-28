@@ -813,6 +813,147 @@
 			]
 		},
 		{
+			"name": "评论相关API",
+			"item": [
+				{
+					"name": "根据动漫ID查询评论",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/comment/getCommentList/1?page=1&size=30",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"comment",
+								"getCommentList",
+								"1"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "size",
+									"value": "30"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "根据UID查询评论",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/comment/getCommentByUID/1?page=1&size=30",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"comment",
+								"getCommentByUID",
+								"1"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "size",
+									"value": "30"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "新增评论",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJhZG1pbiIsInBlcm1pc3Npb24iOjAsInBhc3NrZXkiOiJqR2wyNWJWQkJCVzk2UWk5VGU0VjM3Rm5xY2h6L0V1NHFCOXZLclJJcVJnPSIsImV4cCI6MTczMzI4NzcxMn0.7Cf2n2QtqtkiktdVGke4iD8vilZjhIGuaP_k2L1iek89uPqfhB9biiT1_oWcg1cwuxcbtsGU9POV4M4rTkuTBg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"animeId\": 1,\r\n  \"userId\": 1,\r\n  \"content\": \"很好看哦\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/comment/addComment",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"comment",
+								"addComment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "删除评论",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJhZG1pbiIsInBlcm1pc3Npb24iOjAsInBhc3NrZXkiOiJqR2wyNWJWQkJCVzk2UWk5VGU0VjM3Rm5xY2h6L0V1NHFCOXZLclJJcVJnPSIsImV4cCI6MTczMzI4NzcxMn0.7Cf2n2QtqtkiktdVGke4iD8vilZjhIGuaP_k2L1iek89uPqfhB9biiT1_oWcg1cwuxcbtsGU9POV4M4rTkuTBg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/comment/deleteComment/5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"comment",
+								"deleteComment",
+								"5"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "压力查询测试",
 			"item": [
 				{
@@ -991,6 +1132,124 @@
 								"api",
 								"anime",
 								"getAnimeListByTags"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "根据动漫ID查询评论表",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// 生成 1 到 30 之间的随机数\r",
+									"const randomPage = Math.floor(Math.random() * 3) + 1;\r",
+									"const randomSize = Math.floor(Math.random() * 30) + 1;\r",
+									"const randomAnimeID = Math.floor(Math.random() * 30) + 1;\r",
+									"\r",
+									"// 设置全局变量或环境变量\r",
+									"pm.variables.set(\"animeID\", randomAnimeID);\r",
+									"pm.variables.set(\"page\", randomPage);\r",
+									"pm.variables.set(\"size\", randomSize);\r",
+									"\r",
+									"console.log(\"Random Page:\", randomPage, \"Random Size:\", randomSize);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/comment/getCommentList/{{animeID}}?page={{page}}&size={{size}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"comment",
+								"getCommentList",
+								"{{animeID}}"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "{{page}}"
+								},
+								{
+									"key": "size",
+									"value": "{{size}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "根据UID查询评论",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// 生成 1 到 30 之间的随机数\r",
+									"const randomPage = Math.floor(Math.random() * 3) + 1;\r",
+									"const randomSize = Math.floor(Math.random() * 30) + 1;\r",
+									"const randomUID = Math.floor(Math.random() * 30) + 1;\r",
+									"\r",
+									"// 设置全局变量或环境变量\r",
+									"pm.variables.set(\"UID\", randomUID);\r",
+									"pm.variables.set(\"page\", randomPage);\r",
+									"pm.variables.set(\"size\", randomSize);\r",
+									"\r",
+									"console.log(\"Random Page:\", randomPage, \"Random Size:\", randomSize);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJhZG1pbiIsInBlcm1pc3Npb24iOjAsInBhc3NrZXkiOiJqR2wyNWJWQkJCVzk2UWk5VGU0VjM3Rm5xY2h6L0V1NHFCOXZLclJJcVJnPSIsImV4cCI6MTczMzI4NzcxMn0.7Cf2n2QtqtkiktdVGke4iD8vilZjhIGuaP_k2L1iek89uPqfhB9biiT1_oWcg1cwuxcbtsGU9POV4M4rTkuTBg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/comment/getCommentByUID/{{UID}}?page={{page}}&size={{size}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"comment",
+								"getCommentByUID",
+								"{{UID}}"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "{{page}}"
+								},
+								{
+									"key": "size",
+									"value": "{{size}}"
+								}
 							]
 						}
 					},
