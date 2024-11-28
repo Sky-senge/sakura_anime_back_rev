@@ -811,6 +811,192 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "压力查询测试",
+			"item": [
+				{
+					"name": "获取动漫列表",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// 生成 1 到 30 之间的随机数\r",
+									"const randomPage = Math.floor(Math.random() * 3) + 1;\r",
+									"const randomSize = Math.floor(Math.random() * 30) + 1;\r",
+									"\r",
+									"// 设置全局变量或环境变量\r",
+									"pm.variables.set(\"page\", randomPage);\r",
+									"pm.variables.set(\"size\", randomSize);\r",
+									"\r",
+									"console.log(\"Random Page:\", randomPage, \"Random Size:\", randomSize);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/anime/getAnimeList?page={{page}}&size={{size}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"anime",
+								"getAnimeList"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "{{page}}"
+								},
+								{
+									"key": "size",
+									"value": "{{size}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "获取用户列表",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJhZG1pbiIsInBlcm1pc3Npb24iOjAsInBhc3NrZXkiOiJqR2wyNWJWQkJCVzk2UWk5VGU0VjM3Rm5xY2h6L0V1NHFCOXZLclJJcVJnPSIsImV4cCI6MTczMzI4NzcxMn0.7Cf2n2QtqtkiktdVGke4iD8vilZjhIGuaP_k2L1iek89uPqfhB9biiT1_oWcg1cwuxcbtsGU9POV4M4rTkuTBg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/user/getAllUsers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"user",
+								"getAllUsers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "获取动漫详情",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// 生成 1 到 30 之间的随机数\r",
+									"const randomAnime = Math.floor(Math.random() * 5) + 1;\r",
+									"\r",
+									"// 设置变量\r",
+									"pm.variables.set(\"AnimeID\", randomAnime);\r",
+									"\r",
+									"console.log(\"Random AnimeID:\", randomAnime);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/anime/getDetail/{{AnimeID}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"anime",
+								"getDetail",
+								"{{AnimeID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "根据单个或多个Tag匹配查询动漫",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// 标签数组\r",
+									"const tags = [\"日系\", \"美剧\", \"治愈\", \"寒蝉\", \"新海诚\"];\r",
+									"\r",
+									"// 随机选1到3个标签\r",
+									"const tagCount = Math.floor(Math.random() * 3) + 1; // 1 或 3\r",
+									"const selectedTags = [];\r",
+									"\r",
+									"while (selectedTags.length < tagCount) {\r",
+									"    const randomTag = tags[Math.floor(Math.random() * tags.length)];\r",
+									"    if (!selectedTags.includes(randomTag)) {\r",
+									"        selectedTags.push(randomTag);\r",
+									"    }\r",
+									"}\r",
+									"\r",
+									"// 构造随机 page 和 size 参数\r",
+									"const randomPage = Math.floor(Math.random() * 5) + 1; // 1 到 5\r",
+									"const randomSize = Math.floor(Math.random() * 30) + 1; // 1 到 30\r",
+									"\r",
+									"// 构造完整的 URL\r",
+									"const baseURL = \"http://localhost:8080/api/anime/getAnimeListByTags\";\r",
+									"const tagParams = selectedTags.map(tag => `tag=${encodeURIComponent(tag)}`).join(\"&\");\r",
+									"const fullURL = `${baseURL}?${tagParams}&page=${randomPage}&size=${randomSize}`;\r",
+									"\r",
+									"// 更新请求 URL\r",
+									"pm.request.url = fullURL;\r",
+									"\r",
+									"console.log(\"Generated URL:\", fullURL);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/anime/getAnimeListByTags",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"anime",
+								"getAnimeListByTags"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	],
 	"event": [
