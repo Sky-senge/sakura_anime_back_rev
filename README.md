@@ -36,6 +36,8 @@ git update-index --no-assume-unchanged
 
 3. 由于项目涉及视频编解码，建议在拥有NVIDIA GPU或者强大算力CPU的计算机运行。
 
+4. 使用Postman或新增样例请使用9.31.28版本，没有可以在[这里下载](https://github.com/Radium-bit/postman_noLogin_backup/releases/tag/9.31.28)。
+
 ## API文档
 
 ### 用户部分控制器：
