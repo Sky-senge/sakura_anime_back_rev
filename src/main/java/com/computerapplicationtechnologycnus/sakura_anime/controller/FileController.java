@@ -26,6 +26,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/files")
@@ -404,6 +409,136 @@ public class FileController {
             return new ResponseEntity<>(content, headers, HttpStatus.OK);
         } catch (IOException e) {
             logger.error("读取封面文件失败: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(("读取文件失败: " + e.getMessage()).getBytes());
+        }
+    }
+
+    /**
+     * 轮播图上传功能
+     *
+     * @param file 轮播图
+     * @return
+     */
+    @Operation(description = "轮播图上传功能")
+    @PostMapping("/uploadCarousel")
+    @AuthRequired(minPermissionLevel = 0) //仅管理员可上传
+    public ResultMessage<String> uploadFile(@RequestParam("file") MultipartFile file) {
+        try {
+            // 验证文件是否为空
+            if (file.isEmpty()) {
+                return ResultMessage.message(false,"文件不能为空！");
+            }
+            // 验证文件类型是否为图片
+            String contentType = file.getContentType();
+            if (contentType == null || !contentType.startsWith("image/")) {
+                return ResultMessage.message(false,"仅支持上传图片文件！");
+            }
+            // 获取上传目录
+            String uploadDir = fileStorageProperties.getUploadDir() + "carousel/";
+            logger.info("文件上传路径: " + uploadDir);
+            // 检查目录是否存在，不存在则创建
+            File dir = new File(uploadDir);
+            if (!dir.exists()) {
+                boolean dirsCreated = dir.mkdirs();
+                if (!dirsCreated) {
+                    return ResultMessage.message(false,"无法创建文件目录，请联系管理员！");
+                }
+            }
+            // 生成唯一文件名
+            String originalFilename = file.getOriginalFilename();
+            String fileExtension = originalFilename != null && originalFilename.contains(".")
+                    ? originalFilename.substring(originalFilename.lastIndexOf('.'))
+                    : "";
+            String uniqueFilename = UUID.randomUUID() + fileExtension;
+            // 保存文件
+            File destinationFile = new File(uploadDir + uniqueFilename);
+            file.transferTo(destinationFile);
+            logger.info("文件上传成功: " + uniqueFilename);
+            return ResultMessage.message(true,"轮播图上传成功，存储路径: " + uniqueFilename);
+        } catch (Exception e) {
+            logger.error("文件上传失败", e);
+            return ResultMessage.message(false,"文件上传失败，请联系管理员！");
+        }
+    }
+
+    /**
+     * 获取轮播图文件列表
+     * 获取carousel目录下所有图片文件列表
+     *
+     * @return ResponseEntity<ResultMessage<List<String>>>
+     */
+    @Operation(description = "获取轮播图文件列表")
+    @GetMapping("/getCarouselList")
+    public ResponseEntity<ResultMessage<List<String>>> listCarouselImages() {
+        try {
+            // 获取上传目录
+            String uploadDir = fileStorageProperties.getUploadDir() + "carousel/";
+            File dir = new File(uploadDir);
+
+            if (!dir.exists() || !dir.isDirectory()) {
+                return ResponseEntity.ok(ResultMessage.message(false, "轮播图目录不存在或无效！"));
+            }
+            // 获取所有图片文件名称列表
+            String[] imageExtensions = {".jpg", ".jpeg", ".png"};
+            List<String> imageFiles = Arrays.stream(Objects.requireNonNull(dir.listFiles()))
+                    .filter(file -> file.isFile() && Arrays.stream(imageExtensions).anyMatch(ext -> file.getName().toLowerCase().endsWith(ext)))
+                    .map(File::getName)
+                    .collect(Collectors.toList());
+            return ResponseEntity.ok(ResultMessage.message(imageFiles, true, "获取轮播图成功！"));
+        } catch (Exception e) {
+            logger.error("获取轮播图失败", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResultMessage.message(false, "获取轮播图失败，请联系管理员！"));
+        }
+    }
+
+    /**
+     * 提供轮播图文件
+     *
+     * @param requirements 目录路径参数
+     * @return 封面文件响应
+     */
+    @Operation(description = "提供轮播图文件的接口")
+    @GetMapping("/getCarouse/{requirements}")
+    public ResponseEntity<byte[]> getCarouse(
+            @PathVariable String requirements) {
+        try {
+            // 获取目录路径
+            String directoryPath = fileStorageProperties.getUploadDir() + "carousel/";
+            File directory = new File(directoryPath);
+            if (!directory.exists() || !directory.isDirectory()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(("目录不存在: " + requirements).getBytes());
+            }
+            // 搜索文件
+            File carouseFile = null;
+            for (String extension : new String[]{"jpg", "jpeg","png"}) {
+                File file = new File(directory, requirements);
+                if (file.exists() && file.isFile()) {
+                    carouseFile = file;
+                    break;
+                }
+            }
+            if (carouseFile == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("轮播图文件不存在".getBytes());
+            }
+            // 修改 Content-Type
+            String contentType = Files.probeContentType(carouseFile.toPath());
+            if (contentType == null) { //如果无法确定，就丢这个
+                contentType = "application/octet-stream";
+            }
+            // 读取文件内容
+            InputStream inputStream = new FileInputStream(carouseFile);
+            byte[] content = inputStream.readAllBytes();
+            inputStream.close();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.parseMediaType(contentType));
+            headers.add("Content-Disposition", "inline; filename=\"" + carouseFile.getName() + "\"");
+
+            return new ResponseEntity<>(content, headers, HttpStatus.OK);
+        } catch (IOException e) {
+            logger.error("读取轮播图文件失败: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(("读取文件失败: " + e.getMessage()).getBytes());
         }
