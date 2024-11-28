@@ -38,7 +38,17 @@ git update-index --no-assume-unchanged
 
 4. 使用Postman或新增样例请使用9.31.28版本，没有可以在[这里下载](https://github.com/Radium-bit/postman_noLogin_backup/releases/tag/9.31.28)。
 
-## API文档
+## API文档：
+
+**【WARNING】**
+
+最新的API文档请直接导入Postman的测试用例，作为参考！
+
+下面的已经写了绝大部分需要用到的，P1级别的API，但后续新增的API我打算不写在这了。
+
+因此建议直接参考Postman中的接口请求，分类也做好了，直接拉一下请求比这里的更直观。
+
+
 
 ### 用户部分控制器：
 
@@ -760,8 +770,6 @@ http://localhost:8080/api/anime/getAnimeListByTags?&tag=日系&tag=治愈
 }
 ```
 
-
-
 [GET] /api/comment/getCommentList/{{id}}
 
 **说明：** 根据动漫ID请求评论
@@ -793,8 +801,6 @@ http://localhost:8080/api/anime/getAnimeListByTags?&tag=日系&tag=治愈
 }
 ```
 
-
-
 [GET] /api/comment/getCommentByUID/{{id}}
 
 **说明：** 根据用户ID（UID）获取评论，可分页查询
@@ -825,8 +831,6 @@ http://localhost:8080/api/anime/getAnimeListByTags?&tag=日系&tag=治愈
   "error": "string"
 }
 ```
-
-
 
 [GET] /api/comment/deleteComment/{{id}}
 
