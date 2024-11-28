@@ -101,8 +101,8 @@ public interface CommentMapper {
     })
     List<Comment> findCommentsByUserId(Long userId);
 
-    @Update("UPDATE comments SET anime_id = #{animeId}, user_id = #{userId}, content = #{content}, " +
-            "create_at = #{createAt} WHERE id = #{id}")
+    @Update("UPDATE comments SET anime_id = #{animeId}, user_id = #{userId}, content = #{content} " +
+            "WHERE id = #{id}")
     void updateComment(Comment comment);
 
     @Delete("DELETE FROM comments WHERE id = #{id}")
