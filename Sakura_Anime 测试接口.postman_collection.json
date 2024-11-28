@@ -371,7 +371,7 @@
 					"response": []
 				},
 				{
-					"name": "根据关键字搜索动漫（支持空格分多个单词搜索）",
+					"name": "根据关键字搜索动漫",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -391,6 +391,41 @@
 								{
 									"key": "keyWord",
 									"value": "Angel"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "size",
+									"value": "30"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "根据关键字搜索动漫（多词匹配）",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/anime/searchByName?keyWord=败犬 太多了&page=1&size=30",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"anime",
+								"searchByName"
+							],
+							"query": [
+								{
+									"key": "keyWord",
+									"value": "败犬 太多了"
 								},
 								{
 									"key": "page",
