@@ -76,7 +76,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJhZG1pbiIsInBlcm1pc3Npb24iOjAsInBhc3NrZXkiOiJqR2wyNWJWQkJCVzk2UWk5VGU0VjM3Rm5xY2h6L0V1NHFCOXZLclJJcVJnPSIsImV4cCI6MTczMzI4NzcxMn0.7Cf2n2QtqtkiktdVGke4iD8vilZjhIGuaP_k2L1iek89uPqfhB9biiT1_oWcg1cwuxcbtsGU9POV4M4rTkuTBg",
+									"value": "{{GlobalToken}}",
 									"type": "string"
 								}
 							]
@@ -107,7 +107,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJhZG1pbiIsInBlcm1pc3Npb24iOjAsInBhc3NrZXkiOiJqR2wyNWJWQkJCVzk2UWk5VGU0VjM3Rm5xY2h6L0V1NHFCOXZLclJJcVJnPSIsImV4cCI6MTczMzI4NzcxMn0.7Cf2n2QtqtkiktdVGke4iD8vilZjhIGuaP_k2L1iek89uPqfhB9biiT1_oWcg1cwuxcbtsGU9POV4M4rTkuTBg",
+									"value": "{{GlobalToken}}",
 									"type": "string"
 								}
 							]
@@ -138,7 +138,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJhZG1pbiIsInBlcm1pc3Npb24iOjAsInBhc3NrZXkiOiJqR2wyNWJWQkJCVzk2UWk5VGU0VjM3Rm5xY2h6L0V1NHFCOXZLclJJcVJnPSIsImV4cCI6MTczMzI4NzcxMn0.7Cf2n2QtqtkiktdVGke4iD8vilZjhIGuaP_k2L1iek89uPqfhB9biiT1_oWcg1cwuxcbtsGU9POV4M4rTkuTBg",
+									"value": "{{GlobalToken}}",
 									"type": "string"
 								}
 							]
@@ -178,7 +178,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJhZG1pbiIsInBlcm1pc3Npb24iOjAsInBhc3NrZXkiOiJqR2wyNWJWQkJCVzk2UWk5VGU0VjM3Rm5xY2h6L0V1NHFCOXZLclJJcVJnPSIsImV4cCI6MTczMzI4NzcxMn0.7Cf2n2QtqtkiktdVGke4iD8vilZjhIGuaP_k2L1iek89uPqfhB9biiT1_oWcg1cwuxcbtsGU9POV4M4rTkuTBg",
+									"value": "{{GlobalToken}}",
 									"type": "string"
 								}
 							]
@@ -218,7 +218,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJhZG1pbiIsInBlcm1pc3Npb24iOjAsInBhc3NrZXkiOiJqR2wyNWJWQkJCVzk2UWk5VGU0VjM3Rm5xY2h6L0V1NHFCOXZLclJJcVJnPSIsImV4cCI6MTczMzI4NzcxMn0.7Cf2n2QtqtkiktdVGke4iD8vilZjhIGuaP_k2L1iek89uPqfhB9biiT1_oWcg1cwuxcbtsGU9POV4M4rTkuTBg",
+									"value": "{{GlobalToken}}",
 									"type": "string"
 								}
 							]
