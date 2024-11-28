@@ -203,6 +203,9 @@ public class AnimeService {
     @Schema(description = "通过ID获取动漫信息")
     public AnimeResponseModel getAnimeById(Long id){
         Anime returnedAnime=animeMapper.findAnimeById(id);
+        if(returnedAnime==null){
+            return new AnimeResponseModel();
+        }
         AnimeResponseModel animeResponse=new AnimeResponseModel();
         //转换对象
         animeResponse.setId(returnedAnime.getId());
