@@ -65,6 +65,7 @@ public class CommentController {
 
     @Operation(description = "根据用户ID获取评论列表")
     @GetMapping("/getCommentByUID/{id}")
+    @AuthRequired(minPermissionLevel = 0) //只有管理员可查户口
     public ResultMessage<List<Comment>> getCommentsByUserID(@PathVariable("id") Long id,
                                                             @RequestParam(defaultValue = "0") long page,
                                                             @RequestParam(defaultValue = "30") long size){
