@@ -265,6 +265,8 @@ git update-index --no-assume-unchanged
 }
 ```
 
+****
+
 ## 动漫部分控制器：
 
 [POST] /api/anime/createAnime
@@ -536,6 +538,8 @@ http://localhost:8080/api/anime/getAnimeListByTags?&tag=日系&tag=治愈
 }
 ```
 
+****
+
 ## 文件控制器：
 
 [POST] /files/getAvatar/{filename}
@@ -725,3 +729,118 @@ http://localhost:8080/api/anime/getAnimeListByTags?&tag=日系&tag=治愈
 ```
 
 **响应：** `二进制文件`
+
+****
+
+## 评论控制器：
+
+[POST] /api/comment/addComment
+
+**说明：** 新增一条评论，需要登录用户
+
+**请求：** 
+
+```json
+{
+  "animeId": 0, //动漫ID
+  "userId": 0, //UID
+  "content": "string", //评论内容
+  "createAt": "" //数据库自动生成，留空
+}
+```
+
+**响应：**
+
+```json
+{
+  "status": true, //是否成功添加
+  "data": "string", 
+  "message": "string",
+  "error": "string"
+}
+```
+
+
+
+[GET] /api/comment/getCommentList/{{id}}
+
+**说明：** 根据动漫ID请求评论
+
+**请求：** {{id}}替换为动漫ID，参数 `page=第几页` & `size=每页几个数据`
+
+**请求示例：**
+
+```url
+/api/comment/getCommentList/1?page=1&size=30
+```
+
+**响应：**
+
+```json
+{
+  "status": true,
+  "data": [
+    {
+      "id": 0, //索引
+      "animeId": 0, //动漫ID
+      "userId": 0, //UID
+      "content": "string", //评论内容
+      "createAt": "2024-11-28T03:42:03.041Z" //创建时间
+    }
+  ],
+  "message": "string",
+  "error": "string"
+}
+```
+
+
+
+[GET] /api/comment/getCommentByUID/{{id}}
+
+**说明：** 根据用户ID（UID）获取评论，可分页查询
+
+**请求：** {{id}}替换为用户ID，参数 `page=第几页` & `size=每页几个数据`
+
+**请求示例：**
+
+```url
+/api/comment/getCommentByUID/1?page=1&size=30
+```
+
+**响应：**
+
+```json
+{
+  "status": true,
+  "data": [
+    {
+      "id": 0, //索引
+      "animeId": 0, //动漫ID
+      "userId": 0, //UID
+      "content": "string", //评论内容
+      "createAt": "2024-11-28T03:42:03.041Z" //创建时间
+    }
+  ],
+  "message": "string",
+  "error": "string"
+}
+```
+
+
+
+[GET] /api/comment/deleteComment/{{id}}
+
+**说明：**  删除一条评论，需要【管理员】操作
+
+**请求：** {{id}}替换为评论的ID
+
+**响应：**
+
+```json
+{
+  "status": true, //是否成功删除
+  "data": "string",
+  "message": "string",
+  "error": "string"
+}
+```
