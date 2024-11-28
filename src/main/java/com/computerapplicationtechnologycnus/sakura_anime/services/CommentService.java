@@ -39,8 +39,14 @@ public class CommentService {
     }
 
     @Schema(description = "根据用户ID，查询其全部评论")
-    public List<Comment> getAllCommentByUserID(Long id){
-        return commentMapper.findCommentsByUserId(id);
+    public List<Comment> getAllCommentByUserID(Long id,Long size,Long page){
+        if(page<=1 || size<1){ //假如出现异常参数，恢复默认
+            page = 0L;
+            size = 30L;
+        }else {
+            page = (page-1)*size;
+        }
+        return commentMapper.findCommentsByUserId(id,size,page);
     }
 
     @Schema(description = "插入新的评论，仅限登录用户可用")

@@ -91,7 +91,7 @@ public interface CommentMapper {
     })
     List<Comment> findCommentsByAnimeId(Long animeId);
 
-    @Select("SELECT * FROM comments WHERE user_id = #{userId}")
+    @Select("SELECT * FROM comments WHERE user_id = #{userId} limit #{size} OFFSET #{offset}")
     @Results({
             @Result(property = "id",column = "id"),
             @Result(property = "animeId",column = "anime_id"),
@@ -99,7 +99,7 @@ public interface CommentMapper {
             @Result(property = "content",column = "content"),
             @Result(property = "createAt",column = "created_at"),
     })
-    List<Comment> findCommentsByUserId(Long userId);
+    List<Comment> findCommentsByUserId(@Param("userId") Long userId,@Param("size") Long size, @Param("offset") Long offset);
 
     @Update("UPDATE comments SET anime_id = #{animeId}, user_id = #{userId}, content = #{content} " +
             "WHERE id = #{id}")

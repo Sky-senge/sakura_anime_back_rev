@@ -65,9 +65,16 @@ public class CommentController {
 
     @Operation(description = "根据用户ID获取评论列表")
     @GetMapping("/getCommentByUID/{id}")
-    public ResultMessage<List<Comment>> getCommentsByUserID(@PathVariable("id") Long id){
+    public ResultMessage<List<Comment>> getCommentsByUserID(@PathVariable("id") Long id,
+                                                            @RequestParam(defaultValue = "0") long page,
+                                                            @RequestParam(defaultValue = "30") long size){
         try{
-            List<Comment> commentList = commentService.getAllCommentByUserID(id);
+            //处理可能存在刁民给你搬来巨大或错误参数拖累性能
+            if(size>100 || page<0){
+                return ResultMessage.message(false,"您的查询参数过于巨大或不正确，请重试");
+            }
+            //查询执行
+            List<Comment> commentList = commentService.getAllCommentByUserID(id,size,page);
             return ResultMessage.message(commentList,true,"获取成功！");
         }catch (Exception e){
             return ResultMessage.message(false,"获取评论失败，请联络管理员！",e.getMessage());
