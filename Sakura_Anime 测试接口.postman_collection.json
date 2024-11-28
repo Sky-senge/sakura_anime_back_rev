@@ -809,6 +809,191 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "上传轮播图",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJhZG1pbiIsInBlcm1pc3Npb24iOjAsInBhc3NrZXkiOiJqR2wyNWJWQkJCVzk2UWk5VGU0VjM3Rm5xY2h6L0V1NHFCOXZLclJJcVJnPSIsImV4cCI6MTczMzI4NzcxMn0.7Cf2n2QtqtkiktdVGke4iD8vilZjhIGuaP_k2L1iek89uPqfhB9biiT1_oWcg1cwuxcbtsGU9POV4M4rTkuTBg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/D:/Pictures/0ac39e4cb7bcd172d83ce949e33bc402f9532bb8.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/files/uploadCarousel",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"files",
+								"uploadCarousel"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "上传轮播图",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/D:/Pictures/0ac39e4cb7bcd172d83ce949e33bc402f9532bb8.jpg"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:8080/files/uploadCarousel",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"files",
+										"uploadCarousel"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 28 Nov 2024 07:57:02 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": true,\n    \"data\": null,\n    \"message\": \"轮播图上传成功，存储路径: afdb19fd-d59d-41bf-8784-25ea0e60bfa3.jpg\",\n    \"error\": null\n}"
+						}
+					]
+				},
+				{
+					"name": "获取轮播图列表",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/files/getCarouselList",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"files",
+								"getCarouselList"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "获取轮播图列表",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/files/getCarouselList",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"files",
+										"getCarouselList"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 28 Nov 2024 07:57:54 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": true,\n    \"data\": [\n        \"afdb19fd-d59d-41bf-8784-25ea0e60bfa3.jpg\"\n    ],\n    \"message\": \"获取轮播图成功！\",\n    \"error\": null\n}"
+						}
+					]
+				},
+				{
+					"name": "获取轮播图图片",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/files/getCarouse/afdb19fd-d59d-41bf-8784-25ea0e60bfa3.jpg",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"files",
+								"getCarouse",
+								"afdb19fd-d59d-41bf-8784-25ea0e60bfa3.jpg"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
