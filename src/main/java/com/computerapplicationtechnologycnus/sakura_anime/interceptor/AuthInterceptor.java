@@ -30,11 +30,17 @@ public class AuthInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         logger.info("AuthInterceptor triggered for URL: " + request.getRequestURI());
 
+        // 检查 User-Agent
+        String userAgent = request.getHeader("User-Agent");
+        if (!isValidUserAgent(userAgent)) {
+            logger.error("Invalid or suspicious User-Agent: " + userAgent);
+            throw new AuthenticationException("Suspicious request detected!\n Please use a normal browser.");
+        }
+
         // 如果不是处理方法直接放行
         if (!(handler instanceof HandlerMethod)) {
             return true;
         }
-
         HandlerMethod handlerMethod = (HandlerMethod) handler;
         // 获取方法上的 @AuthRequired 注解
         AuthRequired authRequired = handlerMethod.getMethodAnnotation(AuthRequired.class);
@@ -86,5 +92,39 @@ public class AuthInterceptor implements HandlerInterceptor {
             logger.error("Invalid token: " + e.getMessage());
             throw new AuthenticationException("Invalid token: " + e.getMessage());
         }
+    }
+
+    /**
+     * UA检查器设定
+     * @param userAgent
+     * @return
+     */
+    private boolean isValidUserAgent(String userAgent) {
+        if (userAgent == null || userAgent.isEmpty()) {
+            logger.warn("No User-Agent provided");
+            return false;
+        }
+        // 黑名单检查：常见的爬虫和恶意请求标识
+        String[] suspiciousUserAgents = {
+                "python-requests",
+                "curl",
+                "wget",
+                "Apache-HttpClient",
+                "Scrapy",
+                "bot",
+                "spider",
+                "crawler"
+        };
+        for (String suspicious : suspiciousUserAgents) {
+            if (userAgent.toLowerCase().contains(suspicious.toLowerCase())) {
+                return false;
+            }
+        }
+        // 可以添加更复杂的验证逻辑，比如正则表达式匹配
+        // 例如：只允许常见浏览器的 User-Agent，这里还加了个Postman豁免
+        if (!userAgent.matches("^(Mozilla|Chrome|Safari|Edge|Opera|Gecko|PostmanRuntime).*$")) {
+            return false;
+        }
+        return true;
     }
 }
