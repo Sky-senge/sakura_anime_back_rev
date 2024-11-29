@@ -149,6 +149,40 @@ INSERT INTO `comments` VALUES
 UNLOCK TABLES;
 
 --
+-- Table structure for table `history`
+--
+
+DROP TABLE IF EXISTS `history`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `history` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) NOT NULL,
+  `anime_id` bigint(20) NOT NULL,
+  `episodes` bigint(20) NOT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `anime_id` (`anime_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `history_ibfk_1` FOREIGN KEY (`anime_id`) REFERENCES `anime` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `history_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `history`
+--
+
+LOCK TABLES `history` WRITE;
+/*!40000 ALTER TABLE `history` DISABLE KEYS */;
+INSERT INTO `history` VALUES
+(1,1,1,1,'2024-11-29 03:38:04'),
+(2,1,1,1,'2024-11-29 03:38:04'),
+(3,2,1,1,'2024-11-29 03:38:04');
+/*!40000 ALTER TABLE `history` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `users`
 --
 
@@ -196,4 +230,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-11-28 12:23:57
+-- Dump completed on 2024-11-29 12:44:30
