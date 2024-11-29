@@ -1,11 +1,11 @@
 package com.computerapplicationtechnologycnus.sakura_anime.services;
 
 import com.alibaba.fastjson.JSON;
+import com.computerapplicationtechnologycnus.sakura_anime.common.ModelConverter;
 import com.computerapplicationtechnologycnus.sakura_anime.mapper.AnimeMapper;
 import com.computerapplicationtechnologycnus.sakura_anime.mapper.CommentMapper;
 import com.computerapplicationtechnologycnus.sakura_anime.model.Anime;
 import com.computerapplicationtechnologycnus.sakura_anime.model.AnimePathObject;
-import com.computerapplicationtechnologycnus.sakura_anime.model.Comment;
 import com.computerapplicationtechnologycnus.sakura_anime.model.webRequestModel.AnimeRequestModel;
 import com.computerapplicationtechnologycnus.sakura_anime.model.webRequestModel.AnimeResponseModel;
 import com.computerapplicationtechnologycnus.sakura_anime.utils.JwtUtil;
@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -27,10 +26,12 @@ public class AnimeService {
     private final AnimeMapper animeMapper;
     private final JwtUtil jwtUtil;
     private final CommentMapper commentMapper;
-    public AnimeService(AnimeMapper animeMapper,JwtUtil jwtUtil,CommentMapper commentMapper){
+    private final ModelConverter modelConverter;
+    public AnimeService(AnimeMapper animeMapper, JwtUtil jwtUtil, CommentMapper commentMapper, ModelConverter modelConverter){
         this.animeMapper=animeMapper;
         this.jwtUtil=jwtUtil;
         this.commentMapper=commentMapper;
+        this.modelConverter=modelConverter;
     }
 
     /**
@@ -45,27 +46,7 @@ public class AnimeService {
         // 从数据库中获取 Anime 对象列表
         List<Anime> animeList = animeMapper.findAllAnimes();
         // 创建一个 List 来存储转换后的 AnimeResponseModel
-        List<AnimeResponseModel> animeResponseList = new ArrayList<>();
-        // 遍历 animeList 并将其转换为 AnimeResponseModel
-        for (Anime anime : animeList) {
-            AnimeResponseModel responseModel = new AnimeResponseModel();
-            // 设置 AnimeResponseModel 的属性
-            responseModel.setId(anime.getId());
-            responseModel.setName(anime.getName());
-            responseModel.setDescription(anime.getDescription());
-            responseModel.setRating(anime.getRating());
-            responseModel.setReleaseDate(anime.getReleaseDate());
-            //把存进去的JSON反序列化回来
-            responseModel.setFilePath(JSON.parseArray(anime.getFilePath(),AnimePathObject.class));
-            // 处理 tags 字段：从 JSON 字符串转为 List<String>
-            if (anime.getTags() != null) {
-                List<String> tagsList = JSON.parseArray(anime.getTags(), String.class);
-                responseModel.setTags(tagsList);
-            }
-            // 将转换后的对象添加到响应列表中
-            animeResponseList.add(responseModel);
-        }
-        return animeResponseList;
+        return modelConverter.convertToAnimeResponseList(animeList);
     }
 
     /**
@@ -87,27 +68,7 @@ public class AnimeService {
         // 从数据库中获取 Anime 对象列表
         List<Anime> animeList = animeMapper.findAllAnimeWithIndexPageUseOffset(size,page);
         // 创建一个 List 来存储转换后的 AnimeResponseModel
-        List<AnimeResponseModel> animeResponseList = new ArrayList<>();
-        // 遍历 animeList 并将其转换为 AnimeResponseModel
-        for (Anime anime : animeList) {
-            AnimeResponseModel responseModel = new AnimeResponseModel();
-            // 设置 AnimeResponseModel 的属性
-            responseModel.setId(anime.getId());
-            responseModel.setName(anime.getName());
-            responseModel.setDescription(anime.getDescription());
-            responseModel.setRating(anime.getRating());
-            responseModel.setReleaseDate(anime.getReleaseDate());
-            //把存进去的JSON反序列化回来
-            responseModel.setFilePath(JSON.parseArray(anime.getFilePath(),AnimePathObject.class));
-            // 处理 tags 字段：从 JSON 字符串转为 List<String>
-            if (anime.getTags() != null) {
-                List<String> tagsList = JSON.parseArray(anime.getTags(), String.class);
-                responseModel.setTags(tagsList);
-            }
-            // 将转换后的对象添加到响应列表中
-            animeResponseList.add(responseModel);
-        }
-        return animeResponseList;
+        return modelConverter.convertToAnimeResponseList(animeList);
     }
 
     /**
@@ -129,27 +90,7 @@ public class AnimeService {
         // 从数据库中获取 Anime 对象列表
         List<Anime> animeList = animeMapper.findAnimeWithIndexPageByTags(tags, size, page);
         // 创建一个 List 来存储转换后的 AnimeResponseModel
-        List<AnimeResponseModel> animeResponseList = new ArrayList<>();
-        // 遍历 animeList 并将其转换为 AnimeResponseModel
-        for (Anime anime : animeList) {
-            AnimeResponseModel responseModel = new AnimeResponseModel();
-            // 设置 AnimeResponseModel 的属性
-            responseModel.setId(anime.getId());
-            responseModel.setName(anime.getName());
-            responseModel.setDescription(anime.getDescription());
-            responseModel.setRating(anime.getRating());
-            responseModel.setReleaseDate(anime.getReleaseDate());
-            //把存进去的JSON反序列化回来
-            responseModel.setFilePath(JSON.parseArray(anime.getFilePath(),AnimePathObject.class));
-            // 处理 tags 字段：从 JSON 字符串转为 List<String>
-            if (anime.getTags() != null) {
-                List<String> tagsList = JSON.parseArray(anime.getTags(), String.class);
-                responseModel.setTags(tagsList);
-            }
-            // 将转换后的对象添加到响应列表中
-            animeResponseList.add(responseModel);
-        }
-        return animeResponseList;
+        return modelConverter.convertToAnimeResponseList(animeList);
     }
 
     /**
@@ -180,24 +121,7 @@ public class AnimeService {
         // 从数据库中获取 Anime 对象列表
         List<Anime> animeList = animeMapper.searchAnimeByNameUseOffset(fuzzyName.toString(), size, page);
         // 转换 Anime 对象为 AnimeResponseModel
-        List<AnimeResponseModel> animeResponseList = new ArrayList<>();
-        for (Anime anime : animeList) {
-            AnimeResponseModel responseModel = new AnimeResponseModel();
-            responseModel.setId(anime.getId());
-            responseModel.setName(anime.getName());
-            responseModel.setDescription(anime.getDescription());
-            responseModel.setRating(anime.getRating());
-            responseModel.setReleaseDate(anime.getReleaseDate());
-            //把存进去的JSON反序列化回来
-            responseModel.setFilePath(JSON.parseArray(anime.getFilePath(), AnimePathObject.class));
-            // 处理 tags 字段：从 JSON 字符串转为 List<String>
-            if (anime.getTags() != null) {
-                List<String> tagsList = JSON.parseArray(anime.getTags(), String.class);
-                responseModel.setTags(tagsList);
-            }
-            animeResponseList.add(responseModel);
-        }
-        return animeResponseList;
+        return modelConverter.convertToAnimeResponseList(animeList);
     }
 
     @Schema(description = "通过ID获取动漫信息")
@@ -261,27 +185,7 @@ public class AnimeService {
         }
         List<Anime> animeList = animeMapper.searchAnimeByNameUseOffset(searchKeyWord,size,page);
         // 创建一个 List 来存储转换后的 AnimeResponseModel
-        List<AnimeResponseModel> animeResponseList = new ArrayList<>();
-        // 遍历 animeList 并将其转换为 AnimeResponseModel
-        for (Anime anime : animeList) {
-            AnimeResponseModel responseModel = new AnimeResponseModel();
-            // 设置 AnimeResponseModel 的属性
-            responseModel.setId(anime.getId());
-            responseModel.setName(anime.getName());
-            responseModel.setDescription(anime.getDescription());
-            responseModel.setRating(anime.getRating());
-            responseModel.setReleaseDate(anime.getReleaseDate());
-            //把存进去的JSON反序列化回来
-            responseModel.setFilePath(JSON.parseArray(anime.getFilePath(),AnimePathObject.class));
-            // 处理 tags 字段：从 JSON 字符串转为 List<String>
-            if (anime.getTags() != null) {
-                List<String> tagsList = JSON.parseArray(anime.getTags(), String.class);
-                responseModel.setTags(tagsList);
-            }
-            // 将转换后的对象添加到响应列表中
-            animeResponseList.add(responseModel);
-        }
-        return animeResponseList;
+        return modelConverter.convertToAnimeResponseList(animeList);
     }
 
     /**
