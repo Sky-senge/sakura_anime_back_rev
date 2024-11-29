@@ -1,5 +1,6 @@
 package com.computerapplicationtechnologycnus.sakura_anime.services;
 
+import com.computerapplicationtechnologycnus.sakura_anime.config.HistoryConfig;
 import com.computerapplicationtechnologycnus.sakura_anime.mapper.HistoryMapper;
 import com.computerapplicationtechnologycnus.sakura_anime.model.History;
 import com.computerapplicationtechnologycnus.sakura_anime.model.webRequestModel.HistoryRequestModel;
@@ -13,14 +14,23 @@ import java.util.List;
 public class HistoryService {
     //实例化Mapper
     private final HistoryMapper historyMapper;
-    public HistoryService(HistoryMapper historyMapper){
+    private final HistoryConfig historyConfig;
+
+    public HistoryService(HistoryMapper historyMapper, HistoryConfig historyConfig){
         this.historyMapper=historyMapper;
+        this.historyConfig = historyConfig;
     }
 
+    /**
+     * 插入新的历史记录
+     * @param requestModel 历史记录新增请求体
+     * @throws Exception
+     */
     @Schema(description = "插入新的历史记录")
     @Transactional
     public void insertHistory(HistoryRequestModel requestModel) throws Exception {
         try{
+            int maxHistoryNumber = historyConfig.getMaxSingleUser();
             Long UID = requestModel.getUserId();
             Long AID = requestModel.getAnimeId();
             Long episodes = requestModel.getEpisodes();
@@ -31,14 +41,14 @@ public class HistoryService {
             history.setEpisodes(episodes);
             // 检查用户历史记录数量
             int userHistoryCount= historyMapper.countByUserId(UID);
-            if(userHistoryCount>=300){
+            if(userHistoryCount>=maxHistoryNumber){
                 // 如果超过 300 条，删除最老的一条记录
                 Long oldestHistoryId = historyMapper.findOldestHistoryIdByUserId(UID);
                 historyMapper.deleteById(oldestHistoryId);
             }
             //查询缺失ID，并吧数据插在缺失处
             Long missingId=historyMapper.findMissingId();
-            if(missingId !=null){
+            if(missingId != null){
                 history.setId(missingId);
                 historyMapper.insertHistoryWithId(history);
             }else {
@@ -49,6 +59,14 @@ public class HistoryService {
         }
     }
 
+    /**
+     * 获取用户历史记录表，支持分页查询
+     *
+     * @param UID 用户ID
+     * @param size 查询长度
+     * @param offset 查询第几页
+     * @return List<History>
+     */
     @Schema(description = "获取用户历史记录表")
     public List<History> getHistoryListByUID(Long UID,Long size,Long offset){
         if(offset<=1 || size<1){ //假如出现异常参数，恢复默认

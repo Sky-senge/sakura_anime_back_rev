@@ -24,6 +24,10 @@ ffmpeg.video.enableNvenc=true
 ## FFMPEG程序路径，若已经配好环境变量，则不需要改动
 ffmpeg.locate="ffmpeg"
 
+# 历史记录配置
+##单个用户最大记录条数
+history.max-single-user=300
+
 # JWT配置
 ## JWT密钥（要弄得超级长，512位密钥）
 jwt.secret=5J4kPATqAyLPDfFghupJcb65fAKFDNF3eO6nCO6tlK2b9yFaeb5J4kPATqAyLPDfFghupJcb65fAKFDNF3eO6nCO6tlK2b9yFaeb5J4kPATqAyLPDfFghupJcb65fAKFDNF3eO6nCO6tlK2b9yFaeb

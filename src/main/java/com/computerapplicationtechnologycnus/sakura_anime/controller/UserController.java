@@ -149,6 +149,9 @@ public class UserController {
     @AuthRequired(minPermissionLevel = 1)
     public ResultMessage<String> createVideoHistory(@RequestBody HistoryRequestModel request, HttpServletRequest requestHeader) throws Exception {
         try{
+            if(request.getUserId()<1 || request.getAnimeId()<1 || request.getEpisodes()<1){
+                return ResultMessage.message(false,"参数不正确！");
+            }
             // 从请求中获取 username
             String usernameFromToken = (String) requestHeader.getAttribute("username");
             Long uidFromDatabase = userService.findUIDByUsername(usernameFromToken);
@@ -156,7 +159,7 @@ public class UserController {
             historyService.insertHistory(request);
             return ResultMessage.message(true,"新增历史记录成功");
         }catch (Exception e){
-            return ResultMessage.message(false,"无法访问数据库，原因如下", e.getMessage());
+            return ResultMessage.message(false,"无法新增历史，原因如下", e.getMessage());
         }
     }
 
