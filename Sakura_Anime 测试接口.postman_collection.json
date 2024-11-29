@@ -131,6 +131,117 @@
 					"response": []
 				},
 				{
+					"name": "获取用户历史记录",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{GlobalToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/user/getHistory?page=1&size=50",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"user",
+								"getHistory"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "size",
+									"value": "50"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "获取用户历史记录",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/user/getHistory?page=1&size=50",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"user",
+										"getHistory"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "size",
+											"value": "50"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 29 Nov 2024 04:32:11 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": true,\n    \"data\": [\n        {\n            \"id\": 1,\n            \"userId\": 1,\n            \"animeId\": 1,\n            \"episodes\": 1,\n            \"createAt\": \"2024-11-29T03:38:04.000+00:00\"\n        },\n        {\n            \"id\": 2,\n            \"userId\": 1,\n            \"animeId\": 1,\n            \"episodes\": 1,\n            \"createAt\": \"2024-11-29T03:38:04.000+00:00\"\n        },\n        {\n            \"id\": 4,\n            \"userId\": 1,\n            \"animeId\": 1,\n            \"episodes\": 1,\n            \"createAt\": \"2024-11-29T04:29:58.000+00:00\"\n        }\n    ],\n    \"message\": \"获取历史记录成功\",\n    \"error\": null\n}"
+						}
+					]
+				},
+				{
 					"name": "修改密码（用户侧，会校验请求和自身是否匹配）",
 					"request": {
 						"auth": {
@@ -205,6 +316,46 @@
 								"api",
 								"user",
 								"updateUser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "新增用户观影历史记录",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{GlobalToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"userId\": 1,\r\n  \"animeId\": 1,\r\n  \"episodes\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/user/createHistory",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"user",
+								"createHistory"
 							]
 						}
 					},
