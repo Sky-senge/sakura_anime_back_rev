@@ -41,14 +41,28 @@ public interface HistoryMapper {
     })
     List<History> findByAnimeId(@Param("animeId") Long animeId, @Param("size") Long size, @Param("offset") Long offset);
 
-    // 新增历史记录（不插入created_at字段）
+    // 新增历史记录（不插入created_at字段，让SQL自动生成）
     @Insert("INSERT INTO history (user_id, anime_id, episodes) VALUES (#{userId}, #{animeId}, #{episodes})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void insertHistory(History history);
 
-    // 根据动漫ID和UID统计记录数
-    @Select("SELECT COUNT(*) FROM history WHERE anime_id = #{animeId} AND user_id = #{userId}")
-    int countByAnimeIdAndUserId(@Param("animeId") Long animeId, @Param("userId") Long userId);
+    // 新增历史记录（不插入created_at字段，让SQL自动生成）
+    @Insert("INSERT INTO history (id, user_id, anime_id, episodes) VALUES (#{id}, #{userId}, #{animeId}, #{episodes})")
+    @Options(useGeneratedKeys = true, keyProperty = "id")
+    void insertHistoryWithId(History history);
+
+
+    // 根据UID统计记录数
+    @Select("SELECT COUNT(*) FROM history WHERE user_id = #{userId}")
+    int countByUserId(@Param("userId") Long userId);
+
+    //查询用户最老的历史记录
+    @Select("SELECT id FROM history WHERE user_id = #{userId} ORDER BY created_at ASC LIMIT 1")
+    Long findOldestHistoryIdByUserId(@Param("userId") Long userId);
+
+    //根据ID删除记录
+    @Delete("DELETE FROM history WHERE id = #{id}")
+    int deleteById(@Param("id") Long id);
 
     // 查询缺失的最小 ID
     @Select("SELECT MIN(t1.id + 1) AS missing_id " +

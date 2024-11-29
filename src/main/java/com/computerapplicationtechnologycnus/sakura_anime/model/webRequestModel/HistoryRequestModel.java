@@ -6,9 +6,6 @@ import lombok.Data;
 
 @Data
 public class HistoryRequestModel {
-    @Schema(description = "评论唯一ID")
-    private Long id;
-
     @Schema(description = "对应用户ID")
     private Long userId;
 

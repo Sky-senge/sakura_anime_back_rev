@@ -2,11 +2,10 @@ package com.computerapplicationtechnologycnus.sakura_anime.controller;
 
 import com.computerapplicationtechnologycnus.sakura_anime.annotation.AuthRequired;
 import com.computerapplicationtechnologycnus.sakura_anime.common.ResultMessage;
+import com.computerapplicationtechnologycnus.sakura_anime.model.History;
 import com.computerapplicationtechnologycnus.sakura_anime.model.User;
-import com.computerapplicationtechnologycnus.sakura_anime.model.webRequestModel.UserLoginRequest;
-import com.computerapplicationtechnologycnus.sakura_anime.model.webRequestModel.UserLoginResponse;
-import com.computerapplicationtechnologycnus.sakura_anime.model.webRequestModel.UserModPasswordRequestModel;
-import com.computerapplicationtechnologycnus.sakura_anime.model.webRequestModel.UserRegistryModel;
+import com.computerapplicationtechnologycnus.sakura_anime.model.webRequestModel.*;
+import com.computerapplicationtechnologycnus.sakura_anime.services.HistoryService;
 import com.computerapplicationtechnologycnus.sakura_anime.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -21,9 +20,11 @@ import java.util.Objects;
 @Schema(description = "用户API入口")
 public class UserController {
     private final UserService userService;
+    private final HistoryService historyService;
 
-    public UserController(UserService userService){
+    public UserController(UserService userService, HistoryService historyService){
         this.userService=userService;
+        this.historyService=historyService;
     }
 
     @Operation(description = "用户登录")
@@ -140,6 +141,45 @@ public class UserController {
             return ResultMessage.message(true,"删除成功，UID："+userId);
         } else {
             return ResultMessage.message(false,"用户删除失败");
+        }
+    }
+
+    @Operation(description = "新增历史记录")
+    @PostMapping("/createHistory")
+    @AuthRequired(minPermissionLevel = 1)
+    public ResultMessage<String> createVideoHistory(@RequestBody HistoryRequestModel request, HttpServletRequest requestHeader) throws Exception {
+        try{
+            // 从请求中获取 username
+            String usernameFromToken = (String) requestHeader.getAttribute("username");
+            Long uidFromDatabase = userService.findUIDByUsername(usernameFromToken);
+            request.setUserId(uidFromDatabase);
+            historyService.insertHistory(request);
+            return ResultMessage.message(true,"新增历史记录成功");
+        }catch (Exception e){
+            return ResultMessage.message(false,"无法访问数据库，原因如下", e.getMessage());
+        }
+    }
+
+    @Operation(description = "获取历史记录列表")
+    @GetMapping("/getHistory")
+    @AuthRequired(minPermissionLevel = 1)
+    public ResultMessage<List<History>> getHistoryList(
+            @RequestParam(defaultValue = "0") long page,
+            @RequestParam(defaultValue = "30") long size,
+            HttpServletRequest requestHeader
+    ){
+        try{
+            //处理可能存在刁民给你搬来巨大或错误参数拖累性能
+            if(size>100 || page<0){
+                return ResultMessage.message(false,"您的查询参数过于巨大或不正确，请重试");
+            }
+            //查询执行
+            String usernameFromToken = (String) requestHeader.getAttribute("username");
+            Long uidFromDatabase = userService.findUIDByUsername(usernameFromToken);
+            List<History> historyList = historyService.getHistoryListByUID(uidFromDatabase,size,page);
+            return ResultMessage.message(historyList,true,"获取历史记录成功");
+        }catch (Exception e){
+            return ResultMessage.message(false,"无法查找到历史记录！", e.getMessage());
         }
     }
 }
