@@ -21,10 +21,13 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthInterceptor.class);
 
-    @Autowired
-    private JwtUtil jwtUtil;
-    @Autowired
-    private UserMapper userMapper;
+    private final JwtUtil jwtUtil;
+    private final UserMapper userMapper;
+
+    public AuthInterceptor(JwtUtil jwtUtil,UserMapper userMapper){
+        this.jwtUtil=jwtUtil;
+        this.userMapper=userMapper;
+    }
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
