@@ -24,7 +24,7 @@ public class CommentService {
 
     @Schema(description = "根据动漫ID，分页查询评论列表")
     public List<Comment> getCommentByAnimeIDByPage(Long id,Long page,Long size){
-        if(page<=1 || size<1){ //假如出现异常参数，恢复默认
+        if(page<1 || size<1){ //假如出现异常参数，恢复默认
             page = 0L;
             size = 30L;
         }else {
@@ -40,7 +40,7 @@ public class CommentService {
 
     @Schema(description = "根据用户ID，查询其全部评论")
     public List<Comment> getAllCommentByUserID(Long id,Long size,Long page){
-        if(page<=1 || size<1){ //假如出现异常参数，恢复默认
+        if(page<1 || size<1){ //假如出现异常参数，恢复默认
             page = 0L;
             size = 30L;
         }else {

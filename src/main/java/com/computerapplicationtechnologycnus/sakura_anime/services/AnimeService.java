@@ -59,7 +59,7 @@ public class AnimeService {
      */
     @Schema(description = "获取动漫信息列表")
     public List<AnimeResponseModel> getAnimeByPage(Long size,Long page) {
-        if(page<=1 || size<1){ //假如出现异常参数，恢复默认
+        if(page<1 || size<1){ //假如出现异常参数，恢复默认
             page = 0L;
             size = 10L;
         }else {
@@ -81,7 +81,7 @@ public class AnimeService {
      */
     @Schema(description = "根据tags筛选动漫信息列表")
     public List<AnimeResponseModel> getAnimeByTagUseOffset(List<String> tags,Long size,Long page) {
-        if(page<=1 || size<1){ //假如出现异常参数，恢复默认
+        if(page<1 || size<1){ //假如出现异常参数，恢复默认
             page = 0L;
             size = 10L;
         }else {
@@ -105,7 +105,7 @@ public class AnimeService {
     @Schema(description = "搜索动漫信息")
     public List<AnimeResponseModel> searchAnime(String name, Long size, Long page) {
         // 参数校验和分页逻辑处理
-        if (page <= 1 || size < 1) { // 出现异常参数时，恢复默认
+        if (page < 1 || size < 1) { // 出现异常参数时，恢复默认
             page = 0L;
             size = 10L;
         } else {
@@ -177,7 +177,7 @@ public class AnimeService {
      */
     @Deprecated //已经弃用的方法
     public List<AnimeResponseModel> animeSearch(String searchKeyWord,Long size,Long page){
-        if(page<=1 || size<1){ //假如出现异常参数，恢复默认
+        if(page<1 || size<1){ //假如出现异常参数，恢复默认
             page = 0L;
             size = 10L;
         }else {

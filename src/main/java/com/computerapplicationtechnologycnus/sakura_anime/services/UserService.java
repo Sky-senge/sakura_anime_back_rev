@@ -39,7 +39,7 @@ public class UserService {
 
     //查询所有用户，分页查询
     public List<User> getUsersByPage(Long size,Long page){
-        if(page<=1 || size<1){ //假如出现异常参数，恢复默认
+        if(page<1 || size<1){ //假如出现异常参数，恢复默认
             page = 0L;
             size = 10L;
         }else {

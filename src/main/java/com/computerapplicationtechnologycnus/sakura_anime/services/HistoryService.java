@@ -69,7 +69,7 @@ public class HistoryService {
      */
     @Schema(description = "获取用户历史记录表")
     public List<History> getHistoryListByUID(Long UID,Long size,Long offset){
-        if(offset<=1 || size<1){ //假如出现异常参数，恢复默认
+        if(offset<1 || size<1){ //假如出现异常参数，恢复默认
             offset = 0L;
             size = 10L;
         }else {
