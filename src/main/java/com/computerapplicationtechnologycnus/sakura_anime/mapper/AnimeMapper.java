@@ -172,6 +172,9 @@ public interface AnimeMapper {
     })
     List<Anime> findAllAnimes();
 
+    @Select("SELECT COUNT(*) FROM anime")
+    int countAnime();
+
 //    @Select("SELECT * FROM anime WHERE name LIKE CONCAT('%', #{name}, '%') LIMIT #{limit} OFFSET #{offset}")
 @Select("""
     SELECT

@@ -68,6 +68,29 @@ public class AnimeController {
     }
 
     /**
+     * 首页，动漫一共可以分多少页数据
+     * 根据页面大小请求可以分多少页
+     *
+     * @param size 每页多少个数据，默认12个
+     * @return int 多少页
+     */
+    @Operation(description = "根据页面大小请求可以分多少页")
+    @GetMapping("/countAnimePage")
+    public ResultMessage<Integer> countAllAnime(@RequestParam(defaultValue = "12") long size){
+        try{
+            //处理可能存在刁民给你搬来巨大或错误参数拖累性能
+            if(size>100){
+                return ResultMessage.message(false,"您的查询参数过于巨大或不正确，请重试");
+            }
+            //查询执行
+            int animeList = animeService.getAnimePageTotally(size);
+            return ResultMessage.message(animeList,true,"访问成功！");
+        }catch (Exception e){
+            return ResultMessage.message(false,"无法访问数据，原因如下："+e.getMessage());
+        }
+    }
+
+    /**
      * 分类页，根据Tag筛选并使用分页查询动漫列表信息
      *
      * @param page 多少页，首页默认第一页

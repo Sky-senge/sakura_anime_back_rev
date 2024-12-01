@@ -94,6 +94,27 @@ public class AnimeService {
     }
 
     /**
+     * 查询数据库总数来确认有多少页数据
+     *
+     * @param size 每页会显示多少个动漫
+     * @return int 这样可以分出来多少页数据
+     * @throws Exception
+     */
+    @Schema(description = "根据页面长度来统计有多少页可以翻页")
+    public int getAnimePageTotally(Long size) throws Exception {
+        try {
+            if (size < 1) {
+                throw new Exception("每页请求内容不能小于1个！");
+            }
+            int totalCount = animeMapper.countAnime();
+            // 使用向上取整，确保即使有余数也能分出一页
+            return (int) Math.ceil((double) totalCount / size);
+        } catch (Exception e) {
+            throw new Exception("请求页面失败：" + e.getMessage(), e);
+        }
+    }
+
+    /**
      * 搜索动漫信息
      * 支持分页和模糊搜索功能
      *
