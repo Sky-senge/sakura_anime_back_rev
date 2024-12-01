@@ -133,12 +133,12 @@ public class ResultMessage<T> {
 
         /**
          * 返回信息描述<br>
-         * 默认为空
+         * 默认会返回数据，除非你给它点个null
          *
          * @return ResultMessage T Model
          */
         public ResultBuilder<T> error(String error) {
-            // this.error = error;
+             this.error = error;
             log.error(error);
             return this;
         }
