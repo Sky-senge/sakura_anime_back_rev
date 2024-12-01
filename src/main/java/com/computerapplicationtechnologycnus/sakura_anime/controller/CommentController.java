@@ -63,6 +63,37 @@ public class CommentController {
         }
     }
 
+    /**
+     * 动漫详情页评论一共可以分多少页数据
+     * 根据页面大小请求可以分多少页
+     *
+     * @param size 每页多少个数据，默认30个
+     * @return int 多少页
+     */
+    @Operation(description = "根据页面大小请求可以分多少页")
+    @GetMapping("/countCommentPage")
+    public ResultMessage<Integer> countAllAnime(
+            @RequestParam(defaultValue = "30") long size,
+            @RequestParam(defaultValue = "") long animeId) {
+        try {
+            // 处理可能存在刁民给你搬来巨大或错误参数拖累性能
+            if (size > 100) {
+                return ResultMessage.message(false, "您的查询参数过于巨大或不正确，请重试");
+            }
+            // 判断animeId是否为默认值0，因为RequestParam默认值为""，会被自动转换为0
+            if (animeId==0 || animeId<1) {
+                return ResultMessage.message(false, "您的查询动漫ID缺失或不正确");
+            }
+            // 查询执行
+            int pageCount = commentService.getCommentPageTotally(size, animeId);
+            return ResultMessage.message(pageCount, true, "访问成功！");
+        } catch (Exception e) {
+            // 捕获所有异常，并打印日志以便排查问题
+//            logger.error("查询评论页数失败", e);
+            return ResultMessage.message(false, "系统繁忙，请稍后重试", e.getMessage());
+        }
+    }
+
     @Operation(description = "根据用户ID获取评论列表")
     @GetMapping("/getCommentByUID/{id}")
     @AuthRequired(minPermissionLevel = 0) //只有管理员可查户口

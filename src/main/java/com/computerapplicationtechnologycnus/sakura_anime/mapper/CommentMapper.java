@@ -19,6 +19,9 @@ public interface CommentMapper {
     })
     List<Comment> findAllComment();
 
+    @Select("SELECT COUNT(*) FROM comments WHERE anime_id = #{animeId}")
+    int countComment(@Param("animeId") Long animeId);
+
     //查询评论全表
     @Select("SELECT * from comments order by id asc limit #{size} OFFSET #{offset}")
     @Results({

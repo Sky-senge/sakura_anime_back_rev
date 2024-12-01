@@ -33,6 +33,28 @@ public class CommentService {
         return commentMapper.findCommentsByAnimeIdUseOffset(id,size,page);
     }
 
+    /**
+     * 查询数据库总数来确认有多少页数据
+     *
+     * @param size 查询每页大小
+     * @param animeId 对应的动漫ID
+     * @return int 总页数
+     * @throws Exception
+     */
+    @Schema(description = "根据页面长度来统计有多少页可以翻页")
+    public int getCommentPageTotally(Long size,Long animeId) throws Exception {
+        try {
+            if (size < 1) {
+                throw new Exception("每页请求内容不能小于1个！");
+            }
+            int totalCount = commentMapper.countComment(animeId);
+            // 使用向上取整，确保即使有余数也能分出一页
+            return (int) Math.ceil((double) totalCount / size);
+        } catch (Exception e) {
+            throw new Exception("请求页面失败：" + e.getMessage(), e);
+        }
+    }
+
     @Schema(description = "获取全部评论，不管是什么动漫的，仅限管理员使用")
     public List<Comment> getAllComment(){
         return commentMapper.findAllComment();
