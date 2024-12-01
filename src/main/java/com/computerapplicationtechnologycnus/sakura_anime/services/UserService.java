@@ -96,10 +96,10 @@ public class UserService {
             String emailRegex = "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$";
             Pattern pattern = Pattern.compile(emailRegex);
             if(email.isBlank() || username.isBlank() || password.isBlank()){
-                throw new Exception("用户注册失败：邮箱/用户名/密码 不能为空！");
+                throw new Exception("邮箱/用户名/密码 不能为空！");
             }
             if (!pattern.matcher(email).matches()) {
-                throw new Exception("用户注册失败：邮箱格式不正确！");
+                throw new Exception("邮箱格式不正确！");
             }
             // 对密码进行加密
             String hashedPassword = SecurityUtils.sha256Hash(password);
