@@ -1,5 +1,6 @@
 package com.computerapplicationtechnologycnus.sakura_anime.services;
 
+import com.computerapplicationtechnologycnus.sakura_anime.common.ResultMessage;
 import com.computerapplicationtechnologycnus.sakura_anime.controller.FileController;
 import com.computerapplicationtechnologycnus.sakura_anime.mapper.CommentMapper;
 import com.computerapplicationtechnologycnus.sakura_anime.mapper.UserMapper;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 @Service
 public class UserService {
@@ -90,6 +92,15 @@ public class UserService {
     @Transactional //修改表需要使用事务
     public void register(String email, String username, String password, String displayName, String remarks) throws Exception {
         try {
+            // 邮箱格式的正则表达式
+            String emailRegex = "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$";
+            Pattern pattern = Pattern.compile(emailRegex);
+            if(email.isBlank() || username.isBlank() || password.isBlank()){
+                throw new Exception("用户注册失败：邮箱/用户名/密码 不能为空！");
+            }
+            if (!pattern.matcher(email).matches()) {
+                throw new Exception("用户注册失败：邮箱格式不正确！");
+            }
             // 对密码进行加密
             String hashedPassword = SecurityUtils.sha256Hash(password);
             // 检查是否存在不连续的 ID

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 @RestController
 @RequestMapping("/api/user")
@@ -90,6 +91,15 @@ public class UserController {
     @PostMapping("/register")
     public ResultMessage register(@RequestBody UserRegistryModel request) {
         try{
+            // 邮箱格式的正则表达式
+            String emailRegex = "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$";
+            Pattern pattern = Pattern.compile(emailRegex);
+            if(request.getUsername().isBlank() || request.getEmail().isBlank() || request.getPassword().isBlank()){
+                return ResultMessage.message(false,"用户注册失败：邮箱/用户名/密码 不能为空！");
+            }
+            if (!pattern.matcher(request.getEmail()).matches()) {
+                return ResultMessage.message(false, "用户注册失败：邮箱格式不正确！");
+            }
             userService.register(request.getEmail(),request.getUsername(),request.getPassword(),request.getDisplayName(),request.getRemarks());
             return ResultMessage.message(true,"注册成功");
         }catch (Exception e){
