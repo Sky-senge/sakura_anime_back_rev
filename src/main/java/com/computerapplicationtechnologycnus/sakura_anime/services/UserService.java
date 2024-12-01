@@ -9,6 +9,7 @@ import com.computerapplicationtechnologycnus.sakura_anime.model.webRequestModel.
 import com.computerapplicationtechnologycnus.sakura_anime.model.webRequestModel.UserLoginResponse;
 import com.computerapplicationtechnologycnus.sakura_anime.utils.JwtUtil;
 import com.computerapplicationtechnologycnus.sakura_anime.utils.SecurityUtils;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -163,6 +164,27 @@ public class UserService {
             userMapper.updateDisplayNameById(UID, user.getDisplayName());
         }catch (Exception e){
             throw new Exception("更改密码失败："+e.getMessage());
+        }
+    }
+
+    /**
+     * 查询数据库总数来确认有多少页数据
+     *
+     * @param size 每页会显示多少个动漫
+     * @return int 这样可以分出来多少页数据
+     * @throws Exception
+     */
+    @Schema(description = "根据页面长度来统计有多少页可以翻页")
+    public int getUserPageTotally(Long size) throws Exception {
+        try {
+            if (size < 1) {
+                throw new Exception("每页请求内容不能小于1个！");
+            }
+            int totalCount = userMapper.countUser();
+            // 使用向上取整，确保即使有余数也能分出一页
+            return (int) Math.ceil((double) totalCount / size);
+        } catch (Exception e) {
+            throw new Exception("请求页面失败：" + e.getMessage(), e);
         }
     }
 

@@ -117,6 +117,9 @@ public interface UserMapper {
     })
     User findByUsernameIncludePassword(@Param("username") String username); //用于管理员查询，【包含密码！需要注意使用】
 
+    @Select("SELECT COUNT(*) FROM users")
+    int countUser();
+
     @Select("SELECT * from users WHERE id=#{id}")
     @Results({
             @Result(property = "id",column = "id"),

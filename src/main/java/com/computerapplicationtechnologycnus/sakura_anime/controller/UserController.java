@@ -117,6 +117,29 @@ public class UserController {
     }
 
     /**
+     * 首页，用户一共可以分多少页数据
+     * 根据页面大小请求可以分多少页
+     *
+     * @param size 每页多少个数据，默认12个
+     * @return int 多少页
+     */
+    @Operation(description = "根据页面大小请求可以分多少页")
+    @GetMapping("/countUserPage")
+    public ResultMessage<Integer> countAllAnime(@RequestParam(defaultValue = "30") long size){
+        try{
+            //处理可能存在刁民给你搬来巨大或错误参数拖累性能
+            if(size>100){
+                return ResultMessage.message(false,"您的查询参数过于巨大或不正确，请重试");
+            }
+            //查询执行
+            int animeList = userService.getUserPageTotally(size);
+            return ResultMessage.message(animeList,true,"访问成功！");
+        }catch (Exception e){
+            return ResultMessage.message(false,"无法访问数据，原因如下："+e.getMessage());
+        }
+    }
+
+    /**
      *
      * @param page 分页页数
      * @param size 分页列表大小
