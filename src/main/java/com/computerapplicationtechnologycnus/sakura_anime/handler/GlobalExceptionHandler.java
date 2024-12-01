@@ -19,6 +19,6 @@ public class GlobalExceptionHandler {
     //转为使用ResultMessage返回讯息
     @ExceptionHandler(AuthenticationException.class)
     public ResultMessage handleAuthenticationException(AuthenticationException e) {
-        return ResultMessage.message(false,e.getMessage());
+        return ResultMessage.message(false,"",e.getMessage());
     }
 }
