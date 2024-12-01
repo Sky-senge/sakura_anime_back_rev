@@ -69,6 +69,33 @@
 					"response": []
 				},
 				{
+					"name": "首页可以分几页",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/user/countUserPage?size=12",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"user",
+								"countUserPage"
+							],
+							"query": [
+								{
+									"key": "size",
+									"value": "12"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "获取用户列表",
 					"request": {
 						"auth": {
@@ -424,6 +451,33 @@
 								"api",
 								"anime",
 								"getAllAnime"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "首页可以分几页",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/anime/countAnimePage?size=12",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"anime",
+								"countAnimePage"
+							],
+							"query": [
+								{
+									"key": "size",
+									"value": "12"
+								}
 							]
 						}
 					},
@@ -1186,6 +1240,37 @@
 		{
 			"name": "评论相关API",
 			"item": [
+				{
+					"name": "评论页可以分几页",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/comment/countCommentPage?size=12&animeId=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"comment",
+								"countCommentPage"
+							],
+							"query": [
+								{
+									"key": "size",
+									"value": "12"
+								},
+								{
+									"key": "animeId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
 				{
 					"name": "根据动漫ID查询评论",
 					"request": {
