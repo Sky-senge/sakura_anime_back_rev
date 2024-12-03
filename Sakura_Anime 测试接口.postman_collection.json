@@ -74,7 +74,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/user/countUserPage?size=12",
+							"raw": "http://localhost:8080/api/user/countUserPage?size=30",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -88,7 +88,7 @@
 							"query": [
 								{
 									"key": "size",
-									"value": "12"
+									"value": "30"
 								}
 							]
 						}
@@ -121,6 +121,47 @@
 								"api",
 								"user",
 								"getAllUsers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "分页查询用户列表",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{GlobalToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/user/getUserList?size=30&page=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"user",
+								"getUserList"
+							],
+							"query": [
+								{
+									"key": "size",
+									"value": "30"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								}
 							]
 						}
 					},
@@ -716,6 +757,115 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "新建动漫",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{GlobalToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"id\":1,\r\n        \"name\": \"秒速5厘米\",\r\n        \"tags\": [\r\n            \"日系\",\r\n            \"治愈\"\r\n        ],\r\n        \"description\": \"新海誠執導的2007年日本動畫電影\",\r\n        \"rating\": 9.5,\r\n        \"releaseDate\": \"2024-11-18\",\r\n        \"filePath\": []\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/anime/createAnime",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"anime",
+								"createAnime"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "新建动漫",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n        \"id\":1,\r\n        \"name\": \"秒速5厘米\",\r\n        \"tags\": [\r\n            \"日系\",\r\n            \"治愈\"\r\n        ],\r\n        \"description\": \"新海誠執導的2007年日本動畫電影\",\r\n        \"rating\": 9.5,\r\n        \"releaseDate\": \"2024-11-18\",\r\n        \"filePath\": []\r\n    }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/anime/createAnime",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"anime",
+										"createAnime"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 03 Dec 2024 09:57:50 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": true,\n    \"data\": null,\n    \"message\": \"添加成功！\",\n    \"error\": null\n}"
+						}
+					]
 				}
 			]
 		},
