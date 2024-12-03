@@ -125,7 +125,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         }
         // 可以添加更复杂的验证逻辑，比如正则表达式匹配
         // 例如：只允许常见浏览器的 User-Agent，这里还加了个Postman豁免
-        if (!userAgent.matches("^(Mozilla|Chrome|Safari|Edge|Opera|Gecko|PostmanRuntime).*$")) {
+        if (!userAgent.matches("^(Mozilla|Chrome|Safari|Edge|Opera|Gecko|PostmanRuntime|VLC).*$")) {
             return false;
         }
         return true;
