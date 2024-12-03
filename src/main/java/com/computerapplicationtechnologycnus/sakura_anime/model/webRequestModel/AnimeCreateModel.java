@@ -1,6 +1,7 @@
 package com.computerapplicationtechnologycnus.sakura_anime.model.webRequestModel;
 
 import com.alibaba.fastjson.JSON;
+import com.computerapplicationtechnologycnus.sakura_anime.model.AnimePathObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -22,5 +23,5 @@ public class AnimeCreateModel {
     private Float rating;
 
     @Schema(description = "视频文件路径")
-    private String filePath;
+    private List<AnimePathObject> filePath;
 }

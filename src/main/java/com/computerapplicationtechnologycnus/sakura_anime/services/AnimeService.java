@@ -294,23 +294,20 @@ public class AnimeService {
      */
     @Schema(description = "添加新的动漫")
     @Transactional
-    public void insertAnime(String name,List<String> tags,String description,Float rating,String filePath) throws Exception{
+    public void insertAnime(String name,List<String> tags,String description,Float rating,List<AnimePathObject> filePath) throws Exception{
         try{
             // 校验评分范围并限制为一位小数
             if (rating == null || rating < 1 || rating > 10 || !isOneDecimalPlace(rating)) {
                 throw new IllegalArgumentException("评分必须在 1 到 10 之间，并保留一位小数，例如 3.8、5.6、10.0");
             }
-
             Long missingId=animeMapper.findMissingId();
+//            logger.info(tags.toString());
             Anime anime=new Anime();
             anime.setName(name);
             anime.setTagsList(tags);
             anime.setDescription(description);
             anime.setFilePath("[]"); //为避免后续冲突问题，文件路径由文件上传提供。
             anime.setRating(rating);
-
-            //检查Rating应当在 1-10内的一位小数，例如3.8 ，5.6 ，10.0
-
             if(missingId !=null){
                 anime.setId(missingId);
                 animeMapper.insertAnimeWithId(anime);
