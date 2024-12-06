@@ -60,7 +60,7 @@ public class UserService {
      * @param UserLoginRequest 登录请求对象
      * @return 如果验证通过，返回一个包含 Token 和 userId 的响应；否则返回 null
      */
-    public UserLoginResponse authenticateUser(UserLoginRequest UserLoginRequest) {
+    public UserLoginResponse authenticateUser(UserLoginRequest UserLoginRequest) throws Exception {
         // 根据用户名查找用户
         User user = userMapper.findByUsernameIncludePassword(UserLoginRequest.getUsername());
         if (user == null) {
@@ -69,7 +69,10 @@ public class UserService {
         // 使用 SecurityUtils 比较密码（数据库中存储的是散列后的密码）
         String hashedPassword = securityUtils.sha256Hash(UserLoginRequest.getPassword());
         if (!hashedPassword.equals(user.getPassword())) {
-            return null; // 密码错误
+            throw new Exception("用户名或密码不正确，请重试"); // 密码错误
+        }
+        if(user.getPermission() >= 2){
+            throw new Exception("用户已被封锁！");
         }
         // 使用 JwtUtil 生成JWT Token
         String token = jwtUtil.generateToken(user.getId(), user.getUsername(), user.getPermission(),user.getPassword());

@@ -38,10 +38,7 @@ public class UserController {
     public ResultMessage<UserLoginResponse> login(@RequestBody UserLoginRequest request){
         try{
            UserLoginResponse token = userService.authenticateUser(request);
-           if(token==null){
-               return ResultMessage.message(false,"登录失败，请检查用户名和密码");
-           }
-            return ResultMessage.message(token,true,"登录成功！");
+           return ResultMessage.message(token,true,"登录成功！");
         }catch (Exception e){
             return ResultMessage.message(false,"登录失败！",e.getMessage());
         }
