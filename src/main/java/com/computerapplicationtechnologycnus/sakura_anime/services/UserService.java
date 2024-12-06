@@ -157,6 +157,7 @@ public class UserService {
                 hashedPassword = userMapper.findUserPasskeyByUsername(user.getUsername());
             }
             userMapper.updateUsernameById(UID,user.getUsername());
+            userMapper.updateAvatarById(UID,user.getAvatar());
             userMapper.updateEmailById(UID,user.getEmail());
             userMapper.updatePasswordById(UID,hashedPassword);
             userMapper.updatePermissionById(UID,user.getPermission());
