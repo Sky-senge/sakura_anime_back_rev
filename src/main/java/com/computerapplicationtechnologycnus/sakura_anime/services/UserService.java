@@ -64,7 +64,7 @@ public class UserService {
         // 根据用户名查找用户
         User user = userMapper.findByUsernameIncludePassword(UserLoginRequest.getUsername());
         if (user == null) {
-            return null; // 用户不存在
+            throw new Exception("用户不存在！"); // 用户不存在
         }
         // 使用 SecurityUtils 比较密码（数据库中存储的是散列后的密码）
         String hashedPassword = securityUtils.sha256Hash(UserLoginRequest.getPassword());
