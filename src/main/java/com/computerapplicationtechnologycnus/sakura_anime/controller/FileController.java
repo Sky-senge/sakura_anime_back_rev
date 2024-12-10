@@ -210,7 +210,8 @@ public class FileController {
 
     /**
      * 动漫资源文件上传用接口
-     * @param file  文件部分，二进制数据
+     * @param file  视频文件部分，二进制数据
+     * @param subtitleFile 字幕文件，二进制数据
      * @param animeId 动漫对应ID
      * @param episodes 第几集，剧场版直接写1
      * @return
@@ -219,9 +220,12 @@ public class FileController {
     @PostMapping("/uploadAnime")
     @AuthRequired(minPermissionLevel = 0)
     public ResultMessage<String> uploadAnime(@RequestParam("file") MultipartFile file,
+                                             @RequestParam("subfile") MultipartFile subtitleFile,
                                              @RequestParam("animeId") Long animeId,
                                              @RequestParam("episodes")Long episodes) {
         try {
+            //是否存在字幕文件的标志
+            boolean hasSubtitleFile=false;
             // 验证文件是否为空
             if (file.isEmpty()) {
                 return ResultMessage.message(false, "文件不能为空！");
@@ -230,6 +234,15 @@ public class FileController {
             String originalFilename = file.getOriginalFilename();
             if (originalFilename == null || !fileTypeUtil.isVideoFile(originalFilename)) {
                 return ResultMessage.message(false, "仅支持上传视频文件（mp4, mkv, avi, mov）！");
+            }
+            // 验证字幕文件类型是否为字幕
+            String originalSubFilename = "";
+            if(!subtitleFile.isEmpty()){
+                hasSubtitleFile=true;
+                originalSubFilename = subtitleFile.getOriginalFilename();
+                if ( !fileTypeUtil.isSubtitleFile(originalSubFilename)) {
+                    return ResultMessage.message(false, "仅支持上传字幕文件（txt, ass, vtt, srt）！");
+                }
             }
             // 获取文件上传路径
             String uploadDirPath = fileStorageProperties.getUploadDir() + "anime/";
@@ -241,17 +254,30 @@ public class FileController {
             }
             // 生成唯一文件名（使用时间戳）
             String fileExtension = originalFilename.substring(originalFilename.lastIndexOf('.'));
-            String uniqueFilename = "anime_" + System.currentTimeMillis() + fileExtension;
+            String uniqueFilename = "anime_" + System.currentTimeMillis();
+            String uniqueVideoFileName = uniqueFilename+ fileExtension;
             // 保存文件
-            File uploadFile = new File(uploadDirPath + uniqueFilename);
+            File uploadFile = new File(uploadDirPath + uniqueVideoFileName);
             file.transferTo(uploadFile);
-            // 启动异步转码任务（转码视频到m3u8格式）
-            String videoFilePath = uploadDirPath + uniqueFilename;
-            String m3u8OutputPath = uploadDirPath + uniqueFilename + "/m3u8/";
+
+            String videoFilePath = uploadDirPath + uniqueVideoFileName;
+            String subtitlePath = uploadDirPath + uniqueFilename + "/m3u8/";
 //            convertToM3U8Stream(videoFilePath, m3u8OutputPath, uniqueFilename); // 【已弃用】转码视频
-            videoService.convertVideoToM3u8(videoFilePath); // 转码视频
-            // 文件唯一名称对应ID路径保存到数据库，去掉mp4之类的扩展名
-            String videoName=uniqueFilename.substring(0,uniqueFilename.lastIndexOf('.'));
+            // 启动异步转码任务（转码视频到m3u8格式）
+            if(!hasSubtitleFile){
+                videoService.convertVideoToM3u8(videoFilePath);
+            }
+            //如果有，那么处理字幕文件，然后烧录转码
+            if(hasSubtitleFile){
+                String subtitleFileExtension = originalSubFilename.substring(originalSubFilename.lastIndexOf('.'));
+                String uniqueSubtitleFilename = uniqueFilename + subtitleFileExtension;
+                File uploadSubtitleFile = new File(uploadDirPath + uniqueSubtitleFilename);
+                subtitleFile.transferTo(uploadSubtitleFile);
+                String subtitleFilePath = uploadDirPath + uniqueSubtitleFilename;
+                videoService.convertVideoToM3u8AddSubtitle(videoFilePath,subtitleFilePath);
+            }
+            // 文件唯一名称对应ID路径保存到数据库
+            String videoName=uniqueFilename;
             animeService.updatePathById(animeId, episodes, videoName);
             return ResultMessage.message(true, "上传完成，转码中。文件名："+uniqueFilename);
         } catch (Exception e) {
@@ -259,6 +285,7 @@ public class FileController {
             return ResultMessage.message(false, "视频上传失败！请联系管理员。", e.getMessage());
         }
     }
+
 
     /**
      * 动漫字幕文件上传用接口
@@ -568,6 +595,31 @@ public class FileController {
 
         } catch (IOException e) {
             logger.error("读取 m3u8 文件失败: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(("读取文件失败: " + e.getMessage()).getBytes());
+        }
+    }
+
+    @Operation(description = "动漫str字幕获取接口")
+    @GetMapping("/getVideo/{requirements}/playlist.str")
+    public ResponseEntity<byte[]> getASS_Subtitle(@PathVariable String requirements) {
+        try {
+            // 获取 m3u8 文件路径
+            String m3u8FilePath = fileStorageProperties.getUploadDir() + "anime/" + requirements + "/playlist.str";
+            File m3u8File = new File(m3u8FilePath);
+
+            if (!m3u8File.exists()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(("文件不存在: " + m3u8FilePath).getBytes());
+            }
+            // 读取文件内容
+            byte[] content = Files.readAllBytes(m3u8File.toPath());
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.parseMediaType("application/x-subrip"));
+            headers.add("Content-Disposition", "inline; filename=\"playlist.str\"");
+            return new ResponseEntity<>(content, headers, HttpStatus.OK);
+        } catch (IOException e) {
+            logger.error("读取 str(字幕) 文件失败: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(("读取文件失败: " + e.getMessage()).getBytes());
         }
