@@ -1080,13 +1080,18 @@
 								},
 								{
 									"key": "animeId",
-									"value": "4",
+									"value": "3",
 									"type": "default"
 								},
 								{
 									"key": "episodes",
 									"value": "1",
 									"type": "default"
+								},
+								{
+									"key": "subfile",
+									"type": "file",
+									"src": []
 								}
 							]
 						},
@@ -1103,7 +1108,91 @@
 							]
 						}
 					},
-					"response": []
+					"response": [
+						{
+							"name": "上传动漫资源",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/F:/tmp/Angel Beats! 2010 [BluRay 1920x1080p x264-Hi10P FLAC AAC] - mawen1250/Angel Beats! 2010 EP02 [BluRay 1920x1080p 23.976fps x264-Hi10P FLAC AAC] - mawen1250.mkv"
+										},
+										{
+											"key": "animeId",
+											"value": "3",
+											"type": "default"
+										},
+										{
+											"key": "episodes",
+											"value": "2",
+											"type": "default"
+										},
+										{
+											"key": "subfile",
+											"type": "file",
+											"src": "/F:/tmp/Angel Beats! 2010 [BluRay 1920x1080p x264-Hi10P FLAC AAC] - mawen1250/Angel Beats! 2010 EP02 [BluRay 1920x1080p 23.976fps x264-Hi10P FLAC AAC] - mawen1250.ass"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:8080/files/uploadAnime",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"files",
+										"uploadAnime"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 10 Dec 2024 04:12:29 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": true,\n    \"data\": null,\n    \"message\": \"上传完成，转码中。文件名：anime_1733803928146\",\n    \"error\": null\n}"
+						}
+					]
 				},
 				{
 					"name": "上传动漫封面",
