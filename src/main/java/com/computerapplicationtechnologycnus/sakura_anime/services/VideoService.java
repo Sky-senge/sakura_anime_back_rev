@@ -183,8 +183,12 @@ public class VideoService {
 
                 // 删除原视频文件
                 File originalFile = new File(videoFilePath);
+                File orignalSubFile = new File(subtitlePath);
                 if (originalFile.exists() && !originalFile.delete()) {
                     logger.warn("无法删除原视频文件: {}", videoFilePath);
+                }
+                if (orignalSubFile.exists() && !orignalSubFile.delete()) {
+                    logger.warn("无法删除原字幕文件: {}", videoFilePath);
                 }
 
             } catch (Exception e) {
