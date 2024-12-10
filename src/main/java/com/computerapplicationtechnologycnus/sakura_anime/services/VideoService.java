@@ -133,7 +133,7 @@ public class VideoService {
                             try (BufferedReader reader = new BufferedReader(new InputStreamReader(extractProcess.getErrorStream()))) {
                                 String line;
                                 while ((line = reader.readLine()) != null) {
-                                    logger.info("FFmpeg 错误: {}", line);
+                                    logger.info("FFmpeg 预处理: {}", line);
                                 }
                             } catch (IOException e) {
                                 logger.error("读取 FFmpeg 错误时发生错误", e);
@@ -155,7 +155,7 @@ public class VideoService {
 
                             // 构建字幕烧录的参数
                             subtitleTransfer = String.format(
-                                    "-vf subtitles=\'%s\'",
+                                    "-vf subtitles='%s'",
                                     subtitleFilePath.replace("\\\\","/").replace(":", "\\:")
                             );
                         } else {
