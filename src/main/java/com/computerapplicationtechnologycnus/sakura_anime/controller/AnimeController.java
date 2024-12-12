@@ -120,6 +120,34 @@ public class AnimeController {
     }
 
     /**
+     * 分类页，根据Tag筛选并使用分页查询动漫列表信息（总数）
+     *
+     * @param size 每页多少个数据，默认10个
+     * @param tag List<String> 关于动漫的标签
+     * @return 动漫列表
+     */
+    @Operation(description = "根据Tags获取动漫资源信息总页数")
+    @GetMapping("/countAnimeListByTags")
+    public ResultMessage<Integer> countAllAnimeByPageWithTags(
+            @RequestParam(defaultValue = "30") long size,
+            @RequestParam(defaultValue = "") List<String> tag
+    ){
+        try{
+            //处理可能存在刁民给你搬来巨大或错误参数拖累性能
+            if(size>100){
+                return ResultMessage.message(false,"您的查询参数过于巨大或不正确，请重试");
+            }
+            //查询执行
+            int animeCount = animeService.countAnimeByTagUseOffsetTotally(tag,size,1L);
+
+            return ResultMessage.message(animeCount,true,"访问成功！");
+        }catch (Exception e){
+            return ResultMessage.message(false,"无法访问数据，原因如下："+e.getMessage());
+        }
+    }
+
+    /**
+     * 获取搜索列表
      *
      * @param keyWord 查询关键词
      * @param page 多少页，默认第一页
@@ -141,6 +169,33 @@ public class AnimeController {
             //查询执行
             List<AnimeResponseModel> animeList = animeService.searchAnime(keyWord,size,page);
             return ResultMessage.message(animeList,true,"访问成功！");
+        }catch (Exception e){
+            return ResultMessage.message(false,"无法访问数据，原因如下："+e.getMessage());
+        }
+    }
+
+    /**
+     * 获取搜索列表总页数
+     *
+     * @param keyWord 查询关键词
+     * @param page 多少页，默认第一页
+     * @param size 每页多少个数据，默认30个
+     * @return
+     */
+    @Operation(description = "按名称搜索（获取总页数）")
+    @GetMapping("/countSearchByName")
+    public ResultMessage<Integer> countSearchAnimeByName(
+            @RequestParam(defaultValue = "") String keyWord,
+            @RequestParam(defaultValue = "30") long size
+    ){
+        try{
+            //处理可能存在刁民给你搬来巨大或错误参数拖累性能
+            if(size>100){
+                return ResultMessage.message(false,"您的查询参数过于巨大或不正确，请重试");
+            }
+            //查询执行
+            int animeCount = animeService.countSearchAnime(keyWord,size,1L);
+            return ResultMessage.message(animeCount,true,"访问成功！");
         }catch (Exception e){
             return ResultMessage.message(false,"无法访问数据，原因如下："+e.getMessage());
         }

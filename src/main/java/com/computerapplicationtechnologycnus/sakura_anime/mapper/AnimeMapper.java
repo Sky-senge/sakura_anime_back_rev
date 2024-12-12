@@ -160,6 +160,17 @@ public interface AnimeMapper {
     List<Anime> findAnimeWithIndexPageByTags(@Param("tags") List<String> tags,@Param("limit") Long limit, @Param("offset") Long offset);
 
 
+    @Select("<script>"
+            + "SELECT COUNT(*) "
+            + "FROM anime a "
+            + "WHERE "
+            + "<foreach collection='tags' item='tag' open='(' separator=' AND ' close=')'>"
+            + "    JSON_CONTAINS(a.tags, JSON_ARRAY(#{tag})) "
+            + "</foreach>"
+            + "</script>")
+    int countAnimeWithIndexPageByTags(@Param("tags") List<String> tags,@Param("limit") Long limit, @Param("offset") Long offset);
+
+
     @Select("SELECT * FROM anime")
     @Results({  //沙雕MyBaties，连个映射都做不好，还要我手操，杂鱼！
             @Result(property = "id", column = "id"),
@@ -229,6 +240,16 @@ public interface AnimeMapper {
             @Result(property = "filePath", column = "file_path")
     })
     List<Anime> searchAnimeByNameUseOffset(@Param("name") String name, @Param("limit") Long limit, @Param("offset") Long offset);
+
+    @Select("""
+    SELECT 
+        COUNT(*)
+    FROM 
+        anime a
+    WHERE 
+        name LIKE CONCAT('%', #{name}, '%');
+    """)
+    int countSearchAnimeByName(@Param("name") String name);
 
     @Select("select * from anime order by id asc limit #{size} OFFSET #{offset}")
     @Results({  //沙雕MyBaties，连个映射都做不好，还要我手操，杂鱼！

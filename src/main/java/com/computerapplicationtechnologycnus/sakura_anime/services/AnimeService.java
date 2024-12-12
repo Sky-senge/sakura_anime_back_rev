@@ -94,6 +94,27 @@ public class AnimeService {
     }
 
     /**
+     * 根据tags筛选动漫信息列表（获取总页数）
+     *
+     * @param tags 动漫标签
+     * @param size 分页长度
+     * @param page 页面数
+     * @return List<AnimeResponseModel>
+     */
+    @Schema(description = "总页数")
+    public int countAnimeByTagUseOffsetTotally(List<String> tags,Long size,Long page) {
+        if(page<1 || size<1){ //假如出现异常参数，恢复默认
+            page = 0L;
+            size = 10L;
+        }else {
+            page = (page-1)*size;
+        }
+        // 从数据库中获取 Anime 对象列表
+        int totalCount = animeMapper.countAnimeWithIndexPageByTags(tags, size, page);
+        return (int) Math.ceil((double) totalCount / size);
+    }
+
+    /**
      * 查询数据库总数来确认有多少页数据
      *
      * @param size 每页会显示多少个动漫
@@ -143,6 +164,36 @@ public class AnimeService {
         List<Anime> animeList = animeMapper.searchAnimeByNameUseOffset(fuzzyName.toString(), size, page);
         // 转换 Anime 对象为 AnimeResponseModel
         return modelConverter.convertToAnimeResponseList(animeList);
+    }
+
+    /**
+     * 搜索动漫信息（查询总数）
+     * 支持分页和模糊搜索功能
+     *
+     * @param name 搜索关键字
+     * @param size 分页长度
+     * @param page 页面数
+     * @return List<AnimeResponseModel>
+     */
+    @Schema(description = "搜索动漫信息（查询总数）")
+    public int countSearchAnime(String name, Long size, Long page) {
+        // 参数校验和分页逻辑处理
+        if (page < 1 || size < 1) { // 出现异常参数时，恢复默认
+            page = 0L;
+            size = 10L;
+        } else {
+            page = (page - 1) * size;
+        }
+        // 清理用户输入并构造模糊匹配的搜索关键字
+        String cleanedName = name == null ? "" : name.trim();
+        String[] words = cleanedName.split("\\s+");
+        StringBuilder fuzzyName = new StringBuilder();
+        for (String word : words) {
+            fuzzyName.append("%").append(word).append("%");
+        }
+        // 从数据库中获取 Anime 对象列表
+        int totalCount = animeMapper.countSearchAnimeByName(fuzzyName.toString());
+        return (int) Math.ceil((double) totalCount / size);
     }
 
     @Schema(description = "通过ID获取动漫信息")
