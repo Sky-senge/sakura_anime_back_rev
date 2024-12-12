@@ -178,7 +178,6 @@ public class AnimeController {
      * 获取搜索列表总页数
      *
      * @param keyWord 查询关键词
-     * @param page 多少页，默认第一页
      * @param size 每页多少个数据，默认30个
      * @return
      */
