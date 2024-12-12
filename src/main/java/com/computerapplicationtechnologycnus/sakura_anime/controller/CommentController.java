@@ -4,6 +4,7 @@ import com.computerapplicationtechnologycnus.sakura_anime.annotation.AuthRequire
 import com.computerapplicationtechnologycnus.sakura_anime.common.ResultMessage;
 import com.computerapplicationtechnologycnus.sakura_anime.model.Comment;
 import com.computerapplicationtechnologycnus.sakura_anime.model.webRequestModel.CommentRequestModel;
+import com.computerapplicationtechnologycnus.sakura_anime.model.webRequestModel.CommentResponseModel;
 import com.computerapplicationtechnologycnus.sakura_anime.services.CommentService;
 import com.computerapplicationtechnologycnus.sakura_anime.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -45,7 +46,7 @@ public class CommentController {
 
     @Operation(description = "根据动漫ID获取评论列表，分页查询，用户和未登录可用")
     @GetMapping("/getCommentList/{id}")
-    public ResultMessage<List<Comment>> getCommentsByAnimeID(
+    public ResultMessage<List<CommentResponseModel>> getCommentsByAnimeID(
             @PathVariable("id") Long id,
             @RequestParam(defaultValue = "0") long page,
             @RequestParam(defaultValue = "30") long size){
@@ -55,7 +56,7 @@ public class CommentController {
                 return ResultMessage.message(false,"您的查询参数过于巨大或不正确，请重试");
             }
             //查询执行
-            List<Comment> commentList = commentService.getCommentByAnimeIDByPage(id,page,size);
+            List<CommentResponseModel> commentList = commentService.getCommentByAnimeIDByPage(id,page,size);
             logger.info(commentList.toString());
             return ResultMessage.message(commentList,true,"获取成功！");
         }catch (Exception e){

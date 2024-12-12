@@ -1,6 +1,7 @@
 package com.computerapplicationtechnologycnus.sakura_anime.mapper;
 
 import com.computerapplicationtechnologycnus.sakura_anime.model.Comment;
+import com.computerapplicationtechnologycnus.sakura_anime.model.webRequestModel.CommentResponseModel;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -83,6 +84,19 @@ public interface CommentMapper {
             @Result(property = "createAt",column = "created_at"),
     })
     List<Comment> findCommentsByAnimeIdUseOffset(@Param("animeId") Long animeId,@Param("size") Long size, @Param("offset") Long offset);
+
+    @Select("SELECT c.*, u.display_name AS username FROM comments c " +
+            "LEFT JOIN users u ON c.user_id = u.id " +
+            "WHERE anime_id = #{animeId} ORDER BY c.id ASC LIMIT #{size} OFFSET #{offset}")
+    @Results({
+            @Result(property = "id", column = "id"),
+            @Result(property = "animeId", column = "anime_id"),
+            @Result(property = "userId", column = "user_id"),
+            @Result(property = "username", column = "username"),
+            @Result(property = "content", column = "content"),
+            @Result(property = "createAt", column = "created_at")
+    })
+    List<CommentResponseModel> findCommentsByAnimeIdUseOffsetDisplayUsername(@Param("animeId") Long animeId, @Param("size") Long size, @Param("offset") Long offset);
 
     @Select("SELECT * FROM comments WHERE anime_id = #{animeId}")
     @Results({

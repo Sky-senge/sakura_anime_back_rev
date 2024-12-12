@@ -3,6 +3,7 @@ package com.computerapplicationtechnologycnus.sakura_anime.services;
 import com.computerapplicationtechnologycnus.sakura_anime.mapper.CommentMapper;
 import com.computerapplicationtechnologycnus.sakura_anime.model.Comment;
 import com.computerapplicationtechnologycnus.sakura_anime.model.webRequestModel.CommentRequestModel;
+import com.computerapplicationtechnologycnus.sakura_anime.model.webRequestModel.CommentResponseModel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,14 +24,15 @@ public class CommentService {
     }
 
     @Schema(description = "根据动漫ID，分页查询评论列表")
-    public List<Comment> getCommentByAnimeIDByPage(Long id,Long page,Long size){
+    public List<CommentResponseModel> getCommentByAnimeIDByPage(Long id, Long page, Long size){
         if(page<1 || size<1){ //假如出现异常参数，恢复默认
             page = 0L;
             size = 30L;
         }else {
             page = (page-1)*size;
         }
-        return commentMapper.findCommentsByAnimeIdUseOffset(id,size,page);
+//        return commentMapper.findCommentsByAnimeIdUseOffset(id,size,page);
+          return commentMapper.findCommentsByAnimeIdUseOffsetDisplayUsername(id,size,page);
     }
 
     /**
