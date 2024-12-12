@@ -595,6 +595,40 @@
 					"response": []
 				},
 				{
+					"name": "根据tags获取动漫总页数",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/anime/countAnimeListByTags?tag=日系&size=100",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"anime",
+								"countAnimeListByTags"
+							],
+							"query": [
+								{
+									"key": "tag",
+									"value": "日系"
+								},
+								{
+									"key": "size",
+									"value": "100"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "根据动漫ID获取详情",
 					"request": {
 						"method": "GET",
@@ -676,6 +710,37 @@
 								{
 									"key": "page",
 									"value": "1"
+								},
+								{
+									"key": "size",
+									"value": "30"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "搜索列表总页数（同样支持多词匹配）",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/anime/countSearchByName?keyWord=Angel&size=30",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"anime",
+								"countSearchByName"
+							],
+							"query": [
+								{
+									"key": "keyWord",
+									"value": "Angel"
 								},
 								{
 									"key": "size",
