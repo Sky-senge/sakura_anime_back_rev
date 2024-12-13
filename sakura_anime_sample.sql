@@ -31,7 +31,7 @@ CREATE TABLE `anime` (
   `release_date` timestamp NULL DEFAULT current_timestamp(),
   `file_path` longtext NOT NULL CHECK (json_valid(`file_path`)),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,21 +41,21 @@ CREATE TABLE `anime` (
 LOCK TABLES `anime` WRITE;
 /*!40000 ALTER TABLE `anime` DISABLE KEYS */;
 INSERT INTO `anime` VALUES
-(1,'秒速5厘米','[\"日系\", \"治愈\"]','新海誠執導的2007年日本動畫電影',9.5,'2024-11-18 06:44:04','[]'),
-(2,'寒蝉鸣泣之时','[\"日系\",\"治愈\",\"寒蝉\"]','人坏掉，蝉在叫',1.0,'2024-11-20 17:06:31','[]'),
-(3,'Angel Beats!','[\"日系\",\"治愈\",\"射击\"]','是一部由游戏制作公司Key与Aniplex联合制作的日本动画',8.5,'2024-11-20 17:06:31','[{\"episodes\":1,\"fileName\":\"anime_1732528204793\"},{\"episodes\":2,\"fileName\":\"anime_1732596771347\"}]'),
-(4,'迷宫饭','[\"日系\",\"治愈\"]','反正是吃货',9.5,'2024-11-22 07:01:33','[{\"episodes\":1,\"fileName\":\"anime_1732528204793\"}]'),
-(5,'败犬女主太多了','[\"日系\",\"轻小说\",\"恋爱\"]','平常担任班上背景人物的我──温水和彦，偶然目击人气女同学八奈见杏菜被男生甩掉的失恋现场',9.5,'2024-11-22 07:01:33','[{\"episodes\":1,\"fileName\":\"anime_1732528204793\"}]'),
-(6,'你的名字','[\"日系\", \"浪漫\", \"青春\"]','新海诚执导的穿越与爱情故事',9.0,'2024-11-20 02:00:00','[]'),
-(7,'千与千寻','[\"日系\", \"奇幻\", \"治愈\"]','宫崎骏执导的关于成长的故事',9.8,'2024-11-19 10:30:00','[]'),
-(8,'进击的巨人','[\"日系\", \"动作\", \"黑暗\"]','围绕巨人与人类生存展开的故事',9.7,'2024-11-22 00:00:00','[{\"episodes\":1,\"fileName\":\"anime_1732528204901\"}]'),
-(9,'鬼灭之刃','[\"日系\", \"动作\", \"感人\"]','关于鬼猎人的冒险与情感羁绊',9.6,'2024-11-21 12:15:00','[]'),
-(10,'一拳超人','[\"日系\", \"搞笑\", \"英雄\"]','埼玉老师拳拳到肉的搞笑故事',8.8,'2024-11-23 04:45:00','[{\"episodes\":1,\"fileName\":\"anime_1732528204902\"}]'),
-(11,'咒术回战','[\"日系\", \"战斗\", \"黑暗\"]','少年与咒灵的战斗之旅',9.1,'2024-11-21 08:00:00','[]'),
-(12,'全职猎人','[\"日系\", \"冒险\", \"经典\"]','追寻猎人的冒险故事',9.5,'2024-11-22 02:00:00','[{\"episodes\":1,\"fileName\":\"anime_1732528204903\"},{\"episodes\":2,\"fileName\":\"anime_1732528204793\"},{\"episodes\":3,\"fileName\":\"anime_1732528204793\"}]'),
-(13,'CLANNAD','[\"日系\", \"感人\", \"治愈\"]','平凡生活中的温馨与感动',9.4,'2024-11-20 06:20:00','[{\"episodes\":1,\"fileName\":\"anime_1732528204904\"}]'),
-(14,'钢之炼金术师','[\"日系\", \"战斗\", \"感人\"]','追求真理的炼金术师兄弟故事',9.9,'2024-11-21 11:00:00','[]'),
-(15,'黑执事','[\"日系\", \"哥特\", \"神秘\"]','执事与少爷之间的黑暗契约',8.5,'2024-11-20 09:00:00','[]'),
+(1,'秒速5厘米','[\"日本\",\"治愈\"]','新海誠執導的2007年日本動畫電影',9.5,'2024-11-18 06:44:04','[{\"episodes\":1,\"fileName\":\"anime_test\"}]'),
+(2,'寒蝉鸣泣之时','[\"日本\",\"治愈\",\"悬疑\"]','蝉在叫，人坏掉',1.0,'2024-11-20 17:06:31','[]'),
+(3,'Angel Beats!','[\"日本\",\"后宫\",\"战斗\",\"冒险\"]','是一部由游戏制作公司Key与Aniplex联合制作的日本动画',8.5,'2024-11-20 17:06:31','[{\"episodes\":1,\"fileName\":\"anime_1733819775178\"},{\"episodes\":2,\"fileName\":\"anime_1733803928146\"}]'),
+(4,'迷宫饭','[\"日本\",\"治愈\",\"冒险\",\"热血\"]','探险者莱欧斯一行人在地下迷宫深层遭遇了强大的红龙，因为红龙的袭击，他们失去了金钱和食物。尽管他们想再次挑战探险迷宫，但就这样贸然继续前进，很可能中途就会饿 ...',9.5,'2024-11-22 07:01:33','[{\"episodes\":1,\"fileName\":\"anime_1733819984867\"},{\"episodes\":2,\"fileName\":\"anime_1733825765919\"}]'),
+(5,'败犬女主太多了','[\"日本\",\"轻小说\",\"恋爱\",\"百合\"]','平常担任班上背景人物的我──温水和彦，偶然目击人气女同学八奈见杏菜被男生甩掉的失恋现场',9.5,'2024-11-22 07:01:33','[{\"episodes\":1,\"fileName\":\"anime_1732528204793\"}]'),
+(6,'你的名字','[\"日本\",\"恋爱\",\"青春\"]','新海诚执导的穿越与爱情故事',9.0,'2024-11-20 02:00:00','[]'),
+(7,'千与千寻','[\"日本\",\"奇幻\",\"治愈\"]','宫崎骏执导的关于成长的故事',9.8,'2024-11-19 10:30:00','[]'),
+(8,'进击的巨人','[\"日本\",\"动作\",\"黑暗\"]','围绕巨人与人类生存展开的故事',9.7,'2024-11-22 00:00:00','[{\"episodes\":1,\"fileName\":\"anime_1732528204901\"}]'),
+(9,'鬼灭之刃','[\"日本\",\"动作\",\"感人\"]','关于鬼猎人的冒险与情感羁绊',9.6,'2024-11-21 12:15:00','[]'),
+(10,'一拳超人','[\"日本\",\"搞笑\",\"英雄\"]','埼玉老师拳拳到肉的搞笑故事',8.8,'2024-11-23 04:45:00','[{\"episodes\":1,\"fileName\":\"anime_1732528204902\"}]'),
+(11,'咒术回战','[\"日本\",\"战斗\",\"黑暗\"]','少年与咒灵的战斗之旅',9.1,'2024-11-21 08:00:00','[]'),
+(12,'全职猎人','[\"日本\",\"冒险\",\"经典\"]','追寻猎人的冒险故事',9.5,'2024-11-22 02:00:00','[{\"episodes\":1,\"fileName\":\"anime_1732528204903\"},{\"episodes\":2,\"fileName\":\"anime_1732528204793\"},{\"episodes\":3,\"fileName\":\"anime_1732528204793\"}]'),
+(13,'CLANNAD','[\"日本\",\"感人\",\"治愈\"]','平凡生活中的温馨与感动',9.4,'2024-11-20 06:20:00','[{\"episodes\":1,\"fileName\":\"anime_1732528204904\"}]'),
+(14,'钢之炼金术师','[\"日本\",\"战斗\",\"感人\"]','追求真理的炼金术师兄弟故事',9.9,'2024-11-21 11:00:00','[]'),
+(15,'黑执事','[\"日本\",\"哥特\",\"奇幻\"]','执事与少爷之间的黑暗契约',8.5,'2024-11-20 09:00:00','[]'),
 (16,'Re:从零开始的异世界生活','[\"日系\", \"穿越\", \"悬疑\"]','穿越到异世界的求生冒险',9.3,'2024-11-23 06:10:00','[{\"episodes\":1,\"fileName\":\"anime_1732528204905\"}]'),
 (17,'未来日记','[\"日系\", \"悬疑\", \"惊悚\"]','通过未来日记改变命运的故事',8.2,'2024-11-20 05:15:00','[]'),
 (18,'夏目友人帐','[\"日系\", \"治愈\", \"奇幻\"]','人与妖怪的温馨故事',9.7,'2024-11-20 08:30:00','[]'),
@@ -71,10 +71,11 @@ INSERT INTO `anime` VALUES
 (28,'JOJO的奇妙冒险','[\"日系\", \"战斗\", \"经典\"]','乔斯达家族的传承与冒险',9.2,'2024-11-20 01:00:00','[]'),
 (29,'紫罗兰永恒花园','[\"日系\", \"治愈\", \"感人\"]','关于爱与成长的温暖故事',9.6,'2024-11-21 09:00:00','[{\"episodes\":1,\"fileName\":\"anime_1732528204907\"}]'),
 (30,'恶魔高校D×D','[\"日系\", \"校园\", \"奇幻\"]','充满热血与奇幻的校园生活',8.0,'2024-11-22 05:00:00','[]'),
-(31,'排球少年','[\"日系\", \"运动\", \"青春\"]','关于排球的青春与奋斗',9.4,'2024-11-22 03:00:00','[{\"episodes\":1,\"fileName\":\"anime_1732528204908\"}]'),
+(31,'香格里拉边境～粪作猎人向神作游戏发起挑战～','[\"轻小说\",\"日本\"]','特别喜欢“粪作”的男人·阳务乐郎，他接下来要挑战的，是总玩家数为3000万人的“神作”《香格里拉·开拓异境》！\n聚集的伙伴、广阔的世界、还有和“宿敌”的相遇，这些改变了包括他在内的所有玩家的命运！ ',8.5,'2024-12-03 10:12:36','[]'),
 (32,'魔法禁书目录','[\"日系\", \"奇幻\", \"战斗\"]','科学与魔法碰撞的世界',8.8,'2024-11-23 07:30:00','[]'),
 (33,'魔法少女小圆','[\"日系\", \"奇幻\", \"黑暗\"]','颠覆传统的魔法少女故事',9.5,'2024-11-22 10:30:00','[{\"episodes\":1,\"fileName\":\"anime_1732528204909\"}]'),
-(34,'Fate/Zero','[\"日系\", \"战斗\", \"史诗\"]','圣杯战争的序章',9.7,'2024-11-21 13:00:00','[{\"episodes\":1,\"fileName\":\"anime_1732528204910\"}]');
+(34,'Fate/Zero','[\"日系\", \"战斗\", \"史诗\"]','圣杯战争的序章',9.7,'2024-11-21 13:00:00','[{\"episodes\":1,\"fileName\":\"anime_1732528204910\"}]'),
+(35,'刺客五六七','[\"刺客\",\"搞笑\",\"广东\",\"日常\"]','搞笑而充满温情的日常的刺客故事',9.5,'2024-12-03 10:09:07','[]');
 /*!40000 ALTER TABLE `anime` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -96,7 +97,7 @@ CREATE TABLE `comments` (
   KEY `user_id` (`user_id`),
   CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`anime_id`) REFERENCES `anime` (`id`) ON DELETE CASCADE,
   CONSTRAINT `comments_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -141,10 +142,11 @@ INSERT INTO `comments` VALUES
 (33,28,1,'每一集都让我期待不已！','2024-11-24 03:22:33'),
 (34,29,2,'剧情伏笔埋得很好，后面爆发很精彩。','2024-11-24 05:10:15'),
 (35,30,3,'虽然是老IP，但完全不输现在的新番。','2024-11-24 06:45:20'),
-(36,31,1,'希望制作组继续保持高水准！','2024-11-24 08:12:55'),
+(36,4,1,'啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊','2024-12-12 03:35:51'),
 (37,32,2,'这部动画的分镜很有创意。','2024-11-24 09:25:10'),
 (38,33,3,'情感的细腻描写让人代入感很强。','2024-11-24 10:45:22'),
-(39,34,1,'配音演员真的太厉害了！','2024-11-24 11:57:40');
+(39,34,1,'配音演员真的太厉害了！','2024-11-24 11:57:40'),
+(40,4,1,'6','2024-12-12 03:40:43');
 /*!40000 ALTER TABLE `comments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -183,6 +185,33 @@ INSERT INTO `history` VALUES
 UNLOCK TABLES;
 
 --
+-- Table structure for table `lastupdate`
+--
+
+DROP TABLE IF EXISTS `lastupdate`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `lastupdate` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `video_lastUpdate` varchar(100) DEFAULT NULL,
+  `user_lastUpdate` varchar(100) DEFAULT NULL,
+  `comment_lastUpdate` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `lastupdate`
+--
+
+LOCK TABLES `lastupdate` WRITE;
+/*!40000 ALTER TABLE `lastupdate` DISABLE KEYS */;
+INSERT INTO `lastupdate` VALUES
+(1,'1734084875','1734084875','1734084875');
+/*!40000 ALTER TABLE `lastupdate` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `users`
 --
 
@@ -201,7 +230,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -211,9 +240,11 @@ CREATE TABLE `users` (
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` VALUES
-(1,NULL,'example@example.com','admin',0,'jGl25bVBBBW96Qi9Te4V37Fnqchz/Eu4qB9vKrRIqRg=','admin','This is a Admin User.'),
+(1,NULL,'example@example.com','admin',0,'jGl25bVBBBW96Qi9Te4V37Fnqchz/Eu4qB9vKrRIqRg=','','This is a Admin User.'),
 (2,'avatar_2_1732250228664.jpg','ff@example.com','testuser1',1,'OE/eNjbm4B4BlNKXbY8mQQrz6EblczecsaCeLwdS2Mw=','Test User','This is a test user.'),
-(3,'avatar_3.jpg','ee@example.com','testuser3',1,'75K3eLr+dx6JJFuJ7LwIpEpOFmwGZZkRiB84PURz6U8=','Test User','This is a test user.');
+(3,'avatar_3.jpg','ee@example.com','testuser3',2,'pb72Ucjj/WzGPEPNa8E0Gvl9eK+CjxUsD0DVoGVwvTQ=','Test User','This is a test user.'),
+(4,NULL,'aa@aa.com','aaa',1,'mDSHbc+wXLFnpcJJU+uljErImxrfV/KPL50JrxB+6PA=','','主打一个玩儿'),
+(5,NULL,'tt@tt.com','tuser',1,'9uCh4qxBlFqap/+KiqoM68EqO8yYGpKa1c+BCgkOEa4=','','无');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -230,4 +261,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-11-29 12:44:30
+-- Dump completed on 2024-12-13 20:56:41
