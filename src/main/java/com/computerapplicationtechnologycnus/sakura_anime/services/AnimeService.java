@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.computerapplicationtechnologycnus.sakura_anime.common.ModelConverter;
 import com.computerapplicationtechnologycnus.sakura_anime.mapper.AnimeMapper;
 import com.computerapplicationtechnologycnus.sakura_anime.mapper.CommentMapper;
+import com.computerapplicationtechnologycnus.sakura_anime.mapper.LastUpdateMapper;
 import com.computerapplicationtechnologycnus.sakura_anime.model.Anime;
 import com.computerapplicationtechnologycnus.sakura_anime.model.AnimePathObject;
 import com.computerapplicationtechnologycnus.sakura_anime.model.webRequestModel.AnimeRequestModel;
@@ -17,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.computerapplicationtechnologycnus.sakura_anime.utils.TimeUtil.getCurrentTimestampInSeconds;
+
 @Service
 public class AnimeService {
 
@@ -26,11 +29,13 @@ public class AnimeService {
     private final AnimeMapper animeMapper;
     private final JwtUtil jwtUtil;
     private final CommentMapper commentMapper;
+    private final LastUpdateMapper lastUpdateMapper;
     private final ModelConverter modelConverter;
-    public AnimeService(AnimeMapper animeMapper, JwtUtil jwtUtil, CommentMapper commentMapper, ModelConverter modelConverter){
+    public AnimeService(AnimeMapper animeMapper, JwtUtil jwtUtil, CommentMapper commentMapper,LastUpdateMapper lastUpdateMapper, ModelConverter modelConverter){
         this.animeMapper=animeMapper;
         this.jwtUtil=jwtUtil;
         this.commentMapper=commentMapper;
+        this.lastUpdateMapper=lastUpdateMapper;
         this.modelConverter=modelConverter;
     }
 
@@ -297,6 +302,9 @@ public class AnimeService {
             String updatedListJson = JSON.toJSONString(animePathList);
             // 更新数据库
             animeMapper.updateAnimeFilePathById(updatedListJson, id);
+            // 更新时间
+            Long currentTimeSec = getCurrentTimestampInSeconds();
+            lastUpdateMapper.updateVideoLastUpdate(String.valueOf(currentTimeSec));
             // 日志记录
             logger.info("ID为 \"" + id + "\" 的动漫路径已更新为：" + updatedListJson);
         } catch (Exception e) {
@@ -328,6 +336,9 @@ public class AnimeService {
             animeFinal.setFilePath(JSON.toJSONString(anime.getFilePath()));
             animeFinal.setRating(anime.getRating());
             animeMapper.updateAnime(animeFinal);
+            // 更新时间
+            Long currentTimeSec = getCurrentTimestampInSeconds();
+            lastUpdateMapper.updateVideoLastUpdate(String.valueOf(currentTimeSec));
         }catch (Exception e){
             throw new Exception("视频数据库更新失败："+e.getMessage());
         }
@@ -362,8 +373,14 @@ public class AnimeService {
             if(missingId !=null){
                 anime.setId(missingId);
                 animeMapper.insertAnimeWithId(anime);
+                // 更新时间
+                Long currentTimeSec = getCurrentTimestampInSeconds();
+                lastUpdateMapper.updateVideoLastUpdate(String.valueOf(currentTimeSec));
             }else {
                 animeMapper.insertAnime(anime);
+                // 更新时间
+                Long currentTimeSec = getCurrentTimestampInSeconds();
+                lastUpdateMapper.updateVideoLastUpdate(String.valueOf(currentTimeSec));
             }
         }catch (Exception e){
             throw new Exception("视频数据库添加失败："+e.getMessage());
@@ -391,6 +408,9 @@ public class AnimeService {
             animeMapper.deleteAnimeById(id);
             // 注意！删除动漫会导致该动漫下的评论一并全部删除！
             commentMapper.deleteCommentsByAnimeId(id);
+            // 更新时间
+            Long currentTimeSec = getCurrentTimestampInSeconds();
+            lastUpdateMapper.updateVideoLastUpdate(String.valueOf(currentTimeSec));
         }catch (Exception e){
             throw new Exception("该条目["+id+"]删除失败！原因："+e.getMessage());
         }

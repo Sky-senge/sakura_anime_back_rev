@@ -1,6 +1,7 @@
 package com.computerapplicationtechnologycnus.sakura_anime.services;
 
 import com.computerapplicationtechnologycnus.sakura_anime.mapper.CommentMapper;
+import com.computerapplicationtechnologycnus.sakura_anime.mapper.LastUpdateMapper;
 import com.computerapplicationtechnologycnus.sakura_anime.model.Comment;
 import com.computerapplicationtechnologycnus.sakura_anime.model.webRequestModel.CommentRequestModel;
 import com.computerapplicationtechnologycnus.sakura_anime.model.webRequestModel.CommentResponseModel;
@@ -10,12 +11,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.computerapplicationtechnologycnus.sakura_anime.utils.TimeUtil.getCurrentTimestampInSeconds;
+
 @Service
 public class CommentService {
     //构造函数，实例化Mapper
     private final CommentMapper commentMapper;
-    public CommentService(CommentMapper commentMapper){
+    private final LastUpdateMapper lastUpdateMapper;
+    public CommentService(CommentMapper commentMapper,LastUpdateMapper lastUpdateMapper){
         this.commentMapper=commentMapper;
+        this.lastUpdateMapper=lastUpdateMapper;
     }
 
     @Schema(description = "根据动漫ID，查询评论列表")
@@ -88,8 +93,12 @@ public class CommentService {
             if(missingId !=null){
                 comment.setId(missingId);
                 commentMapper.insertCommentWithId(comment);
+                Long currentTimeSec = getCurrentTimestampInSeconds();
+                lastUpdateMapper.updateCommentLastUpdate(String.valueOf(currentTimeSec));
             }else {
                 commentMapper.insertComment(comment);
+                Long currentTimeSec = getCurrentTimestampInSeconds();
+                lastUpdateMapper.updateCommentLastUpdate(String.valueOf(currentTimeSec));
             }
         }catch (Exception e){
             throw new Exception("评论无法正常添加！"+e.getMessage());
@@ -101,6 +110,8 @@ public class CommentService {
     public void updateComment(Comment request) throws Exception {
         try{
             commentMapper.updateComment(request);
+            Long currentTimeSec = getCurrentTimestampInSeconds();
+            lastUpdateMapper.updateCommentLastUpdate(String.valueOf(currentTimeSec));
         }catch (Exception e){
             throw new Exception("评论无法正常更新！"+e.getMessage());
         }
@@ -111,6 +122,8 @@ public class CommentService {
     public void deleteCommentByID(Long id) throws Exception {
         try{
             commentMapper.deleteComment(id);
+            Long currentTimeSec = getCurrentTimestampInSeconds();
+            lastUpdateMapper.updateCommentLastUpdate(String.valueOf(currentTimeSec));
         }catch (Exception e){
             throw new Exception("评论无法正常更新！"+e.getMessage());
         }

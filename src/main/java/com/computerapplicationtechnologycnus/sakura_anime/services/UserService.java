@@ -3,6 +3,7 @@ package com.computerapplicationtechnologycnus.sakura_anime.services;
 import com.computerapplicationtechnologycnus.sakura_anime.common.ResultMessage;
 import com.computerapplicationtechnologycnus.sakura_anime.controller.FileController;
 import com.computerapplicationtechnologycnus.sakura_anime.mapper.CommentMapper;
+import com.computerapplicationtechnologycnus.sakura_anime.mapper.LastUpdateMapper;
 import com.computerapplicationtechnologycnus.sakura_anime.mapper.UserMapper;
 import com.computerapplicationtechnologycnus.sakura_anime.model.User;
 import com.computerapplicationtechnologycnus.sakura_anime.model.webRequestModel.UserLoginRequest;
@@ -18,6 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import static com.computerapplicationtechnologycnus.sakura_anime.utils.TimeUtil.getCurrentTimestampInSeconds;
+
 @Service
 public class UserService {
 
@@ -26,11 +29,13 @@ public class UserService {
     //构造函式
     private final UserMapper userMapper;
     private final CommentMapper commentMapper;
+    private final LastUpdateMapper lastUpdateMapper;
     private final SecurityUtils securityUtils;
     private final JwtUtil jwtUtil;
-    public UserService(UserMapper userMapper, CommentMapper commentMapper,SecurityUtils securityUtils,JwtUtil jwtUtil){
+    public UserService(UserMapper userMapper, CommentMapper commentMapper,LastUpdateMapper lastUpdateMapper,SecurityUtils securityUtils,JwtUtil jwtUtil){
         this.userMapper=userMapper;
         this.commentMapper=commentMapper;
+        this.lastUpdateMapper=lastUpdateMapper;
         this.securityUtils = securityUtils;
         this.jwtUtil = jwtUtil;
     }
@@ -122,9 +127,13 @@ public class UserService {
                 // 如果存在缺失的 ID，则手动指定 ID
                 user.setId(missingId);
                 userMapper.insertUserWithId(user);
+                Long currentTimeSec = getCurrentTimestampInSeconds();
+                lastUpdateMapper.updateUserLastUpdate(String.valueOf(currentTimeSec));
             } else {
                 // 正常插入，不指定 ID
                 userMapper.insertUser(user);
+                Long currentTimeSec = getCurrentTimestampInSeconds();
+                lastUpdateMapper.updateUserLastUpdate(String.valueOf(currentTimeSec));
             }
         } catch (Exception e) {
             throw new Exception("用户注册失败：" + e.getMessage(), e);
@@ -141,6 +150,8 @@ public class UserService {
         try{
             String hashedPassword = SecurityUtils.sha256Hash(passwd);
             userMapper.updatePasswordById(userId,hashedPassword);
+            Long currentTimeSec = getCurrentTimestampInSeconds();
+            lastUpdateMapper.updateUserLastUpdate(String.valueOf(currentTimeSec));
         }catch (Exception e){
             throw new Exception("更改密码失败："+e.getMessage());
         }
@@ -166,6 +177,9 @@ public class UserService {
             userMapper.updatePermissionById(UID,user.getPermission());
             userMapper.updateRemarksById(UID,user.getRemarks());
             userMapper.updateDisplayNameById(UID, user.getDisplayName());
+            //更新时间
+            Long currentTimeSec = getCurrentTimestampInSeconds();
+            lastUpdateMapper.updateUserLastUpdate(String.valueOf(currentTimeSec));
         }catch (Exception e){
             throw new Exception("更改密码失败："+e.getMessage());
         }
@@ -200,6 +214,9 @@ public class UserService {
     @Transactional //修改表需要使用事务
     public void saveAvatarToDatabase(Long userId, String filename) {
         userMapper.updateAvatarById(userId,filename);
+        //更新时间
+        Long currentTimeSec = getCurrentTimestampInSeconds();
+        lastUpdateMapper.updateUserLastUpdate(String.valueOf(currentTimeSec));
         logger.info("用户ID: " + userId + " 的头像已更新为: " + filename);
     }
 
@@ -217,6 +234,9 @@ public class UserService {
 
         // 删除用户
         int deletedUser = userMapper.deleteUserById(userId);
+        //更新时间
+        Long currentTimeSec = getCurrentTimestampInSeconds();
+        lastUpdateMapper.updateUserLastUpdate(String.valueOf(currentTimeSec));
         System.out.println("删除的用户数量: " + deletedUser);
 
         return deletedUser > 0;
