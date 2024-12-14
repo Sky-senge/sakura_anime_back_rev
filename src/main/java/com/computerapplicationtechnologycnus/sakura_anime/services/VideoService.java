@@ -172,7 +172,7 @@ public class VideoService {
                 }
                 //最终执行命令Builder
                 String command = String.format(
-                        ffmpegLocate+" -hwaccel auto -i %s -c:v "+encodingType+" -b:v "+ffmpegConfig.getVideo().getAvgrate()+"k -maxrate "+ffmpegConfig.getVideo().getMaxrate()+"k -bufsize 10000k " +
+                        ffmpegLocate+" -threads 0 -hwaccel auto -i %s -c:v "+encodingType+" -b:v "+ffmpegConfig.getVideo().getAvgrate()+"k -maxrate "+ffmpegConfig.getVideo().getMaxrate()+"k -bufsize 10000k " +
                                 "-profile:v high -level 5.1 -map v:0 -map a:0 "+subtitleTransfer+" -c:a aac -ar 48k -b:a 256k " +
                                 "-pix_fmt yuv420p -sws_flags lanczos -f hls -hls_time "+ffmpegConfig.getHls().getTime()+" -hls_list_size 0 %s",
                         videoFilePath, m3u8FilePath
@@ -273,7 +273,7 @@ public class VideoService {
                 String ffmpegSubtitlePath = subtitlePath.replace(":", "\\:").replace("/", "\\\\");
 
                 String command = String.format(
-                        ffmpegLocate + " -hwaccel auto -i %s -vf subtitles='%s' " +
+                        ffmpegLocate + " -threads 0 -hwaccel auto -i %s -vf subtitles='%s' " +
                                 "-c:v " + encodingType + " -b:v " + ffmpegConfig.getVideo().getAvgrate() + "k -maxrate " + ffmpegConfig.getVideo().getMaxrate() + "k -bufsize 10000k " +
                                 "-profile:v high -level 5.1 -map v:0 -map a:0 -c:a aac -ar 48k -b:a 256k " +
                                 "-pix_fmt yuv420p -sws_flags lanczos -f hls -hls_time " + ffmpegConfig.getHls().getTime() + " -hls_list_size 0 %s",
