@@ -79,11 +79,14 @@ public class VideoService {
                             String language = streamMatcher.group(2).toLowerCase();
                             String subtitleType = streamMatcher.group(3).split(" ")[0];
                             logger.info("匹配成功 - 流ID: {}, 语言: {}, 字幕类型: {}", streamId, language, subtitleType);
-                            // 执行命令行赋值
-                            subtitleStreamIndex = Integer.parseInt(streamId.split(":")[1]);
-                            subtitleTrackLanguage = language;
-                            subtitleTrackType = subtitleType;
-                            break;
+                            if (languageIndicators.contains(language)) {
+                                // 执行命令行赋值
+                                subtitleStreamIndex = Integer.parseInt(streamId.split(":")[1]);
+                                subtitleTrackLanguage = language;
+                                subtitleTrackType = subtitleType;
+                                logger.info("匹配的语言符合条件，已设置字幕流参数");
+                                break; // 退出循环，因为已经找到符合条件的字幕流
+                            }
                         } else {
 //                            logger.warn("未能匹配字幕行: {}", checkLine);
                             logger.info("未能匹配字幕行，可能不存在字幕");
