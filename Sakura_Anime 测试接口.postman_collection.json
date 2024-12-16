@@ -557,6 +557,41 @@
 					"response": []
 				},
 				{
+					"name": "获取首页动漫列表(按评分排行)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/anime/getAnimeList?page=1&size=30&sort=ranking",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"anime",
+								"getAnimeList"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "size",
+									"value": "30"
+								},
+								{
+									"key": "sort",
+									"value": "ranking"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "根据单个或多个tag匹配动漫",
 					"request": {
 						"method": "GET",
@@ -589,6 +624,49 @@
 								{
 									"key": "size",
 									"value": "30"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "根据tags匹配动漫(按评分排行)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/anime/getAnimeListByTags?tag=治愈&tag=日系&page=1&size=30&sort=ranking",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"anime",
+								"getAnimeListByTags"
+							],
+							"query": [
+								{
+									"key": "tag",
+									"value": "治愈"
+								},
+								{
+									"key": "tag",
+									"value": "日系"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "size",
+									"value": "30"
+								},
+								{
+									"key": "sort",
+									"value": "ranking"
 								}
 							]
 						}
