@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.computerapplicationtechnologycnus.sakura_anime.utils.TimeUtil.getCurrentTimestampInSeconds;
@@ -63,7 +64,7 @@ public class AnimeService {
      * @return List<AnimeResponseModel>
      */
     @Schema(description = "获取动漫信息列表")
-    public List<AnimeResponseModel> getAnimeByPage(Long size,Long page) {
+    public List<AnimeResponseModel> getAnimeByPage(Long size,Long page,String sort) {
         if(page<1 || size<1){ //假如出现异常参数，恢复默认
             page = 0L;
             size = 10L;
@@ -71,7 +72,12 @@ public class AnimeService {
             page = (page-1)*size;
         }
         // 从数据库中获取 Anime 对象列表
-        List<Anime> animeList = animeMapper.findAllAnimeWithIndexPageUseOffset(size,page);
+        List<Anime> animeList;
+        if(!sort.isBlank()){
+            animeList = animeMapper.findAllAnimeWithIndexPageUseOffsetOrderByRanking(size,page);
+        }else{
+            animeList = animeMapper.findAllAnimeWithIndexPageUseOffset(size,page);
+        }
         // 创建一个 List 来存储转换后的 AnimeResponseModel
         return modelConverter.convertToAnimeResponseList(animeList);
     }
@@ -85,7 +91,7 @@ public class AnimeService {
      * @return List<AnimeResponseModel>
      */
     @Schema(description = "根据tags筛选动漫信息列表")
-    public List<AnimeResponseModel> getAnimeByTagUseOffset(List<String> tags,Long size,Long page) {
+    public List<AnimeResponseModel> getAnimeByTagUseOffset(List<String> tags,Long size,Long page,String sort) {
         if(page<1 || size<1){ //假如出现异常参数，恢复默认
             page = 0L;
             size = 10L;
@@ -93,8 +99,14 @@ public class AnimeService {
             page = (page-1)*size;
         }
         // 从数据库中获取 Anime 对象列表
-        List<Anime> animeList = animeMapper.findAnimeWithIndexPageByTags(tags, size, page);
-        // 创建一个 List 来存储转换后的 AnimeResponseModel
+        List<Anime> animeList;
+        if(!sort.isBlank()){
+            animeList = animeMapper.findAnimeWithIndexPageByTagsOrderByRanking(tags, size, page);
+            // 创建一个 List 来存储转换后的 AnimeResponseModel
+        }else{
+            animeList = animeMapper.findAnimeWithIndexPageByTags(tags, size, page);
+            // 创建一个 List 来存储转换后的 AnimeResponseModel
+        }
         return modelConverter.convertToAnimeResponseList(animeList);
     }
 

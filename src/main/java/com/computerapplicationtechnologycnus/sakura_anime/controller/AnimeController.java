@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.HandlerMapping;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -51,7 +52,8 @@ public class AnimeController {
     @GetMapping("/getAnimeList")
     public ResultMessage<List<AnimeResponseModel>> getAllAnimeByPage(
             @RequestParam(defaultValue = "0") long page,
-            @RequestParam(defaultValue = "10") long size
+            @RequestParam(defaultValue = "10") long size,
+            @RequestParam(required = false, defaultValue = "") String sort
     ){
         try{
             //处理可能存在刁民给你搬来巨大或错误参数拖累性能
@@ -59,8 +61,10 @@ public class AnimeController {
                 return ResultMessage.message(false,"您的查询参数过于巨大或不正确，请重试");
             }
             //查询执行
-            List<AnimeResponseModel> animeList = animeService.getAnimeByPage(size,page);
-
+            List<AnimeResponseModel> animeList = animeService.getAnimeByPage(size,page,sort);
+            if(animeList.isEmpty()){
+                return ResultMessage.message(false,"无法访问数据，数据为空");
+            }
             return ResultMessage.message(animeList,true,"访问成功！");
         }catch (Exception e){
             return ResultMessage.message(false,"无法访问数据，原因如下："+e.getMessage());
@@ -103,7 +107,8 @@ public class AnimeController {
     public ResultMessage<List<AnimeResponseModel>> getAllAnimeByPageWithTags(
             @RequestParam(defaultValue = "0") long page,
             @RequestParam(defaultValue = "30") long size,
-            @RequestParam(defaultValue = "") List<String> tag
+            @RequestParam(defaultValue = "") List<String> tag,
+            @RequestParam(required = false, defaultValue = "") String sort
     ){
         try{
             //处理可能存在刁民给你搬来巨大或错误参数拖累性能
@@ -111,8 +116,10 @@ public class AnimeController {
                 return ResultMessage.message(false,"您的查询参数过于巨大或不正确，请重试");
             }
             //查询执行
-            List<AnimeResponseModel> animeList = animeService.getAnimeByTagUseOffset(tag,size,page);
-
+            List<AnimeResponseModel> animeList = animeService.getAnimeByTagUseOffset(tag,size,page,sort);
+            if(animeList.isEmpty()){
+                return ResultMessage.message(false,"无法访问数据，数据为空");
+            }
             return ResultMessage.message(animeList,true,"访问成功！");
         }catch (Exception e){
             return ResultMessage.message(false,"无法访问数据，原因如下："+e.getMessage());
