@@ -200,6 +200,43 @@
 					"response": []
 				},
 				{
+					"name": "获取用户历史记录总数(UID根据Token自动获取)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{GlobalToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/user/countHistory?size=50",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"user",
+								"countHistory"
+							],
+							"query": [
+								{
+									"key": "size",
+									"value": "50"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "获取用户历史记录",
 					"request": {
 						"auth": {
@@ -294,7 +331,7 @@
 								},
 								{
 									"key": "Date",
-									"value": "Fri, 29 Nov 2024 04:32:11 GMT"
+									"value": "Mon, 16 Dec 2024 09:31:06 GMT"
 								},
 								{
 									"key": "Keep-Alive",
@@ -306,7 +343,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"status\": true,\n    \"data\": [\n        {\n            \"id\": 1,\n            \"userId\": 1,\n            \"animeId\": 1,\n            \"episodes\": 1,\n            \"createAt\": \"2024-11-29T03:38:04.000+00:00\"\n        },\n        {\n            \"id\": 2,\n            \"userId\": 1,\n            \"animeId\": 1,\n            \"episodes\": 1,\n            \"createAt\": \"2024-11-29T03:38:04.000+00:00\"\n        },\n        {\n            \"id\": 4,\n            \"userId\": 1,\n            \"animeId\": 1,\n            \"episodes\": 1,\n            \"createAt\": \"2024-11-29T04:29:58.000+00:00\"\n        }\n    ],\n    \"message\": \"获取历史记录成功\",\n    \"error\": null\n}"
+							"body": "{\n    \"status\": true,\n    \"data\": [\n        {\n            \"id\": 1,\n            \"userId\": 1,\n            \"displayName\": \"ADMIN\",\n            \"animeId\": 1,\n            \"animeName\": \"秒速5厘米\",\n            \"episodes\": 1,\n            \"createAt\": \"2024-11-29T03:38:04.000+00:00\"\n        },\n        {\n            \"id\": 2,\n            \"userId\": 1,\n            \"displayName\": \"ADMIN\",\n            \"animeId\": 1,\n            \"animeName\": \"秒速5厘米\",\n            \"episodes\": 1,\n            \"createAt\": \"2024-11-29T03:38:04.000+00:00\"\n        },\n        {\n            \"id\": 3,\n            \"userId\": 2,\n            \"displayName\": \"Test User\",\n            \"animeId\": 1,\n            \"animeName\": \"秒速5厘米\",\n            \"episodes\": 1,\n            \"createAt\": \"2024-11-29T03:38:04.000+00:00\"\n        }\n    ],\n    \"message\": \"获取历史记录成功\",\n    \"error\": null\n}"
 						}
 					]
 				},
