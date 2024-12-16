@@ -195,7 +195,7 @@ public class UserController {
     @Operation(description = "获取历史记录列表")
     @GetMapping("/getHistory")
     @AuthRequired(minPermissionLevel = 1)
-    public ResultMessage<List<History>> getHistoryList(
+    public ResultMessage<List<HistoryResponseModel>> getHistoryList(
             @RequestParam(defaultValue = "0") long page,
             @RequestParam(defaultValue = "30") long size,
             HttpServletRequest requestHeader
@@ -208,10 +208,34 @@ public class UserController {
             //查询执行
             String usernameFromToken = (String) requestHeader.getAttribute("username");
             Long uidFromDatabase = userService.findUIDByUsername(usernameFromToken);
-            List<History> historyList = historyService.getHistoryListByUID(uidFromDatabase,size,page);
+            List<HistoryResponseModel> historyList = historyService.getHistoryListByUID(uidFromDatabase,size,page);
             return ResultMessage.message(historyList,true,"获取历史记录成功");
         }catch (Exception e){
             return ResultMessage.message(false,"无法查找到历史记录！", e.getMessage());
         }
     }
+
+    @Operation(description = "获取历史记录总页数")
+    @GetMapping("/countHistory")
+    @AuthRequired(minPermissionLevel = 1)
+    public ResultMessage<Integer> countHistoryList(
+            @RequestParam(defaultValue = "30") long size,
+            HttpServletRequest requestHeader
+    ){
+        try{
+            //处理可能存在刁民给你搬来巨大或错误参数拖累性能
+            if(size>100){
+                return ResultMessage.message(false,"您的查询参数过于巨大或不正确，请重试");
+            }
+            //查询执行
+            String usernameFromToken = (String) requestHeader.getAttribute("username");
+            Long uidFromDatabase = userService.findUIDByUsername(usernameFromToken);
+            int historyCount = historyService.countHistoryByUID(uidFromDatabase,size);
+            return ResultMessage.message(historyCount,true,"获取历史记录成功");
+        }catch (Exception e){
+            return ResultMessage.message(false,"无法查找到历史记录！", e.getMessage());
+        }
+    }
 }
+
+

@@ -4,6 +4,7 @@ import com.computerapplicationtechnologycnus.sakura_anime.config.HistoryConfig;
 import com.computerapplicationtechnologycnus.sakura_anime.mapper.HistoryMapper;
 import com.computerapplicationtechnologycnus.sakura_anime.model.History;
 import com.computerapplicationtechnologycnus.sakura_anime.model.webRequestModel.HistoryRequestModel;
+import com.computerapplicationtechnologycnus.sakura_anime.model.webRequestModel.HistoryResponseModel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -68,13 +69,28 @@ public class HistoryService {
      * @return List<History>
      */
     @Schema(description = "获取用户历史记录表")
-    public List<History> getHistoryListByUID(Long UID,Long size,Long offset){
+    public List<HistoryResponseModel> getHistoryListByUID(Long UID, Long size, Long offset){
         if(offset<1 || size<1){ //假如出现异常参数，恢复默认
             offset = 0L;
             size = 10L;
         }else {
             offset = (offset-1)*size;
         }
-        return historyMapper.findByUserId(UID,size,offset);
+        return historyMapper.findByUserIdWithDetails(UID,size,offset);
+    }
+
+    /**
+     * 查询某用户拥有的历史记录条数
+     * @param UID 用户ID
+     * @param size 查询大小
+     * @return int 总页数
+     */
+    @Schema(description = "获取某用户的历史记录总条数")
+    public int countHistoryByUID(Long UID,Long size){
+        if(size<1){ //假如出现异常参数，恢复默认
+            size = 10L;
+        }
+        int totalCount = historyMapper.countByUserId(UID);
+        return (int) Math.ceil((double) totalCount / size);
     }
 }
