@@ -47,7 +47,7 @@ public interface HistoryMapper {
     LEFT JOIN 
         anime a ON h.anime_id = a.id
     WHERE 
-        h.anime_id = #{userId}
+        h.user_id = #{userId}
     LIMIT #{size} OFFSET #{offset}
 """)
     @Results({
