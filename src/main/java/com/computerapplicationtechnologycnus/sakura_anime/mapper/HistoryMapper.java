@@ -48,6 +48,8 @@ public interface HistoryMapper {
         anime a ON h.anime_id = a.id
     WHERE 
         h.user_id = #{userId}
+    ORDER BY
+        h.created_at DESC
     LIMIT #{size} OFFSET #{offset}
 """)
     @Results({
