@@ -38,6 +38,8 @@ git update-index --no-assume-unchanged
 
 4. 使用Postman或新增样例请使用9.31.28版本，没有可以在[这里下载](https://github.com/Radium-bit/postman_noLogin_backup/releases/tag/9.31.28)。
 
+5. 如有可能，建议遵照`Create_SQL_User.sql`的规范创建一个用于管理项目数据库的，拥有最低权限的数据库用户，以保障安全性。
+
 ## API文档：
 
 **【WARNING】**
@@ -47,8 +49,6 @@ git update-index --no-assume-unchanged
 下面的已经写了绝大部分需要用到的，P1级别的API，但后续新增的API我打算不写在这了。
 
 因此建议直接参考Postman中的接口请求，分类也做好了，直接拉一下请求比这里的更直观。
-
-
 
 ### 用户部分控制器：
 
