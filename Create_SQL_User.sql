@@ -1,0 +1,20 @@
+-- 该脚本用于创建一个低权限等级的SQL用户进行数据库操作
+-- 避免系统被入侵后造成更大损失
+-- 该用户对数据库拥有对目标数据库(sakura_anime)的基本增删改查(CRUD)权限
+-- 
+-- 默认数据库名：sakura_anime
+-- 默认用户名：sakura_manager
+-- 默认密码：manager
+-- 默认主机：localhost
+
+-- 检查是否存在 sakura_manager 用户,如果存在,则先删除该用户
+IF EXISTS (SELECT 1 FROM mysql.user WHERE user = 'sakura_manager' AND host = 'localhost')
+THEN
+    DROP USER 'sakura_manager'@'localhost';
+END IF;
+
+-- 创建新的 sakura_manager 用户
+CREATE USER 'sakura_manager'@'localhost' IDENTIFIED BY 'manager';
+
+-- 授予运作所需的基本权限
+GRANT SELECT, INSERT, UPDATE, DELETE ON sakura_anime.* TO 'sakura_manager'@'localhost';
