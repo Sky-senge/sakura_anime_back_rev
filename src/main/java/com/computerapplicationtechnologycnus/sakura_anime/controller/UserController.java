@@ -122,6 +122,7 @@ public class UserController {
      */
     @Operation(description = "根据页面大小请求可以分多少页")
     @GetMapping("/countUserPage")
+    @AuthRequired(minPermissionLevel = 0)
     public ResultMessage<Integer> countAllAnime(@RequestParam(defaultValue = "30") long size){
         try{
             //处理可能存在刁民给你搬来巨大或错误参数拖累性能
@@ -143,7 +144,7 @@ public class UserController {
      * @return
      */
     @Operation(description = "分页获取用户所有信息的接口")
-    @AuthRequired(minPermissionLevel = 1)  // 使用 AuthRequired 注解，进行认证，普通用户即可访问
+    @AuthRequired(minPermissionLevel = 0)  // 使用 AuthRequired 注解，进行认证，仅管理员可访问
     @GetMapping("/getUserList")
     public ResultMessage<List<User>> getUsersByPage(
             @RequestParam(defaultValue = "0") long page,
