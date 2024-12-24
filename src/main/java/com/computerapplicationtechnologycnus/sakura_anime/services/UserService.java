@@ -40,6 +40,42 @@ public class UserService {
         this.jwtUtil = jwtUtil;
     }
 
+    //默认管理员常量
+    private static final String DEFAULT_ADMIN_EMAIL = "admin@localhost";
+    private static final String DEFAULT_ADMIN_USERNAME = "admin";
+    private static final String DEFAULT_ADMIN_PASSWORD = "jGl25bVBBBW96Qi9Te4V37Fnqchz/Eu4qB9vKrRIqRg=";
+    private static final int DEFAULT_PERMISSION = 0;
+    private static final String DEFAULT_DISPLAY_NAME = "ADMIN";
+
+    public void ensureAdminUser() {
+        User admin = userMapper.findByUsername(DEFAULT_ADMIN_USERNAME);
+
+        if (admin == null) {
+            // Admin 不存在，直接创建
+            logger.info("管理员不存在，创建中...");
+            createAdminUser();
+        } else if (admin.getPermission() != DEFAULT_PERMISSION) {
+            // Admin 存在但权限不符
+            User otherAdmin = userMapper.findIfAnyAdminUser();
+            if (otherAdmin == null) {
+                // 没有其他管理员用户，删除旧 admin 并创建新 admin
+                logger.warn("唯一管理员被恶意禁用，正在恢复默认管理员状态...");
+                userMapper.deleteUserByUsername(DEFAULT_ADMIN_USERNAME);
+                createAdminUser();
+            }
+        }
+    }
+
+    private void createAdminUser() {
+        User newUser = new User();
+        newUser.setEmail(DEFAULT_ADMIN_EMAIL);
+        newUser.setUsername(DEFAULT_ADMIN_USERNAME);
+        newUser.setPassword(DEFAULT_ADMIN_PASSWORD);
+        newUser.setPermission(DEFAULT_PERMISSION);
+        newUser.setDisplayName(DEFAULT_DISPLAY_NAME);
+        userMapper.insertUser(newUser);
+    }
+
     //查询所有用户
     public List<User> getAllUsers(){
         return userMapper.findAllUsers();
