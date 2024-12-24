@@ -571,6 +571,89 @@ public class FileController {
         }
     }
 
+    /**
+     * 获取图库文件列表
+     * 获取carousel目录下所有图片文件列表
+     *
+     * @return ResponseEntity<ResultMessage<List<String>>>
+     */
+    @Operation(description = "获取图库文件列表")
+    @GetMapping("/getPicLibImagesList")
+    public ResponseEntity<ResultMessage<List<String>>> listPicLibImage() {
+        try {
+            // 获取上传目录
+            String uploadDir = fileStorageProperties.getUploadDir() + "imagelibrary/";
+            File dir = new File(uploadDir);
+
+            if (!dir.exists() || !dir.isDirectory()) {
+                return ResponseEntity.ok(ResultMessage.message(false, "轮播图目录不存在或无效！"));
+            }
+            // 获取所有图片文件名称列表
+            String[] imageExtensions = {".jpg", ".jpeg", ".png"};
+            List<String> imageFiles = Arrays.stream(Objects.requireNonNull(dir.listFiles()))
+                    .filter(file -> file.isFile() && Arrays.stream(imageExtensions).anyMatch(ext -> file.getName().toLowerCase().endsWith(ext)))
+                    .map(File::getName)
+                    .collect(Collectors.toList());
+            return ResponseEntity.ok(ResultMessage.message(imageFiles, true, "获取图库资源成功！"));
+        } catch (Exception e) {
+            logger.error("获取图库资源失败", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResultMessage.message(false, "获取图库资源失败，请联系管理员！"));
+        }
+    }
+
+    /**
+     * 提供图库文件
+     *
+     * @param requirements 目录路径参数
+     * @return 封面文件响应
+     */
+    @Operation(description = "提供图库文件的接口")
+    @GetMapping("/getPicLibImage/{requirements}")
+    public ResponseEntity<byte[]> getPicLibImage(
+            @PathVariable String requirements) {
+        try {
+            // 获取目录路径
+            String directoryPath = fileStorageProperties.getUploadDir() + "imagelibrary/";
+            File directory = new File(directoryPath);
+            if (!directory.exists() || !directory.isDirectory()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(("目录不存在: " + requirements).getBytes());
+            }
+            // 搜索文件
+            File carouseFile = null;
+            for (String extension : new String[]{"jpg", "jpeg","png"}) {
+                File file = new File(directory, requirements);
+                if (file.exists() && file.isFile()) {
+                    carouseFile = file;
+                    break;
+                }
+            }
+            if (carouseFile == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("图库文件不存在".getBytes());
+            }
+            // 修改 Content-Type
+            String contentType = Files.probeContentType(carouseFile.toPath());
+            if (contentType == null) { //如果无法确定，就丢这个
+                contentType = "application/octet-stream";
+            }
+            // 读取文件内容
+            InputStream inputStream = new FileInputStream(carouseFile);
+            byte[] content = inputStream.readAllBytes();
+            inputStream.close();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.parseMediaType(contentType));
+            headers.add("Content-Disposition", "inline; filename=\"" + carouseFile.getName() + "\"");
+
+            return new ResponseEntity<>(content, headers, HttpStatus.OK);
+        } catch (IOException e) {
+            logger.error("读取图库文件失败: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(("读取文件失败: " + e.getMessage()).getBytes());
+        }
+    }
+
+
     @Operation(description = "动漫资源获取接口")
     @GetMapping("/getVideo/{requirements}/playlist.m3u8")
     public ResponseEntity<byte[]> getM3U8(@PathVariable String requirements) {
