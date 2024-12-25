@@ -1,5 +1,7 @@
 # sakura_anime_backend
 
+**If you are Looking for English ver. [Click here](./README_EN.md)**
+
 樱花动漫(毕设)-后端
 
 ## 运行需求/Requirements
@@ -90,8 +92,16 @@ git update-index --no-assume-unchanged
 
 11. 提取其中编译好的的`Sakura_Anime-0.1.0-ALPHA.jar`文件和配置好的`application.properties`到合适位置
 
-12. 执行命令`java -jar 应用程序.jar --spring.config.location=file:/配置文件完整路径`   以下是一个例子：
+12. 执行命令
     
-    `java -jar ./target/Sakura_Anime-0.1.0-ALPHA.jar --spring.config.location=file:/D:/Sakura_Anime/application.properties`
+    ```shell
+    java -jar 应用程序.jar --spring.config.location=file:/配置文件完整路径
+    ```
+    
+       以下是一个例子：
+    
+    ```shell
+    java -jar ./target/Sakura_Anime-0.1.0-ALPHA.jar --spring.config.location=file:/D:/Sakura_Anime/application.properties
+    ```
 
 13. 如运行成功，通过配置好的端口即可访问数据。
