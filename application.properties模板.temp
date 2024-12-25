@@ -9,7 +9,7 @@ spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
 # 监听端口
 server.port=8080
 
-# 文件上传下载配置，必须以/结尾（表示路径），以下是一个示例。
+# 文件上传下载配置，必须以/结尾（表示路径），且必须为绝对路径，最好不要使用反斜杠区分路径，以下是一个示例。
 file.upload-dir=D:/Sakura_Anime/storgeFiles/
 
 # FFMPEG转码配置

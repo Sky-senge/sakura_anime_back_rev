@@ -6,9 +6,9 @@
 
 ## 运行需求/Requirements
 
-Java 17，
+* Java 17，
 
-Maven
+* Maven
 
 已经配置好的ffmpeg，可以到[这里下载](https://www.ffmpeg.org/download.html)
 
@@ -64,7 +64,7 @@ git update-index --no-assume-unchanged
 
 6. 根据模板`Create_SQL_User.sql`创建合适的运行时用户（建议）
 
-7. 根据模板，配置`application.properties`
+7. 根据模板（.temp文件），配置`application.properties`
 
 8. 进入IDE，运行主类选择为`SakuraAnimeBackendApplication`
 
@@ -84,7 +84,7 @@ git update-index --no-assume-unchanged
 
 7. 运行，启动数据库
 
-8. 根据模板，配置`application.properties`
+8. 根据模板（.temp文件），配置`application.properties`
 
 9. 定位到项目根目录，运行命令`mvn clean package`
 

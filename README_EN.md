@@ -68,7 +68,7 @@ It is recommended to directly refer to the categorized API requests in Postman.
 4. Install FFmpeg and set up the environment variables.
 5. Install MariaDB 10.11 and import the `sakura_anime_sample.sql` database.
 6. Optionally, create a runtime database user based on the `Create_SQL_User.sql` template.
-7. Configure the `application.properties` file based on the provided template.
+7. Configure the `application.properties` file based on the provided template(.temp File).
 8. In the IDE, set the main class to `SakuraAnimeBackendApplication` and run the project.
 
 ---
@@ -89,7 +89,7 @@ It is recommended to directly refer to the categorized API requests in Postman.
 
 7. Start the database server.
 
-8. Configure the `application.properties` file based on the provided template.
+8. Configure the `application.properties` file based on the provided template(.temp FIle).
 
 9. Navigate to the project root directory and run the following command:
    
