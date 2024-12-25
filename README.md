@@ -46,8 +46,6 @@ git update-index --no-assume-unchanged
 
 因此建议直接参考Postman中的接口请求，分类也做好了。
 
-
-
 # 运行说明：
 
 ## 在IDE中运行
@@ -86,12 +84,14 @@ git update-index --no-assume-unchanged
 
 8. 根据模板，配置`application.properties`
 
-9. 运行命令`mvn clean package`
+9. 定位到项目根目录，运行命令`mvn clean package`
 
 10. 如命令正常运行，则打开项目下的`./target`子目录
 
 11. 提取其中编译好的的`Sakura_Anime-0.1.0-ALPHA.jar`文件和配置好的`application.properties`到合适位置
 
-12. 执行命令`java -jar 应用程序.jar --spring.config.location=file:/配置文件完整路径` 以下是一个例子`java -jar ./target/Sakura_Anime-0.1.0-ALPHA.jar --spring.config.location=file:/D:/Sakura_Anime/application.properties`
+12. 执行命令`java -jar 应用程序.jar --spring.config.location=file:/配置文件完整路径`   以下是一个例子：
+    
+    `java -jar ./target/Sakura_Anime-0.1.0-ALPHA.jar --spring.config.location=file:/D:/Sakura_Anime/application.properties`
 
 13. 如运行成功，通过配置好的端口即可访问数据。
