@@ -7,14 +7,14 @@
 -- 默认密码：manager
 -- 默认主机：localhost
 
--- 检查是否存在 sakura_manager 用户,如果存在,则先删除该用户
-IF EXISTS (SELECT 1 FROM mysql.user WHERE user = 'sakura_manager' AND host = 'localhost')
-THEN
-    DROP USER 'sakura_manager'@'localhost';
-END IF;
+-- 检查并删除现有的 sakura_manager 用户（如有）
+DROP USER IF EXISTS 'sakura_manager'@'localhost';
 
 -- 创建新的 sakura_manager 用户
 CREATE USER 'sakura_manager'@'localhost' IDENTIFIED BY 'manager';
 
--- 授予运作所需的基本权限
+-- 授予 sakura_anime 数据库的基本权限
 GRANT SELECT, INSERT, UPDATE, DELETE ON sakura_anime.* TO 'sakura_manager'@'localhost';
+
+-- 刷新权限
+FLUSH PRIVILEGES;
