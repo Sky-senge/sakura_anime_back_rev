@@ -146,6 +146,19 @@ public interface UserMapper {
     })
     User findIfAnyAdminUser(); //查询是否存在任意管理员账户
 
+    @Select("SELECT * from users WHERE username=#{username} OR email=#{email} LIMIT 1")
+    @Results({
+            @Result(property = "id",column = "id"),
+            @Result(property = "avatar",column = "avatar"),
+            @Result(property = "email",column = "email"),
+            @Result(property = "username",column = "username"),
+            @Result(property = "permission",column = "permission"),
+            @Result(property = "password",column = "password"),
+            @Result(property = "displayName",column = "display_name"),
+            @Result(property = "remarks",column = "remarks")
+    })
+    User findIfExistsUser(@Param("username") String username,@Param("email") String email); //查询是否存在任意账户
+
     @Select("SELECT id from users WHERE username=#{username}")
     Long findUserIdByUsername(String username); //根据用户名反查UID
 

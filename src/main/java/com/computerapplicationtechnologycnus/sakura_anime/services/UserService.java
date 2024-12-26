@@ -146,31 +146,38 @@ public class UserService {
             if (!pattern.matcher(email).matches()) {
                 throw new Exception("邮箱格式不正确！");
             }
-            // 对密码进行加密
-            String hashedPassword = SecurityUtils.sha256Hash(password);
-            // 检查是否存在不连续的 ID
-            Long missingId = userMapper.findMissingId();
-            // 创建用户对象
-            User user = new User();
-            user.setEmail(email);
-            user.setUsername(username);
-            user.setPassword(hashedPassword);
-            user.setDisplayName(displayName);  // displayName 可能为 null
-            user.setRemarks(remarks);  // remarks 可能为 null
-            user.setPermission(1);  // 默认权限级别为 1 (普通用户)
 
-            if (missingId != null) {
-                // 如果存在缺失的 ID，则手动指定 ID
-                user.setId(missingId);
-                userMapper.insertUserWithId(user);
-                Long currentTimeSec = getCurrentTimestampInSeconds();
-                lastUpdateMapper.updateUserLastUpdate(String.valueOf(currentTimeSec));
-            } else {
-                // 正常插入，不指定 ID
-                userMapper.insertUser(user);
-                Long currentTimeSec = getCurrentTimestampInSeconds();
-                lastUpdateMapper.updateUserLastUpdate(String.valueOf(currentTimeSec));
+            User existsUser = userMapper.findIfExistsUser(username,email);
+            if(existsUser == null){
+                // 对密码进行加密
+                String hashedPassword = SecurityUtils.sha256Hash(password);
+                // 检查是否存在不连续的 ID
+                Long missingId = userMapper.findMissingId();
+                // 创建用户对象
+                User user = new User();
+                user.setEmail(email);
+                user.setUsername(username);
+                user.setPassword(hashedPassword);
+                user.setDisplayName(displayName);  // displayName 可能为 null
+                user.setRemarks(remarks);  // remarks 可能为 null
+                user.setPermission(1);  // 默认权限级别为 1 (普通用户)
+
+                if (missingId != null) {
+                    // 如果存在缺失的 ID，则手动指定 ID
+                    user.setId(missingId);
+                    userMapper.insertUserWithId(user);
+                    Long currentTimeSec = getCurrentTimestampInSeconds();
+                    lastUpdateMapper.updateUserLastUpdate(String.valueOf(currentTimeSec));
+                } else {
+                    // 正常插入，不指定 ID
+                    userMapper.insertUser(user);
+                    Long currentTimeSec = getCurrentTimestampInSeconds();
+                    lastUpdateMapper.updateUserLastUpdate(String.valueOf(currentTimeSec));
+                }
+            }else {
+                throw new Exception("存在同名用户或邮箱！");
             }
+
         } catch (Exception e) {
             throw new Exception("用户注册失败：" + e.getMessage(), e);
         }
