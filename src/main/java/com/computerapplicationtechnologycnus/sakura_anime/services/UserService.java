@@ -105,12 +105,12 @@ public class UserService {
         // 根据用户名查找用户
         User user = userMapper.findByUsernameIncludePassword(UserLoginRequest.getUsername());
         if (user == null) {
-            throw new Exception("用户不存在！"); // 用户不存在
+            throw new Exception("用户名或密码不正确，请重试！"); // 用户不存在
         }
         // 使用 SecurityUtils 比较密码（数据库中存储的是散列后的密码）
         String hashedPassword = securityUtils.sha256Hash(UserLoginRequest.getPassword());
         if (!hashedPassword.equals(user.getPassword())) {
-            throw new Exception("用户名或密码不正确，请重试"); // 密码错误
+            throw new Exception("用户名或密码不正确，请重试！"); // 密码错误
         }
         if(user.getPermission() >= 2){
             throw new Exception("用户已被封锁！");
