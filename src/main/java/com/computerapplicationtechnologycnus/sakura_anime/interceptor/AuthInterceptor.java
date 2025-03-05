@@ -39,6 +39,15 @@ public class AuthInterceptor implements HandlerInterceptor {
             logger.error("Invalid or suspicious User-Agent: " + userAgent);
             throw new AuthenticationException("Suspicious request detected!\n Please use a normal browser.");
         }
+        // 检查 Sec-GPC 和 DNT 请求头
+        Boolean requestSecGpc = "1".equals(request.getHeader("Sec-GPC"));
+        Boolean requestDoNotTrack = "1".equals(request.getHeader("DNT"));
+        if(requestDoNotTrack || requestSecGpc){
+            /*用户期望自己不要对他使用广告追踪算法，
+            * 并期望网站不要出售他们的偏好信息给第三方；
+            * 但做不做是咱们的选择，这没有法律强制效力。
+            * 我只是在此预留一个接口，方便未来扩展。*/
+        }
 
         // 如果不是处理方法直接放行
         if (!(handler instanceof HandlerMethod)) {
