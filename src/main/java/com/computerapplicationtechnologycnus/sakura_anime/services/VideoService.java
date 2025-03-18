@@ -1,7 +1,10 @@
 package com.computerapplicationtechnologycnus.sakura_anime.services;
 
+import com.alibaba.fastjson.JSON;
 import com.computerapplicationtechnologycnus.sakura_anime.config.FFmpegConfig;
 import com.computerapplicationtechnologycnus.sakura_anime.controller.FileController;
+import com.computerapplicationtechnologycnus.sakura_anime.config.FileStorageProperties;
+import com.computerapplicationtechnologycnus.sakura_anime.model.webRequestModel.AnimeResponseModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,12 +15,19 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import static com.computerapplicationtechnologycnus.sakura_anime.controller.FileController.FFmpeg_COMMAND;
 
@@ -28,10 +38,12 @@ public class VideoService {
     private static final Logger logger = LoggerFactory.getLogger(VideoService.class);
 
     private final FFmpegConfig ffmpegConfig;
+    private final FileStorageProperties fileStorageProperties;
 
     @Autowired
-    public VideoService(FFmpegConfig FFmpegConfig){
-        this.ffmpegConfig=FFmpegConfig;
+    public VideoService(FFmpegConfig ffmpegConfig,FileStorageProperties fileStorageProperties){
+        this.ffmpegConfig=ffmpegConfig;
+        this.fileStorageProperties=fileStorageProperties;
     }
 
     /**
@@ -331,5 +343,130 @@ public class VideoService {
                 logger.error("视频转码过程中发生错误", e);
             }
         });
+    }
+
+    /**
+     * 检测 videoFileSequence 是否包含非法字符
+     * @param videoFileSequence 视频文件的唯一路径标识符
+     * @return 如果合法返回 true，否则返回 false
+     */
+    public boolean isValidVideoFileSequence(String videoFileSequence) {
+        // 检查是否为空或空字符串
+        if (videoFileSequence == null || videoFileSequence.trim().isEmpty()) {
+            return false;
+        }
+
+        // 定义非法字符的正则表达式
+        // 包含路径穿越符号 ".." 或其他非法字符（如 / \ : * ? " < > |）
+        Pattern illegalPattern = Pattern.compile(".*(\\.\\.|[/\\\\:*?\"<>|]).*");
+
+        // 检查是否匹配非法字符
+        if (illegalPattern.matcher(videoFileSequence).matches()) {
+            return false;
+        }
+
+        // 如果通过所有检查，返回 true
+        return true;
+    }
+
+    /**
+     * 删除对应序列的视频文件
+     * 【警告】此操作不可逆！
+     * @param videoFileSequence 视频文件的唯一路径标识符
+     */
+    public void deleteVideoFile(String videoFileSequence) {
+        // 检查videoFileSequence是否合规
+        if(!isValidVideoFileSequence(videoFileSequence)){
+            throw new IllegalArgumentException("非法路径标识符：" + videoFileSequence);
+        }
+        // 构建完整的文件路径
+        String videoFilePath = fileStorageProperties.getUploadDir() + "anime/" + videoFileSequence;
+        Path filePath = Paths.get(videoFilePath);
+
+        logger.warn("即将删除视频资源：" + videoFilePath);
+
+        try {
+            // 检查路径是否存在
+            if (Files.exists(filePath)) {
+                // 如果是目录，递归删除目录及其内容
+                if (Files.isDirectory(filePath)) {
+                    try (Stream<Path> paths = Files.walk(filePath)) {
+                        paths.sorted(Comparator.reverseOrder()) // 先删除子文件和子目录
+                                .forEach(path -> {
+                                    try {
+                                        Files.delete(path);
+                                        logger.info("删除成功：" + path);
+                                    } catch (IOException e) {
+                                        logger.error("删除失败：" + path, e);
+                                        throw new RuntimeException("删除失败：" + path, e);
+                                    }
+                                });
+                    }
+                } else {
+                    // 如果是文件，直接删除
+                    Files.delete(filePath);
+                    logger.info("视频资源删除成功：" + videoFilePath);
+                }
+            } else {
+                logger.info("视频资源不存在，无需删除：" + videoFilePath);
+            }
+        } catch (IOException e) {
+            logger.error("删除视频资源失败：" + videoFilePath, e);
+            throw new RuntimeException("删除视频资源失败：" + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * 下架视频时不会主动删除资源，但会备份对应的集数Index数据。
+     * @param animeDetails 即将下架的动漫资源详情
+     */
+    public void backupVideoIndex(AnimeResponseModel animeDetails) {
+        String animeBasePath = fileStorageProperties.getUploadDir() + "anime/";
+        String fileName;
+
+        // 尝试生成 "id_动漫名称_IndexData.json" 文件名
+        String animeName = animeDetails.getName();
+        if (animeName != null && !animeName.trim().isEmpty()) {
+            // 仅将空格替换为下划线
+            String safeAnimeName = animeName.replace(" ", "_");
+            fileName = animeDetails.getId() + "_" + safeAnimeName + "_IndexData.json";
+        } else {
+            // 如果动漫名称为空，使用 "id_当前时间_IndexData.json" 文件名
+            String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+            fileName = animeDetails.getId() + "_" + timeStamp + "_IndexData.json";
+            logger.warn("无法生成带动漫名称的文件，使用时间戳文件名：" + fileName);
+        }
+
+        // 构建完整文件路径
+        String filePath = animeBasePath + fileName;
+
+        // 将 animeDetails 对象转换为 JSON 并写入文件
+        try {
+            // 使用 fastjson 将对象转换为 JSON 字符串
+            String jsonString = JSON.toJSONString(animeDetails, true); // true 表示格式化输出
+            File file = new File(filePath);
+
+            // 检查文件是否可创建
+            if (file.createNewFile()) {
+                // 写入 JSON 数据
+                Files.write(file.toPath(), jsonString.getBytes());
+                logger.info("动漫索引数据备份成功，文件路径：" + filePath);
+            } else {
+                // 如果文件无法创建，使用时间戳文件名重试
+                String fallbackFileName = animeDetails.getId() + "_" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + "_IndexData.json";
+                String fallbackFilePath = animeBasePath + fallbackFileName;
+                File fallbackFile = new File(fallbackFilePath);
+
+                if (fallbackFile.createNewFile()) {
+                    Files.write(fallbackFile.toPath(), jsonString.getBytes());
+                    logger.warn("原文件名无法创建，已使用备用文件名：" + fallbackFilePath);
+                } else {
+                    throw new IOException("无法创建文件：" + fallbackFilePath);
+                }
+            }
+        } catch (IOException e) {
+            logger.error("动漫索引数据备份失败：" + e.getMessage(), e);
+            throw new RuntimeException("动漫索引数据备份失败：" + e.getMessage(), e);
+        }
     }
 }

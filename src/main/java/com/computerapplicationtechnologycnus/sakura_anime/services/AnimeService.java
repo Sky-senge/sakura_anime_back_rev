@@ -32,12 +32,15 @@ public class AnimeService {
     private final CommentMapper commentMapper;
     private final LastUpdateMapper lastUpdateMapper;
     private final ModelConverter modelConverter;
-    public AnimeService(AnimeMapper animeMapper, JwtUtil jwtUtil, CommentMapper commentMapper,LastUpdateMapper lastUpdateMapper, ModelConverter modelConverter){
+    private final VideoService videoService;
+
+    public AnimeService(AnimeMapper animeMapper, JwtUtil jwtUtil, CommentMapper commentMapper, LastUpdateMapper lastUpdateMapper, ModelConverter modelConverter, VideoService videoService){
         this.animeMapper=animeMapper;
         this.jwtUtil=jwtUtil;
         this.commentMapper=commentMapper;
         this.lastUpdateMapper=lastUpdateMapper;
         this.modelConverter=modelConverter;
+        this.videoService = videoService;
     }
 
     /**
@@ -339,7 +342,20 @@ public class AnimeService {
             if (anime.getRating() == null || anime.getRating() < 1 || anime.getRating() > 10 || !isOneDecimalPlace(anime.getRating())) {
                 throw new IllegalArgumentException("评分必须在 1 到 10 之间，并保留一位小数，例如 3.8、5.6、10.0");
             }
-            //为什么要绕弯弯，为什么MyBaties不能原生处理List？啊？
+            // 查询当前和更新的动漫的文件详情
+            List<AnimePathObject> currentAnimePaths=getAnimeById(anime.getId()).getFilePath();
+            List<AnimePathObject> newAnimePaths = anime.getFilePath();
+            // 对比新旧 filePath，找出被删除的 AnimePathObject
+            List<AnimePathObject> deletedPaths = new ArrayList<>(currentAnimePaths);
+            deletedPaths.removeAll(newAnimePaths);
+            // 如果有被删除的路径，提取 fileName
+            if (!deletedPaths.isEmpty()) {
+                for (AnimePathObject deletedPath : deletedPaths) {
+                    String deletedFileName = deletedPath.getFileName();
+                    videoService.deleteVideoFile(deletedFileName);
+                }
+            }
+            //预备更新内容
             Anime animeFinal =new Anime();
             animeFinal.setId(anime.getId());
             animeFinal.setName(anime.getName());
@@ -409,14 +425,16 @@ public class AnimeService {
     }
 
     /**
-     * 删除1某个动漫列表
-     *
-     *
+     * 删除某个动漫列表
+     * @param id 动漫唯一ID
+     * @throws Exception
      */
     @Schema(description = "删除某条动漫列表")
     @Transactional
     public void deleteAnime(Long id) throws Exception {
         try{
+            // 简历番剧的索引表备份，以便将来恢复
+            videoService.backupVideoIndex(getAnimeById(id));
             animeMapper.deleteAnimeById(id);
             // 注意！删除动漫会导致该动漫下的评论一并全部删除！
             commentMapper.deleteCommentsByAnimeId(id);
