@@ -30,8 +30,8 @@ public class VideoService {
     private final FFmpegConfig ffmpegConfig;
 
     @Autowired
-    public VideoService(FFmpegConfig fFmpegConfig){
-        this.ffmpegConfig=fFmpegConfig;
+    public VideoService(FFmpegConfig FFmpegConfig){
+        this.ffmpegConfig=FFmpegConfig;
     }
 
     /**
