@@ -498,6 +498,165 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "用户隐私权检查请求",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "DNT",
+								"value": "1",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api/privacy/check",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"privacy",
+								"check"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "检测到标头",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "DNT",
+										"value": "1",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8080/api/privacy/check",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"privacy",
+										"check"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 28 Mar 2025 07:53:18 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": true,\n    \"data\": null,\n    \"message\": \"我们检测到您启用了隐私保护选项（Sec-GPC 或 DNT）。\\n我们尊重用户的隐私权，然而请注意：\\n根据当前法律框架，目前Sec-GPC 和 DNT 请求头并未被所有司法管辖区的法律明确认可为具有强制效力的隐私保护要求。\\n尽管我们检测到这些请求头，但我们可能不会完全遵循其表达的偏好。我们的数据处理行为将严格遵循我们的隐私政策以及适用的法律法规。我们致力于保护用户的隐私，并将持续关注相关法律法规的变化。如有任何疑问，请联系我们。\",\n    \"error\": null\n}"
+						},
+						{
+							"name": "无有效标头",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "DNT",
+										"value": "1",
+										"type": "default",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8080/api/privacy/check",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"privacy",
+										"check"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 28 Mar 2025 07:54:09 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": true,\n    \"data\": null,\n    \"message\": \"我们未检测到有效的 Sec-GPC 或 DNT 标头，您的隐私保护政策将遵从通用设定。\",\n    \"error\": null\n}"
+						}
+					]
 				}
 			]
 		},
@@ -1650,6 +1809,106 @@
 								"files",
 								"getCarouse",
 								"afdb19fd-d59d-41bf-8784-25ea0e60bfa3.jpg"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "获取图库列表",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/files/getPicLibImagesList",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"files",
+								"getPicLibImagesList"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "获取图库列表",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/files/getPicLibImagesList",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"files",
+										"getPicLibImagesList"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 24 Dec 2024 10:58:10 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": true,\n    \"data\": [\n        \"0ac39e4cb7bcd172d83ce949e33bc402f9532bb8.jpg\",\n        \"1 d_t1KEERB6nNzn0qrafAwQ.jpeg\",\n        \"779640_screenshots_20180901211512_1.jpg\",\n        \"91226205_p30.png\",\n        \"Anime-The-Journey-Of-Elaina-HD-Live-Wallpaper.jpg\",\n        \"BCF6C81AD037B51C2BF9E4A884558F4425C08561.jpg\",\n        \"Blender_piotr by Krynski.jpg\",\n        \"FpjITo5akAYjS36.jpg\",\n        \"FwOxz7BaEAARmxF.png\"\n    ],\n    \"message\": \"获取轮播图成功！\",\n    \"error\": null\n}"
+						}
+					]
+				},
+				{
+					"name": "获取图库图片",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/files/getPicLibImage/BCF6C81AD037B51C2BF9E4A884558F4425C08561.jpg",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"files",
+								"getPicLibImage",
+								"BCF6C81AD037B51C2BF9E4A884558F4425C08561.jpg"
 							]
 						}
 					},
