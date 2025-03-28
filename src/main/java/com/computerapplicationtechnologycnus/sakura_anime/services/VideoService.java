@@ -417,6 +417,49 @@ public class VideoService {
     }
 
     /**
+     * 重命名视频文件夹
+     * @param oldFileName 原文件夹名称
+     * @param newFileName 新文件夹名称
+     * @return 操作是否成功
+     */
+    public boolean renameVideoFolder(String oldFileName, String newFileName) {
+        // 检查文件名是否合规
+        if(!isValidVideoFileSequence(oldFileName) || !isValidVideoFileSequence(newFileName)){
+            throw new IllegalArgumentException("非法路径标识符：" +
+                    (!isValidVideoFileSequence(oldFileName) ? oldFileName : newFileName));
+        }
+
+        // 构建完整路径
+        String basePath = fileStorageProperties.getUploadDir() + "anime/";
+        Path oldPath = Paths.get(basePath + oldFileName);
+        Path newPath = Paths.get(basePath + newFileName);
+
+        logger.info("即将重命名文件夹：从 " + oldFileName + " 到 " + newFileName);
+
+        try {
+            // 检查原路径是否存在
+            if (Files.exists(oldPath)) {
+                // 检查新路径是否已存在
+                if (Files.exists(newPath)) {
+                    logger.error("目标文件夹已存在：" + newPath);
+                    return false;
+                }
+
+                // 执行重命名操作
+                Files.move(oldPath, newPath);
+                logger.info("文件夹重命名成功：" + oldFileName + " -> " + newFileName);
+                return true;
+            } else {
+                logger.error("原文件夹不存在：" + oldPath);
+                return false;
+            }
+        } catch (IOException e) {
+            logger.error("重命名文件夹失败：" + oldPath + " -> " + newPath, e);
+            throw new RuntimeException("重命名文件夹失败：" + e.getMessage(), e);
+        }
+    }
+
+    /**
      * 下架视频时不会主动删除资源，但会备份对应的集数Index数据。
      * @param animeDetails 即将下架的动漫资源详情
      */

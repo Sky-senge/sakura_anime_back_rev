@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.computerapplicationtechnologycnus.sakura_anime.utils.TimeUtil.getCurrentTimestampInSeconds;
 
@@ -345,16 +346,8 @@ public class AnimeService {
             // 查询当前和更新的动漫的文件详情
             List<AnimePathObject> currentAnimePaths=getAnimeById(anime.getId()).getFilePath();
             List<AnimePathObject> newAnimePaths = anime.getFilePath();
-            // 对比新旧 filePath，找出被删除的 AnimePathObject
-            List<AnimePathObject> deletedPaths = new ArrayList<>(currentAnimePaths);
-            deletedPaths.removeAll(newAnimePaths);
-            // 如果有被删除的路径，提取 fileName
-            if (!deletedPaths.isEmpty()) {
-                for (AnimePathObject deletedPath : deletedPaths) {
-                    String deletedFileName = deletedPath.getFileName();
-                    videoService.deleteVideoFile(deletedFileName);
-                }
-            }
+            // 删除动漫资源文件
+            removeOrMoveAnimeFile(currentAnimePaths,newAnimePaths);
             //预备更新内容
             Anime animeFinal =new Anime();
             animeFinal.setId(anime.getId());
@@ -370,6 +363,48 @@ public class AnimeService {
         }catch (Exception e){
             throw new Exception("视频数据库更新失败："+e.getMessage());
         }
+    }
+
+    /**
+     * 删除或移动当前动漫文件，私有方法
+     * @param currentAnimePaths 当前动漫集构成
+     * @param newAnimePaths 新的动漫集构成
+     * @return 结果[1为删除成功；0为未删除但找到了路径；-1为路径也无法找到，可能存在错误]
+     */
+    private int removeOrMoveAnimeFile(List<AnimePathObject> currentAnimePaths,List<AnimePathObject> newAnimePaths){
+        // 对比新旧 filePath，找出被删除的 AnimePathObject
+        try{
+            List<AnimePathObject> modPaths = new ArrayList<>(currentAnimePaths);
+            modPaths.removeAll(newAnimePaths);
+            // 如果有被删除的路径，提取 fileName
+            if (!modPaths.isEmpty()) {
+                for (AnimePathObject modPath : modPaths) {
+                    // 在newAnimePaths中查找相同episodes的对象
+                    Optional<AnimePathObject> matchingNewPath = newAnimePaths.stream()
+                            .filter(p -> p.getEpisodes().equals(modPath.getEpisodes()))
+                            .findFirst();
+
+                    if (matchingNewPath.isPresent()) {
+                        // 获取两者的fileName
+                        String oldFileName = modPath.getFileName();
+                        String newFileName = matchingNewPath.get().getFileName();
+                        // 如果不是删除，那么尝试重命名该文件
+                        videoService.renameVideoFolder(oldFileName,newFileName);
+                    } else {
+                        // 如果episodes确实减少了，调用deleteVideoFile
+                        String deletedFileName = modPath.getFileName();
+                        videoService.deleteVideoFile(deletedFileName);
+                    }
+                }
+                return 1;
+            } else {
+                return 0;
+            }
+        }catch(Exception e){
+            logger.warn("无法删除动漫文件，因为："+e.getMessage());
+            return -1;
+        }
+
     }
 
     /**
