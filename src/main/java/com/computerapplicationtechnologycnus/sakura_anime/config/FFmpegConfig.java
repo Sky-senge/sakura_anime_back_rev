@@ -17,6 +17,9 @@ public class FFmpegConfig {
     @Schema(description = "FFMPEG程序的所在路径，默认为ffmpeg")
     private String locate;
 
+    @Schema(description = "FFMPEG程序的转码线程数，填0自动")
+    private int threads;
+
     @Data
     public static class Hls {
         @Schema(description = "FFMPEG 单个切片时长")

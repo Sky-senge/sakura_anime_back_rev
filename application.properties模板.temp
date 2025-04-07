@@ -23,6 +23,8 @@ ffmpeg.video.avgrate=3000
 ffmpeg.video.enableNvenc=true
 ## FFMPEG程序路径，若已经配好环境变量，则不需要改动
 ffmpeg.locate="ffmpeg"
+## FFMPEG的转码线程数，默认0为自动，会占用全部CPU/GPU，要多少线程就写多少，不能超过硬件限制
+ffmpeg.threads=8
 
 # 历史记录配置
 ##单个用户最大记录条数

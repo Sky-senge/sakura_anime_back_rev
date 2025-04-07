@@ -71,6 +71,44 @@ public class AnimeController {
         }
     }
 
+
+//    @Operation(description = "获取全部动漫列表讯息，但使用分页查询")
+//    @GetMapping("/getAnimeListRedis")
+//    public ResultMessage<List<AnimeResponseModel>> getAllAnimeByPage_Redis(
+//            @RequestParam(defaultValue = "0") long page,
+//            @RequestParam(defaultValue = "10") long size,
+//            @RequestParam(required = false, defaultValue = "") String sort
+//    ){
+//        try{
+//            // 处理可能存在刁民给你搬来巨大或错误参数拖累性能
+//            if(size > 100 || page < 0){
+//                return ResultMessage.message(false,"您的查询参数过于巨大或不正确，请重试");
+//            }
+//
+//            // 生成唯一的缓存key
+//            String cacheKey = String.format("anime:list:page:%d:size:%d:sort:%s", page, size, sort);
+//
+//            // 尝试从缓存获取
+//            List<AnimeResponseModel> cachedList = redisTemplate.opsForValue().get(cacheKey);
+//            if(cachedList != null){
+//                return ResultMessage.message(cachedList, true, "数据来自缓存");
+//            }
+//
+//            // 缓存未命中，查询数据库
+//            List<AnimeResponseModel> animeList = animeService.getAnimeByPage(size, page, sort);
+//            if(animeList.isEmpty()){
+//                return ResultMessage.message(false,"无法访问数据，数据为空");
+//            }
+//
+//            // 将结果存入缓存，设置过期时间(例如30分钟)
+//            redisTemplate.opsForValue().set(cacheKey, animeList, 30, TimeUnit.MINUTES);
+//
+//            return ResultMessage.message(animeList, true, "访问成功！");
+//        }catch (Exception e){
+//            return ResultMessage.message(false,"无法访问数据，原因如下："+e.getMessage());
+//        }
+//    }
+
     /**
      * 首页，动漫一共可以分多少页数据
      * 根据页面大小请求可以分多少页
